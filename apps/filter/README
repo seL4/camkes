@@ -1,0 +1,14 @@
+#
+# Copyright 2014, NICTA
+#
+# This software may be distributed and modified according to the terms of
+# the BSD 2-Clause license. Note that NO WARRANTY is provided.
+# See "LICENSE_BSD2.txt" for details.
+#
+# @TAG(NICTA_BSD)
+#
+
+This application demonstrates the use of a component to filter communication
+from another. In this setup, 'filter' is placed in-between 'client' and 'store'
+and prevents 'client' reading the value of a secret via its interface. In a
+sense, 'client' can be fooled into thinking it is talking directly to 'store'.

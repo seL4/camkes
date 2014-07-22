@@ -1,0 +1,16 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+procedure Display {
+  /* Write a character to the display at position (x,y). Returns 0 on success
+   * and non-zero on failure.
+   */
+  int put_char(in int x, in int y, in char data);
+};

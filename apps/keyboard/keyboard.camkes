@@ -1,0 +1,61 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+import "components/Client/Client.camkes";
+import "components/Driver/Driver.camkes";
+
+component Keyboard {
+	hardware;
+	emits DataAvailable interrupt;
+	provides IOPort s;
+	provides IOPort t; //Pseudo IOPort
+}
+
+/* Pseudo hardware device. */
+component Dummy {
+	hardware;
+	provides IOPort s;
+}
+
+assembly {
+	composition {
+		component Keyboard keyboard;
+		component Driver driver;
+		component Client client;
+		component Dummy  dumb;
+
+		connection seL4HardwareIOPort ports(from driver.s, to keyboard.s);
+		connection seL4HardwareIOPort tports(from driver.t, to keyboard.t);
+		connection seL4HardwareIOPort cports(from client.s, to dumb.s);
+		connection seL4HardwareInterrupt irq(from keyboard.interrupt, to driver.interrupt);
+		connection seL4RPC kbd_inf(from client.kbd, to driver.kbd);
+		connection seL4Asynch KeyPressEvent(from driver.keypress, to client.keypress);
+	}
+
+	configuration {
+		/* The keyboard requires a set of IO ports. This is defined by setting
+		 * the s_attributes attribute to a minimum and maximum accessible IO
+		 * port as below:
+		 */
+		keyboard.s_attributes = "0x60:0x64";
+
+		/* Pseudo IOPort to demonstrate that the parser can handle multiple ranges
+		 * in either same or different components.
+		 */
+		keyboard.t_attributes = "0x1CE:0x1D0";
+		dumb.s_attributes = "0x123:0x456";
+
+		/* The keyboard triggers interrupt 1 when data is available. */
+		keyboard.interrupt_attributes = 1;
+	}
+}
+

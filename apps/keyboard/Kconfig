@@ -1,0 +1,17 @@
+#
+# Copyright 2014, NICTA
+#
+# This software may be distributed and modified according to the terms of
+# the BSD 2-Clause license. Note that NO WARRANTY is provided.
+# See "LICENSE_BSD2.txt" for details.
+#
+# @TAG(NICTA_BSD)
+#
+
+menuconfig APP_KEYBOARD
+    bool "Keyboard example"
+    default n
+    depends on ARCH_IA32
+    select MODULE_CAPDL_LOADER 
+    help
+        An example of using keyboard in CAmkES.

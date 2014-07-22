@@ -1,0 +1,30 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+import "components/A/A.camkes";
+import "components/B/B.camkes";
+
+connector seL4MyConnector {
+    from Procedure user template "seL4MyConnector-from.c";
+    to Procedure implementer template "seL4MyConnector-to.c";
+}
+
+assembly {
+    composition {
+        component A a;
+        component B b;
+
+        connection seL4MyConnector simple(from a.lock, to b.lock);
+    }
+}
+
+

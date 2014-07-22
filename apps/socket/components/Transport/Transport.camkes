@@ -1,0 +1,19 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+component Transport {
+    include "socket.h";
+    control;
+    dataport socket_t incoming;
+    dataport socket_t outgoing;
+    consumes Init setup;
+    emits Init init;
+}
+

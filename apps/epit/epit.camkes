@@ -1,0 +1,39 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+import "components/Driver/Driver.camkes";
+
+component EPIT {
+    hardware;
+    dataport Buf mem;
+    emits DataAvailable irq;
+}
+
+assembly {
+    composition {
+        component EPIT epit;
+        component Driver drv;
+
+        connection seL4HardwareMMIO epit_mem(from drv.mem, to epit.mem);
+	connection seL4HardwareInterrupt irq(from epit.irq, to drv.irq);
+    }
+
+    configuration {
+	/* Freescale i.MX31 (KZM) */
+        epit.mem_attributes = "0x53F98000:0x1000";
+	epit.irq_attributes = 27;
+
+	/* Freescale i.MX6 (Sabralite) */
+       // epit.mem_attributes = "0x020D0000:0x1000";
+	//epit.irq_attributes = 88;
+    }
+}
+

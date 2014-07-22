@@ -1,0 +1,37 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+import "components/Client/Client.camkes";
+import "components/Echo/Echo.camkes";
+import "components/Sender/Sender.camkes";
+
+assembly {
+        composition {
+                component Echo echo;
+                component Client client1;
+                component Client client2;
+                component Sender send;
+
+                connection seL4RPCCall echo1(from client1.s, to echo.s);
+                connection seL4RPCCall echo2(from client2.s, to echo.s);
+                connection seL4RPCCall echo3(from send.s, to echo.s);
+
+                connection seL4Asynch event1(from echo.e, to client1.e);
+                connection seL4Asynch event2(from echo.e, to client2.e);
+                connection seL4Asynch event3(from echo.e, to send.e);
+
+                connection seL4SharedData data1(from echo.d, to client1.d);
+                connection seL4SharedData data2(from echo.d, to client2.d);
+                connection seL4SharedData data3(from echo.d, to send.d);
+        }
+}
+

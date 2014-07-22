@@ -1,0 +1,37 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+import "interfaces/uart.idl4";
+import "components/Driver/Driver.camkes";
+import "components/Client/Client.camkes";
+
+component UART {
+    hardware;
+    dataport Buf mem;
+}
+
+assembly {
+    composition {
+        component UART uart;
+        component Driver drv;
+	component Client client;
+
+        connection seL4HardwareMMIO uart_mem(from drv.mem, to uart.mem);
+        connection seL4RPC uart_inf(from client.uart, to drv.uart);
+    }
+
+    configuration {
+        uart.mem_attributes = "0x43F90000:0x1000";
+
+	random.ID = 1;
+    }
+}
