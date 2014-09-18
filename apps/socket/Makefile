@@ -20,8 +20,8 @@ Transport_HFILES := $(patsubst ${SOURCE_DIR}/%,%,$(wildcard ${SOURCE_DIR}/compon
 Receiver_CFILES := $(patsubst ${SOURCE_DIR}/%,%,$(wildcard ${SOURCE_DIR}/components/Receiver/src/*.c))
 Receiver_HFILES := $(patsubst ${SOURCE_DIR}/%,%,$(wildcard ${SOURCE_DIR}/components/Receiver/include/*.h))
 
-Sender_LIBS := muslc sel4sync
-Transport_LIBS := muslc sel4sync
-Receiver_LIBS := muslc sel4sync
+Sender_LIBS := c sel4sync
+Transport_LIBS := c sel4sync
+Receiver_LIBS := c sel4sync
 
 include ${PWD}/tools/camkes/camkes.mk
