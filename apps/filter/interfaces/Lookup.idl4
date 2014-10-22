@@ -9,5 +9,5 @@
  */
 
 procedure Lookup {
-	smallstring get_value(in smallstring id);
+	string get_value(in string id);
 };
