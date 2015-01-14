@@ -16,5 +16,5 @@ check_exit
 spawn make clean
 check_exit
 
-spawn make
+spawn make -j
 check_exit
