@@ -53,6 +53,7 @@ menu "Applications"
         source "apps/mutex/Kconfig"
         source "apps/lockserver/Kconfig"
         source "apps/multiclient/Kconfig"
+        source "apps/multiassembly/Kconfig"
     endmenu
 
     menu "Integration tests"

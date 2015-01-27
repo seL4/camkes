@@ -1,0 +1,40 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+import "components/Client/Client.camkes";
+import "components/Server/Server.camkes";
+import "components/UpperCase/UpperCase.camkes";
+import "components/Reverse/Reverse.camkes";
+import "components/Append/Append.camkes";
+
+assembly {
+    composition {
+        component Client c;
+        component Server s;
+
+        connection seL4RPC client_external(from c.o, to a.i);
+        connection seL4RPC server_external(from r.o, to s.i);
+    }
+}
+
+assembly {
+    composition {
+        component UpperCase uc;
+        component Reverse r;
+        component Append a;
+
+        connection seL4RPC internal1(from a.o, to uc.i);
+        connection seL4RPC internal2(from uc.o, to r.i);
+    }
+    configuration {
+        a.string_to_append = "world";
+    }
+}
