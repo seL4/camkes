@@ -18,8 +18,7 @@
 
 void i_process(char *str) {
     char buf[BUF_SIZE];
-    strncpy(buf, str, BUF_SIZE);
-    snprintf(buf, BUF_SIZE, "%s%s", buf, string_to_append);
+    snprintf(buf, BUF_SIZE, "%s%s", str, string_to_append);
 
     o_process(buf);
 }
