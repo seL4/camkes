@@ -9,6 +9,8 @@
  */
 
 #include <Echo.h>
+#include <string.h>
+
 int count = 0;
 inline void udelay(uint32_t us){
 	volatile int i;
