@@ -32,9 +32,9 @@ static struct {
 char *l_get_value(char *key) {
     for (unsigned int i = 0; i < sizeof(dict) / sizeof(dict[0]); ++i) {
         if (!strcmp(key, dict[i].key)) {
-            return dict[i].value;
+            return strdup(dict[i].value);
         }
     }
     /* Not found */
-    return "";
+    return strdup("");
 }

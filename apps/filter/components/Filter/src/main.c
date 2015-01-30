@@ -16,7 +16,7 @@ void external__init(void) {}
 char *external_get_value(char *key) {
     if (!strcmp(key, "secret")) {
         /* Block reading the value of "secret" */
-        return "";
+        return strdup("");
     } else {
         /* Allow anything else */
         return backing_get_value(key);

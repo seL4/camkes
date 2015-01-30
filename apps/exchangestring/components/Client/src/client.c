@@ -17,7 +17,7 @@
 
 int run(void)
 {
-	char *ret = NULL;
+	char *ret;
 	char *input = "This is a client string.";
 	char *output = NULL;
 	char *joint = malloc(25);

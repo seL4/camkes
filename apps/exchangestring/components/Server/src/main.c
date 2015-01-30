@@ -18,7 +18,7 @@
 
 char *a_exchange(char *input, char **output, char **joint)
 {
-	char *reply = "This is a string from server.";
+	char *reply = strdup("This is a string from server.");
 	*output = malloc(30);
 	strncpy(*output, reply, 30);
 	(*output)[29] = '\0';
