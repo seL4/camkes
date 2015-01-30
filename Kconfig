@@ -54,6 +54,7 @@ menu "Applications"
         source "apps/lockserver/Kconfig"
         source "apps/multiclient/Kconfig"
         source "apps/multiassembly/Kconfig"
+        source "apps/hierarchical-components/Kconfig"
     endmenu
 
     menu "Integration tests"
