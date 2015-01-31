@@ -9,9 +9,6 @@
 # @TAG(NICTA_BSD)
 #
 
-export QEMU_KZM=${QEMU_KZM:-qemu-system-arm}
-export QEMU_IA32=${QEMU_IA32:-qemu-system-i386}
-
 RESULT=0
 
 for t in $(ls tests); do

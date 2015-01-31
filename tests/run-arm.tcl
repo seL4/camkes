@@ -10,4 +10,4 @@
 
 # This fragment is expected to included by other tests.
 
-spawn $env(QEMU_KZM) -M kzm -nographic -kernel images/capdl-loader-experimental-image-arm-imx31
+spawn qemu-system-arm -M kzm -nographic -kernel images/capdl-loader-experimental-image-arm-imx31
