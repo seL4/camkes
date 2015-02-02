@@ -1,0 +1,3 @@
+procedure StringProcessor {
+    void process(in string input);
+};
