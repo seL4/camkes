@@ -1,0 +1,5 @@
+import <string_getter.idl4>;
+
+component Server {
+    provides StringGetter getter;
+}

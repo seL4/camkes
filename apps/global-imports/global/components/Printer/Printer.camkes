@@ -1,0 +1,5 @@
+import <string_printer.idl4>;
+
+component Printer {
+    provides StringPrinter printer;
+}

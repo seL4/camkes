@@ -1,0 +1,8 @@
+import <string_printer.idl4>;
+import <string_getter.idl4>;
+
+component Client {
+    control;
+    uses StringPrinter p;
+    uses StringGetter g; 
+}

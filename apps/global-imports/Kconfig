@@ -1,0 +1,11 @@
+config APP_GLOBAL_IMPORTS
+    bool "Demonstration of including files from a global include directory"
+    select APP_CAMKES_EXECUTIVE
+    help
+        This app demonstrates including components and interfaces from some
+        global include directory. The directories 'global/components' and
+        'global/interfaces' are two such directories. They can be placed
+        anywhere in the filesystem and the app will still compile. To have
+        the compiler know where the include directories are, set the make option
+        "CAMKES_IMPORT_PATH" in the "CAmkES Options" section of menuconfig
+        to "/path/to/global/components /path/to/global/interfaces".

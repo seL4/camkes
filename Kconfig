@@ -55,6 +55,7 @@ menu "Applications"
         source "apps/multiclient/Kconfig"
         source "apps/multiassembly/Kconfig"
         source "apps/hierarchical-components/Kconfig"
+        source "apps/global-imports/Kconfig"
     endmenu
 
     menu "Integration tests"
