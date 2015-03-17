@@ -22,6 +22,11 @@ all: capdl-loader-experimental-image
 
 -include Makefile.local
 
+# Add all global component directories to include path when make is called
+# in project.mk.
+COMPONENT_DIRECTORIES=$(sort $(dir $(wildcard $(foreach p, $(subst $\",,${CONFIG_CAMKES_IMPORT_PATH}), ${p}/*/*))))
+export MAKEFLAGS += $(foreach p, ${COMPONENT_DIRECTORIES}, --include-dir=$p)
+
 include tools/common/project.mk
 
 capdl-loader-experimental: $(filter-out capdl-loader-experimental,$(apps)) parse-capDL ${STAGE_BASE}/cpio-strip/cpio-strip

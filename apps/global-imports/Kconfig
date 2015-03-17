@@ -1,6 +1,5 @@
 config APP_GLOBAL_IMPORTS
-    bool "Demonstration of including files from a global include directory"
-    select APP_CAMKES_EXECUTIVE
+    bool "Including files from a global directory"
     help
         This app demonstrates including components and interfaces from some
         global include directory. The directories 'global/components' and
