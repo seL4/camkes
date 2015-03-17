@@ -51,6 +51,13 @@ ${STAGE_BASE}/cpio-strip/cpio-strip:
       exit $${PIPESTATUS[0]}
 	@echo "[$(notdir $@)] done."
 
+# Fail a default `make` if the user has selected multiple apps.
+ifeq (${MAKECMDGOALS},)
+  ifneq ($(words $(filter-out capdl-loader-experimental,${apps})),1)
+    $(error Multiple CAmkES applications selected. Only a single application can be built at once)
+  endif
+endif
+
 ifeq (${CONFIG_CAMKES_PRUNE_GENERATED},y)
 ${apps}: prune
 endif
