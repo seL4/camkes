@@ -22,10 +22,14 @@ all: capdl-loader-experimental-image
 
 -include Makefile.local
 
-# Add all global component directories to include path when make is called
-# in project.mk.
-COMPONENT_DIRECTORIES=$(sort $(dir $(wildcard $(foreach p, $(subst $\",,${CONFIG_CAMKES_IMPORT_PATH}), ${p}/*/*))))
-export MAKEFLAGS += $(foreach p, ${COMPONENT_DIRECTORIES}, --include-dir=$p)
+# Strip the quotes from the string CONFIG_CAMKES_IMPORT_PATH.
+CAMKES_IMPORT_PATH=$(subst $\",,${CONFIG_CAMKES_IMPORT_PATH})
+
+# Find all sudbirectories of import path directories.
+# These are component directories and contain component makefiles.
+COMPONENT_DIRECTORIES=$(foreach p, ${CAMKES_IMPORT_PATH}, $(shell find ${p} -mindepth 1 -maxdepth 1 -type d))
+
+export MAKEFLAGS += $(foreach p, ${COMPONENT_DIRECTORIES}, --include-dir=${p})
 
 include tools/common/project.mk
 
