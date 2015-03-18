@@ -1,5 +1,5 @@
-import <string_printer.idl4>;
-import <string_getter.idl4>;
+import <string_printer.camkes>;
+import <string_getter.camkes>;
 
 component Client {
     control;
