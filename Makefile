@@ -23,7 +23,6 @@ all: capdl-loader-experimental-image
 -include Makefile.local
 
 # Strip the quotes from the string CONFIG_CAMKES_IMPORT_PATH.
-#CAMKES_IMPORT_PATH=$(subst $\",,${CONFIG_CAMKES_IMPORT_PATH})
 CAMKES_IMPORT_PATH=$(patsubst %",%,$(patsubst "%,%,${CONFIG_CAMKES_IMPORT_PATH}))
 #")") Help syntax-highlighting editors.
 
