@@ -1,5 +1,7 @@
-import <string_getter.camkes>;
+import <GetterIface/GetterIface.camkes>;
 
 component Server {
-    provides StringGetter getter;
+    include <shared_int.h>;
+    provides GetterIface getter;
+    dataport shared_int_t counter;
 }

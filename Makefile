@@ -25,11 +25,7 @@ all: capdl-loader-experimental-image
 # Strip the quotes from the string CONFIG_CAMKES_IMPORT_PATH.
 CAMKES_IMPORT_PATH=$(subst $\",,${CONFIG_CAMKES_IMPORT_PATH})
 
-# Find all sudbirectories of import path directories.
-# These are component directories and contain component makefiles.
-COMPONENT_DIRECTORIES=$(foreach p, ${CAMKES_IMPORT_PATH}, $(shell find ${p} -mindepth 1 -maxdepth 1 -type d))
-
-export MAKEFLAGS += $(foreach p, ${COMPONENT_DIRECTORIES}, --include-dir=${p})
+export MAKEFLAGS += $(foreach p, ${CAMKES_IMPORT_PATH}, --include-dir=${p})
 
 include tools/common/project.mk
 

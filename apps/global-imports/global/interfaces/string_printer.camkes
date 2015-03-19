@@ -1,3 +1,0 @@
-procedure StringPrinter {
-    void print_string(in string str);
-};

@@ -1,5 +1,5 @@
-import <string_printer.camkes>;
+import <PrinterIface/PrinterIface.camkes>;
 
 component Printer {
-    provides StringPrinter printer;
+    provides PrinterIface printer;
 }

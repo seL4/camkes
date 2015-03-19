@@ -1,8 +1,12 @@
-import <string_printer.camkes>;
-import <string_getter.camkes>;
+import <PrinterIface/PrinterIface.camkes>;
+import <GetterIface/GetterIface.camkes>;
 
 component Client {
+    include <shared_int.h>;
+
     control;
-    uses StringPrinter p;
-    uses StringGetter g; 
+
+    uses PrinterIface p;
+    uses GetterIface g; 
+    dataport shared_int_t counter;
 }

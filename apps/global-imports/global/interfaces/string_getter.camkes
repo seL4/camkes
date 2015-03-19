@@ -1,3 +1,0 @@
-procedure StringGetter {
-    string get_string();
-};
