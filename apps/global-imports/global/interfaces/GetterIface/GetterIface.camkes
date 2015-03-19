@@ -1,0 +1,5 @@
+procedure GetterIface {
+    include <vector.h>;
+    string get_string();
+    vector_t get_vector();
+};
