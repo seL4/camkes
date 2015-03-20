@@ -3,5 +3,5 @@
 typedef struct {
     double x;
     double y;
-} vector_t;
+} vec_t;
 #endif

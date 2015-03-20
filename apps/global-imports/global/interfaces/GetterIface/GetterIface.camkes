@@ -1,5 +1,5 @@
 procedure GetterIface {
-    include <vector.h>;
+    include <vec.h>;
     string get_string();
-    vector_t get_vector();
+    vec_t get_vec();
 };

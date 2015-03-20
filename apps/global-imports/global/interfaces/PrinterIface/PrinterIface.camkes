@@ -1,5 +1,5 @@
 procedure PrinterIface {
-    include <vector.h>;
+    include <vec.h>;
     void print_string(in string str);
-    void print_vector(in vector_t vec);
+    void print_vec(in vec_t vec);
 };
