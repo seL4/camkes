@@ -11,6 +11,5 @@
 config APP_MULTICLIENT
     bool "Example of multi-clients connect to the same server."
     default n 
-    select APP_CAMKES_EXECUTIVE
     help
         An application to demonstrate one server is connected to multiple clients.

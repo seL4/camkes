@@ -11,6 +11,5 @@
 config APP_FILTER
     bool "CAmkES filter example"
     default n
-    select APP_CAMKES_EXECUTIVE
     help
         A simple application showing use of a filter component.

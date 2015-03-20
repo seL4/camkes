@@ -12,6 +12,5 @@ config APP_UART
     bool "UART driver example for ARM-KZM"
     default n
     depends on ARCH_ARM
-    select APP_CAMKES_EXECUTIVE
     help
         An example of ARM UART driver on CAmkES.
