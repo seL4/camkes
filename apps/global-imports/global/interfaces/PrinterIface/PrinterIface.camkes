@@ -1,0 +1,5 @@
+procedure PrinterIface {
+    include <vec.h>;
+    void print_string(in string str);
+    void print_vec(in vec_t vec);
+};

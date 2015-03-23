@@ -1,0 +1,5 @@
+import <PrinterIface/PrinterIface.camkes>;
+
+component Printer {
+    provides PrinterIface printer;
+}

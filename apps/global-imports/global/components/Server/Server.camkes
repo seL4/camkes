@@ -1,0 +1,7 @@
+import <GetterIface/GetterIface.camkes>;
+
+component Server {
+    include <shared_int.h>;
+    provides GetterIface getter;
+    dataport shared_int_t counter;
+}

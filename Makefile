@@ -22,6 +22,12 @@ all: capdl-loader-experimental-image
 
 -include Makefile.local
 
+# Strip the quotes from the string CONFIG_CAMKES_IMPORT_PATH.
+CAMKES_IMPORT_PATH=$(patsubst %",%,$(patsubst "%,%,${CONFIG_CAMKES_IMPORT_PATH}))
+#")") Help syntax-highlighting editors.
+
+export MAKEFLAGS += $(foreach p, ${CAMKES_IMPORT_PATH}, --include-dir=${p})
+
 include tools/common/project.mk
 
 capdl-loader-experimental: $(filter-out capdl-loader-experimental,$(apps)) parse-capDL ${STAGE_BASE}/cpio-strip/cpio-strip
