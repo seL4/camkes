@@ -29,7 +29,7 @@ static struct {
 };
 
 /* Lookup and return the value associated with 'key' */
-char *l_get_value(char *key) {
+char *l_get_value(const char *key) {
     for (unsigned int i = 0; i < sizeof(dict) / sizeof(dict[0]); ++i) {
         if (!strcmp(key, dict[i].key)) {
             return strdup(dict[i].value);

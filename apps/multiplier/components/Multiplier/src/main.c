@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int a_calculate(size_t operands_sz, int *operands, size_t *other_sz, int **other, size_t *inplace_sz, int **inplace) {
+int a_calculate(size_t operands_sz, const int *operands, size_t *other_sz, int **other, size_t *inplace_sz, int **inplace) {
     const char *name = get_instance_name();
     int total = 1;
     for (int i = 0; i < operands_sz; i++) {

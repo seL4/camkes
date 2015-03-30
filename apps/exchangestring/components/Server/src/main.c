@@ -16,7 +16,7 @@
 
 #include "Server.h"
 
-char *a_exchange(char *input, char **output, char **joint)
+char *a_exchange(const char *input, char **output, char **joint)
 {
 	char *reply = strdup("This is a string from server.");
 	*output = malloc(30);
