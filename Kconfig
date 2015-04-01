@@ -56,6 +56,7 @@ menu "Applications"
         source "apps/multiassembly/Kconfig"
         source "apps/hierarchical-components/Kconfig"
         source "apps/global-imports/Kconfig"
+        source "apps/swapcounter/Kconfig"
     endmenu
 
     menu "Integration tests"
