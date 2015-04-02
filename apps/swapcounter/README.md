@@ -26,7 +26,7 @@ The instructions that follow assume the following environment:
     is the environment we have tested in. The process for generating code and
     theories requires a Linux environment and will not work on Mac OS or
     Windows.
-* 20GB free disk space
+* 60GB free disk space
   * Proof images, associated dependencies and generated files will likely
     occupy at least this much space.
 * Internet connection
