@@ -23,4 +23,5 @@ void i_process(const char *arg) {
     }
 
     o_process(str);
+    free(str);
 }
