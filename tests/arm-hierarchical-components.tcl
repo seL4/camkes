@@ -19,4 +19,4 @@ check_exit
 source [file join [file dirname [info script]] build.tcl]
 
 source [file join [file dirname [info script]] run-arm.tcl]
-wait_for "client: result was 1270"
+wait_for "hello world!"
