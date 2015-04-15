@@ -10,8 +10,10 @@
 
 
 #include <Reverse.h>
+#include <string.h>
 
-void i_process(char *str) {
+void i_process(const char *arg) {
+    char *str = strdup(arg);
     int last_idx = strlen(str)-1;
     for (int i = 0;i<last_idx/2;i++) {
         char tmp = str[i];
@@ -20,4 +22,5 @@ void i_process(char *str) {
     }
 
     o_process(str);
+    free(str);
 }

@@ -11,6 +11,6 @@
 
 #include <Server.h>
 
-void i_process(char *str) {
+void i_process(const char *str) {
     printf("%s\n", str);
 }

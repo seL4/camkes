@@ -16,7 +16,7 @@
 
 #define BUF_SIZE 128
 
-void i_process(char *str) {
+void i_process(const char *str) {
     char buf[BUF_SIZE];
     snprintf(buf, BUF_SIZE, "%s%s", str, string_to_append);
 
