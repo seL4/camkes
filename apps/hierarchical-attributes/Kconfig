@@ -9,7 +9,7 @@
 #
 
 config APP_HIERARCHICAL_ATTRIBUTES
-    bool "Hierachircal Attributes Example"
-    select APP_CAMKES_EXECUTIVE
+    bool "Hierarchical Attributes Example"
+    default n
     help
         CAmkES application demonstrating hierarchical attributes

@@ -9,6 +9,7 @@
  */
 
 #include <Controller.h>
+#include <stdio.h>
 
 int run(void) {
 
