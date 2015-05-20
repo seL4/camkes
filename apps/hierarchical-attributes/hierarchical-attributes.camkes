@@ -1,0 +1,32 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+import "components/Foo/Foo.camkes";
+import "components/Bar/Bar.camkes";
+import "components/Baz/Baz.camkes";
+import "components/Controller/Controller.camkes";
+
+assembly {
+    composition {
+ 
+        component Foo foo;
+        component Controller controller;
+
+        connection seL4RPC a(from controller.foo_pa, to foo.self_pa);
+        connection seL4RPC b(from controller.foo_nested_pa0, to foo.nested_pa0);
+        connection seL4RPC c(from controller.foo_nested_pa1, to foo.nested_pa1);
+        connection seL4RPC d(from controller.foo_nested_pa2, to foo.nested_pa2);
+    }
+    configuration {
+        foo.str0 = "hello";
+        foo.str1 = "world";
+    }
+}
