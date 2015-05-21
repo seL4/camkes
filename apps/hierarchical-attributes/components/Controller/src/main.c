@@ -8,7 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-#include <Controller.h>
+#include <camkes.h>
 #include <stdio.h>
 
 int run(void) {

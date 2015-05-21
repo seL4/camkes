@@ -8,8 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-#include <Baz.h>
-
+#include <camkes.h>
 #include <stdio.h>
 
 void pa_print_attributes(void) {
