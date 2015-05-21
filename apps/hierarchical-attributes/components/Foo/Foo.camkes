@@ -1,0 +1,35 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import "../../interfaces/print_attributes.camkes";
+
+component Foo {
+    attribute string str0;
+    attribute string str1;
+    
+    provides print_attributes_iface self_pa;
+
+    provides print_attributes_iface nested_pa0;
+    provides print_attributes_iface nested_pa1;
+    provides print_attributes_iface nested_pa2;
+
+    composition {
+        component Bar nested_bar;
+        component Baz nested_baz;
+
+        connection ExportRPC e0(from nested_pa0, to nested_bar.self_pa);
+        connection ExportRPC e1(from nested_pa1, to nested_bar.nested_pa);
+        connection ExportRPC e2(from nested_pa2, to nested_baz.pa);
+    }
+    configuration {
+        nested_bar.str <- str0;
+        nested_baz.str <- str1;
+    }
+}
