@@ -9,6 +9,8 @@
  */
 
 import "../../interfaces/print_attributes.camkes";
+import "../Bar/Bar.camkes";
+import "../Baz/Baz.camkes";
 
 component Foo {
     attribute string str0;
