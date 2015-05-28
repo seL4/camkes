@@ -11,7 +11,7 @@
 
 source [file join [file dirname [info script]] procs.tcl]
 
-set timeout 60
+set timeout 120
 
 spawn make x86_simple_defconfig
 check_exit
