@@ -8,10 +8,9 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <stdio.h>
 #include "payload.h"
-
-#include <Client.h>
 #include <camkes/dataport.h>
 
 int run(void) {

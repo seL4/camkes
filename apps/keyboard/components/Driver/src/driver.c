@@ -13,7 +13,7 @@
  */
 
 #include <stdio.h>
-#include <Driver.h>
+#include <camkes.h>
 
 #define KEYBOARD_STATUS_PORT    0x64 /* Control port. */
 #define KEYBOARD_DATA_PORT      0x60 /* Input/output port. */

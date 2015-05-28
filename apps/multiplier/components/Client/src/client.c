@@ -9,10 +9,10 @@
  */
 
 #include <assert.h>
+#include <camkes.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <Client.h>
 
 int run(void) {
     int operands[] = { 342, 74, 283, };

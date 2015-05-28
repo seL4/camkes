@@ -8,9 +8,9 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <string.h>
 #include <stdio.h>
-#include <Client.h>
 
 static size_t uart_write(void *buf, size_t count)
 {

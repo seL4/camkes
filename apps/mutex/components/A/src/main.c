@@ -8,10 +8,9 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <sel4/sel4.h>
 #include <stdio.h>
-#include <limits.h>
-#include <A.h>
 
 int run(void) {
     const char *name = get_instance_name();

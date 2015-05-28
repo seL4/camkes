@@ -8,8 +8,8 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <stdio.h>
-#include <B.h>
 
 int lock_lock(void);
 int lock_unlock(void);

@@ -8,10 +8,10 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <stdio.h>
 #include <string.h>
 #include <sync/spinlock.h>
-#include <Receiver.h>
 
 int run(void) {
     const char *name = get_instance_name();

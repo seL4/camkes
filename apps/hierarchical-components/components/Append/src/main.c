@@ -8,9 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-
-
-#include <Append.h>
+#include <camkes.h>
 #include <stdio.h>
 #include <string.h>
 

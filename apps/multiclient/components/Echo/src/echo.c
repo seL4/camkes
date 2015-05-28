@@ -8,7 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-#include <Echo.h>
+#include <camkes.h>
 #include <string.h>
 
 int count = 0;

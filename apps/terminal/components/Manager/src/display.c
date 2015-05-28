@@ -8,7 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-#include <Manager.h>
+#include <camkes.h>
 #include <stdio.h>
 #include <configuration.h>
 #include <terminal_terminal.h>

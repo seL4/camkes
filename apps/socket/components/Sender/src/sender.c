@@ -8,10 +8,10 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <stdio.h>
 #include <string.h>
 #include <sync/spinlock.h>
-#include <Sender.h>
 
 int run(void) {
     const char *s = "hello world";

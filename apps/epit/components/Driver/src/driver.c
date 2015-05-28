@@ -9,8 +9,8 @@
  */
 
 #include <autoconf.h>
+#include <camkes.h>
 #include <stdio.h>
-#include <Driver.h>
 
 #define KZM_EPIT_BASE_ADDR  (unsigned int)mem
 #define KZM_EPIT_CTRL_ADDR  (KZM_EPIT_BASE_ADDR + 0x00)

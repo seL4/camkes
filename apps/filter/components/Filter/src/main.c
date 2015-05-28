@@ -8,7 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-#include <Filter.h>
+#include <camkes.h>
 #include <string.h>
 
 void external__init(void) {}

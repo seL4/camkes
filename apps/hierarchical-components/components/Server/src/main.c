@@ -8,8 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-
-#include <Server.h>
+#include <camkes.h>
 #include <stdio.h>
 
 void i_process(const char *str) {

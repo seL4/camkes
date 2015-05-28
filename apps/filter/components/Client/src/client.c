@@ -8,9 +8,9 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <Client.h>
 
 int run(void) {
     printf("Looking up key \"foo\"...");

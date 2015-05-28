@@ -8,8 +8,8 @@
  * @TAG(NICTA_BSD)
  */
 
-#include "Multiplier.h"
 #include <assert.h>
+#include <camkes.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>

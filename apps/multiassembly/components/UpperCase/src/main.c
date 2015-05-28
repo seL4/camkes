@@ -8,8 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-
-#include <UpperCase.h>
+#include <camkes.h>
 #include <stdlib.h>
 #include <string.h>
 

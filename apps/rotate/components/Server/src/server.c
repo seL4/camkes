@@ -8,7 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-#include <Server.h>
+#include <camkes.h>
 
 MyType_t s_rotate(MyType_t a, MyType_t *b, MyType_t *c) {
     b->i = c->i;

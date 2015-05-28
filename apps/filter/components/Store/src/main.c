@@ -8,7 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-#include <Store.h>
+#include <camkes.h>
 #include <string.h>
 
 void l__init(void) {

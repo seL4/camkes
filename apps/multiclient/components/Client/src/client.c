@@ -8,8 +8,8 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <stdio.h>
-#include <Client.h>
 
 void event_reg_callback(void *_ UNUSED)
 {

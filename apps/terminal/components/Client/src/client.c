@@ -8,8 +8,8 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <stdio.h>
-#include <Client.h>
 
 /* Print a string starting at (0,0) in our region. */
 static void print(const char *msg) {

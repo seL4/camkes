@@ -8,7 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-#include <Server.h>
+#include <camkes.h>
 
 void a_lock(void) {
     (void)m_lock();

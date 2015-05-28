@@ -9,12 +9,11 @@
  */
 
 #include <assert.h>
+#include <camkes.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "Server.h"
 
 char *a_exchange(const char *input, char **output, char **joint)
 {

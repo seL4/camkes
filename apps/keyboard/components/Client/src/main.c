@@ -8,8 +8,8 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <stdio.h>
-#include <Client.h>
 
 static void keyboard_event_callback(void *arg)
 {

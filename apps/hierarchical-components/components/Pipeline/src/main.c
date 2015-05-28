@@ -8,8 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-
-#include <Pipeline.h>
+#include <camkes.h>
 
 void extra_process(const char *str) {
     printf("%sworld!\n", str);

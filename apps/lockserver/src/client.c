@@ -8,8 +8,8 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <stdio.h>
-#include <Client.h>
 
 int run(void) {
     printf("%s: starting...\n", get_instance_name());

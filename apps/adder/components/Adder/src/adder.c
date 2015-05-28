@@ -8,10 +8,10 @@
  * @TAG(NICTA_BSD)
  */
 
+#include <camkes.h>
 #include <stdio.h>
 #include <camkes/dataport.h>
 #include "payload.h"
-#include "Adder.h"
 
 dataport_ptr_t a_calculate(dataport_ptr_t ptr) {
     struct payload *p1, *p2;

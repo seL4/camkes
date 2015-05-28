@@ -8,7 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-#include <Service.h>
+#include <camkes.h>
 
 static unsigned int counter;
 
