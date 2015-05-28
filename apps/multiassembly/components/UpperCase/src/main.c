@@ -10,6 +10,7 @@
 
 
 #include <UpperCase.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define TO_UPPER_DIST ('A' - 'a')

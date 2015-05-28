@@ -9,6 +9,7 @@
  */
 
 #include <autoconf.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <Driver.h>
 

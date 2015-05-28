@@ -10,6 +10,7 @@
 
 
 #include <Reverse.h>
+#include <stdlib.h>
 #include <string.h>
 
 void i_process(const char *arg) {
