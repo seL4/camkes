@@ -11,12 +11,12 @@
 
 source [file join [file dirname [info script]] procs.tcl]
 
-set timeout 120
+set timeout 300
 
-spawn make x86_adder_defconfig
+spawn make ia32_multiplier_defconfig
 check_exit
 
 source [file join [file dirname [info script]] build.tcl]
 
 source [file join [file dirname [info script]] run-x86.tcl]
-wait_for "client: result was 1270"
+wait_for "client: other is {7, 8, }"

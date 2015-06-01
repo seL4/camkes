@@ -13,7 +13,7 @@ source [file join [file dirname [info script]] procs.tcl]
 
 set timeout 600
 
-spawn make x86_terminal_defconfig
+spawn make ia32_keyboard_defconfig
 check_exit
 
 source [file join [file dirname [info script]] build.tcl]

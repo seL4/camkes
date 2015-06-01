@@ -11,12 +11,12 @@
 
 source [file join [file dirname [info script]] procs.tcl]
 
-set timeout 300
+set timeout 120
 
-spawn make x86_lockserver_defconfig
+spawn make ia32_adder_defconfig
 check_exit
 
 source [file join [file dirname [info script]] build.tcl]
 
 source [file join [file dirname [info script]] run-x86.tcl]
-wait_for "c3: released"
+wait_for "client: result was 1270"

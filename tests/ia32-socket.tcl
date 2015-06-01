@@ -11,12 +11,12 @@
 
 source [file join [file dirname [info script]] procs.tcl]
 
-set timeout 300
+set timeout 600
 
-spawn make x86_multiclient_defconfig
+spawn make ia32_socket_defconfig
 check_exit
 
 source [file join [file dirname [info script]] build.tcl]
 
 source [file join [file dirname [info script]] run-x86.tcl]
-wait_for "echo_int: 2"
+wait_for "receiver: Done."

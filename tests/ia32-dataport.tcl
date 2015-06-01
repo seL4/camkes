@@ -13,10 +13,10 @@ source [file join [file dirname [info script]] procs.tcl]
 
 set timeout 120
 
-spawn make x86_multiassembly_defconfig
+spawn make ia32_dataport_defconfig
 check_exit
 
 source [file join [file dirname [info script]] build.tcl]
 
 source [file join [file dirname [info script]] run-x86.tcl]
-wait_for "DLROW OLLEH"
+wait_for "comp2 read hello world"

@@ -11,12 +11,12 @@
 
 source [file join [file dirname [info script]] procs.tcl]
 
-set timeout 120
+set timeout 300
 
-spawn make x86_hierarchical_attributes_defconfig
+spawn make ia32_event_defconfig
 check_exit
 
 source [file join [file dirname [info script]] build.tcl]
 
 source [file join [file dirname [info script]] run-x86.tcl]
-wait_for "str: world"
+wait_for "event_callback: Got an event"

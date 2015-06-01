@@ -11,12 +11,12 @@
 
 source [file join [file dirname [info script]] procs.tcl]
 
-set timeout 300
+set timeout 120
 
-spawn make x86_mutex_defconfig
+spawn make ia32_hierarchical_attributes_defconfig
 check_exit
 
 source [file join [file dirname [info script]] build.tcl]
 
 source [file join [file dirname [info script]] run-x86.tcl]
-wait_for "b: Exiting"
+wait_for "str: world"

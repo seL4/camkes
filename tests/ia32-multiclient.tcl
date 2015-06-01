@@ -13,10 +13,10 @@ source [file join [file dirname [info script]] procs.tcl]
 
 set timeout 300
 
-spawn make x86_multiplier_defconfig
+spawn make ia32_multiclient_defconfig
 check_exit
 
 source [file join [file dirname [info script]] build.tcl]
 
 source [file join [file dirname [info script]] run-x86.tcl]
-wait_for "client: other is {7, 8, }"
+wait_for "echo_int: 2"
