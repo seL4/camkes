@@ -18,5 +18,5 @@ check_exit
 
 source [file join [file dirname [info script]] build.tcl]
 
-source [file join [file dirname [info script]] run-x86.tcl]
+source [file join [file dirname [info script]] run-ia32.tcl]
 wait_for "Client ret: This is a string from server."
