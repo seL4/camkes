@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <sel4/sel4.h>
+#include <stddef.h>
 
 /*- set ep = alloc('ep', seL4_EndpointObject, read=True, write=True) -*/
 
