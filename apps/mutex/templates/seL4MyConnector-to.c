@@ -10,6 +10,7 @@
 
 #include <assert.h>
 #include <sel4/sel4.h>
+#include <stddef.h>
 #include <sync/mutex.h>
 
 /*- set ep = alloc('ep', seL4_EndpointObject, read=True, write=True) -*/
