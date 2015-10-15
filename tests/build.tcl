@@ -16,5 +16,8 @@ check_exit
 spawn make clean
 check_exit
 
-spawn make -j
+spawn make -j libmuslc
+check_exit
+
+spawn make
 check_exit
