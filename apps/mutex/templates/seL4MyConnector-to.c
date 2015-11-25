@@ -36,7 +36,7 @@ void /*? me.to_interface.name ?*/__init(void) {
 
 int /*? me.to_interface.name ?*/__run(void) {
     while (1) {
-        seL4_MessageInfo_t info = seL4_Wait(/*? ep ?*/, NULL);
+        seL4_MessageInfo_t info = seL4_Recv(/*? ep ?*/, NULL);
         assert(seL4_MessageInfo_get_length(info) == 1);
         if (seL4_GetMR(0) == 0) {
             (void)sync_mutex_lock(&mutex);
