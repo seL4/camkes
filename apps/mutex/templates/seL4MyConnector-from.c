@@ -21,12 +21,12 @@ int /*? me.from_interface.name ?*/__run(void) {
 
 int /*? me.from_interface.name ?*/_lock(void) {
     seL4_Notify(/*? ep ?*/, 0);
-    (void)seL4_Wait(/*? ep ?*/, NULL);
+    (void)seL4_Recv(/*? ep ?*/, NULL);
     return 0;
 }
 
 int /*? me.from_interface.name ?*/_unlock(void) {
     seL4_Notify(/*? ep ?*/, 1);
-    (void)seL4_Wait(/*? ep ?*/, NULL);
+    (void)seL4_Recv(/*? ep ?*/, NULL);
     return 0;
 }

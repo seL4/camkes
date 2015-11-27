@@ -14,7 +14,7 @@
 #include <sync/mutex.h>
 
 /*- set ep = alloc('ep', seL4_EndpointObject, read=True, write=True) -*/
-/*- set aep = alloc('aep', seL4_AsyncEndpointObject, read=True, write=True) -*/
+/*- set notification = alloc('notification', seL4_NotificationObject, read=True, write=True) -*/
 
 static sync_mutex_t mutex;
 
@@ -30,13 +30,13 @@ int /*? me.to_interface.name ?*/_unlock(void) {
 }
 
 void /*? me.to_interface.name ?*/__init(void) {
-    int result = sync_mutex_init(&mutex, /*? aep ?*/);
+    int result = sync_mutex_init(&mutex, /*? notification ?*/);
     assert(result == 0);
 }
 
 int /*? me.to_interface.name ?*/__run(void) {
     while (1) {
-        seL4_MessageInfo_t info = seL4_Wait(/*? ep ?*/, NULL);
+        seL4_MessageInfo_t info = seL4_Recv(/*? ep ?*/, NULL);
         assert(seL4_MessageInfo_get_length(info) == 1);
         if (seL4_GetMR(0) == 0) {
             (void)sync_mutex_lock(&mutex);
