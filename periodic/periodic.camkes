@@ -1,0 +1,42 @@
+/*
+ * Copyright 2015, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+import "components/Client/Client.camkes";
+
+assembly {
+        composition {
+                component Client client1;
+                component Client client2;
+        }
+	configuration {
+		client1._priority = 100;
+		client1._control_period = 10000;
+		client1._control_budget = 2500;
+		client2._priority = 100;
+		client2._control_period = 10000;
+		client2._control_budget = 10000;
+	}
+}
+
+/*
+Scenarios to consider:
+- client 1: high prio, client 2: low prio
+- client 1 period == client 2 period
+- client 1: high budget/period ratio, client 2: high budget/period ratio 
+	- result: client 1 progress >> client 2 progress
+- client 1: high budget/period ratio, client 2: low budget/period ratio 
+	- result: client 1 progress >> client 2 progress
+- client 1: low budget/period ratio, client 2: high budget/period ratio 
+	- result: client 1 progress << client 2 progress
+- client 1: low budget/period ratio, client 2: low budget/period ratio
+	- result: client 1 progress == client 2 progress
+*/
