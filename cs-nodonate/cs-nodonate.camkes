@@ -21,14 +21,13 @@ assembly {
                 connection seL4RPC client_server(from client.i, to server.i);
         }
 	configuration {
-		client.control_priority = 50;
-		client.control_period = 10000;
-		client.control_deadline = 10000;
-		client.control_exec_req = 10000;
+		client._control_priority = 50;
+		client._control_period = 10000;
+		client._control_budget = 100;
+		// server.i_sc = "none";
 		server.i_priority = 60;
 		server.i_period = 10000;
-		server.i_deadline = 10000;
-		server.i_exec_req = 10000;
+		server.i_budget = 100;
 	}
 }
 
@@ -39,9 +38,9 @@ Scenarios to consider:
 - server has enough SC: succeed
 - server doesn't have enough SC: succeed (roll over to the next period)
 - if client/server doesn't have enough SC
-	- exec_req << period: succeed - longer delay
-	- exec_req < period: succeed - shorter delay
-	- exec_req = period: succeed - no delay
+	- budget << period: succeed - longer delay
+	- budget < period: succeed - shorter delay
+	- budget = period: succeed - no delay
 	- deadline? has this been removed?
 
 should we time how long the calls take? or does it matter (thinking behind this: tell the difference between a call succedding in one period or having to wait for it to reset and continuing when it goes over budget and also how long the period is)

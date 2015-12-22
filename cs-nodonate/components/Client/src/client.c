@@ -23,23 +23,23 @@ int run() {
     printf("Starting the client\n");
     printf("-------------------\n");
 
-    j = a_echo_int(i);
+    j = i_echo_int(i);
     printf("echo_int: %d -> %d\n",i, j);
 
-    g = a_echo_float(f);
+    g = i_echo_float(f);
     printf("echo_float: %f -> %f\n",f, g);
 
-    e = a_echo_double(d);
+    e = i_echo_double(d);
     printf("echo_double: %f -> %f\n",d, e);
 
-    j = a_echo_mix(d);
+    j = i_echo_mix(d);
     printf("echo_mix: %f -> %d\n",d, j);
 
-    s = a_echo_string(shello);
+    s = i_echo_string(shello);
     printf("echo_string: \"%s\" -> \"%s\"\n", shello, s);
     free(s);
 
-    p2 = a_echo_parameter(p, &p1);
+    p2 = i_echo_parameter(p, &p1);
     printf("echo_parameter: %d -> %d (returned = %d)\n", p, p1, p2);
 
     printf("After the client\n");
