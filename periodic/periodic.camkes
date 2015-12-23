@@ -20,8 +20,8 @@ assembly {
 	configuration {
 		client1._priority = 100;
 		client1._control_period = 10000;
-		client1._control_budget = 2500;
-		client2._priority = 100;
+		client1._control_budget = 10000;
+		client2._priority = 50;
 		client2._control_period = 10000;
 		client2._control_budget = 10000;
 	}
@@ -31,6 +31,9 @@ assembly {
 Scenarios to consider:
 - client 1: high prio, client 2: low prio
 - client 1 period == client 2 period
+- high ratio = 3/4, low ratio = 1/4
+- client 1: budget/period ratio == 1, client 2: budget/period ratio == 1
+	- result: client 1 progress runs before client 2 progress
 - client 1: high budget/period ratio, client 2: high budget/period ratio 
 	- result: client 1 progress >> client 2 progress
 - client 1: high budget/period ratio, client 2: low budget/period ratio 

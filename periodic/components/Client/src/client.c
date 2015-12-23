@@ -24,6 +24,7 @@ int run() {
     IPRINT("--- Starting ---\n");
 
     while (acc < MAX) {
+	/* do calculations to waste time */
 	acc *= 17;
 	acc++;
 	acc /= 17;
