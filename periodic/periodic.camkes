@@ -19,11 +19,11 @@ assembly {
         }
 	configuration {
 		client1._priority = 100;
-		client1._control_period = 10000;
-		client1._control_budget = 10000;
+		client1._period = 10000;
+		client1._budget = 7500;
 		client2._priority = 50;
-		client2._control_period = 10000;
-		client2._control_budget = 10000;
+		client2._period = 10000;
+		client2._budget = 7500;
 	}
 }
 
