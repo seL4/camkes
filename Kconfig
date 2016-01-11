@@ -36,6 +36,7 @@ menu "Libraries"
     source "libs/libutils/Kconfig"
     source "libs/libsel4simple/Kconfig"
     source "libs/libsel4simple-default/Kconfig"
+    source "libs/libsel4bga/Kconfig"
 endmenu
 
 menu "Applications"
