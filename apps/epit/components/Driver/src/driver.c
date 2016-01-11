@@ -72,18 +72,16 @@ void epit_start_timer(void)
 }
 
 static int count = 0;
-void epit_irq_callback(void *_ UNUSED)
+void irq_handle(void)
 {
 	/* Clear status bit. */
 	REG_VAL(KZM_EPIT_STAT_ADDR) = 0x1;
 
 	printf("EPIT time out...%d\n", count++);
-	irq_reg_callback(epit_irq_callback, NULL);
 }
 
 int run(void)
 {
-	irq_reg_callback(epit_irq_callback, NULL);
 	epit_init();
 	epit_set_interval(1000);
 

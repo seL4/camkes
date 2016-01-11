@@ -1,0 +1,12 @@
+#
+# Copyright 2014, NICTA
+#
+# This software may be distributed and modified according to the terms of
+# the GNU General Public License version 2. Note that NO WARRANTY is provided.
+# See "LICENSE_GPLv2.txt" for details.
+#
+# @TAG(NICTA_GPL)
+#
+
+apps-$(CONFIG_APP_AEROPLAGE) += aeroplage
+aeroplage: libsel4 libmuslc libsel4muslccamkes libsel4camkes libsel4sync libsel4debug libsel4bench libringbuffer libsel4bga libsel4keyboard

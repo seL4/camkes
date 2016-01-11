@@ -1,0 +1,79 @@
+/*
+ * Copyright 2015, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+procedure Transfer {
+    void switch_to(void);
+}
+
+/* This component will generate a reply cap in its partner and validate that
+ * this application reaches successful conclusion.
+ */
+component Generator {
+    control;
+    uses Transfer a;
+}
+
+/* This component will receive a reply cap and then do its best to trash the
+ * cap through various CAmkES operations. If the reply cap protection is
+ * correctly implemented, we should still eventually be able to return to the
+ * Generator.
+ */
+component Receiver {
+    provides Transfer a;
+
+    uses Transfer b1;
+    provides Transfer b2;
+
+    uses Transfer c1;
+    provides Transfer c2;
+
+    uses Transfer d1;
+    provides Transfer d2;
+
+    uses Transfer e;
+
+    has mutex m;
+    has semaphore s;
+
+    emits Ping p1;
+    emits Ping p2;
+}
+
+/* This component simply responds to incoming requests. */
+component Responder {
+    provides Transfer e;
+}
+
+/* This component waits for an incoming event and then calls its procedure. */
+component Caller {
+    control;
+    consumes Ping p;
+    uses Transfer t;
+}
+
+assembly {
+    composition {
+        component Generator g;
+        component Receiver r;
+        component Responder p;
+        component Caller c1;
+        component Caller c2;
+
+        connection seL4RPCCall conn0(from g.a, from c1.t, from c2.t, to r.a);
+        connection seL4RPC conn1(from r.b1, to r.b2);
+        connection seL4RPCSimple conn2(from r.c1, to r.c2);
+        connection seL4RPCCall conn3(from r.d1, to r.d2);
+        connection seL4RPCCall conn4(from r.e, to p.e);
+        connection seL4Asynch conn5(from r.p1, to c1.p);
+        connection seL4Asynch conn6(from r.p2, to c2.p);
+    }
+}

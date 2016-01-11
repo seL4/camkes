@@ -24,8 +24,8 @@ component Pipeline {
 
         connection seL4RPC internal1(from a.o, to sp.i);
  
-        connection ExportRPC exp1(from sp.o, to o);
-        connection ExportRPC exp2(from i, to a.i);
+        export sp.o -> o;
+        export a.i -> i;
     }
     configuration {
         a.string_to_append = "world";

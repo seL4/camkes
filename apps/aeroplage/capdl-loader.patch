@@ -1,0 +1,42 @@
+diff -r 9259bdf00f0e src/main.c
+--- a/src/main.c	Tue Mar 25 09:39:50 2014 +1100
++++ b/src/main.c	Tue Mar 25 15:03:01 2014 +1100
+@@ -401,6 +401,38 @@
+          */
+         elf32_getProgramHeaderTable(elf_file)[i].p_type = PT_NULL;
+     }
++
++    /* XXX: Hack to map the BGA frame buffer into the VESA driver's address
++     * space. We need this because CAmkES does not currently support large
++     * frame MMIO regions.
++     */
++    if (!strcmp(elf_name, "vesa.group.bin")) {
++        static int done = 0;
++        if (!done) {
++            uintptr_t bga_addr = 0xfd000000; // Physical address of the frame buffer
++            uintptr_t bga_vaddr = 0x400000; // Virtual address through which the VESA driver will access it
++            printf("Mapping BGA frame, %p\n", (void*)bga_addr);
++            for (unsigned int i = 0; i < bootinfo->numDeviceRegions; i++) {
++                uintptr_t paddr = bootinfo->deviceRegions[i].basePaddr;
++                int size = bootinfo->deviceRegions[i].frameSizeBits;
++                int frames = bootinfo->deviceRegions[i].frames.end
++                    - bootinfo->deviceRegions[i].frames.start;
++                for (unsigned int j = 0; j < frames; j++) {
++                    if (paddr + (1 << size) * j == bga_addr) {
++                        seL4_CPtr sel4_pd = orig_caps(pd);
++                        int err = seL4_Page_Map(bootinfo->deviceRegions[i].frames.start + j,
++                            sel4_pd, bga_vaddr, seL4_AllRights, CDL_VM_CacheDisabled);
++                        assert(err == 0);
++                        goto found;
++                    }
++                }
++            }
++            printf("not found!\n");
++            assert(0);
++found:
++            done = 1;
++        }
++    }
+ }
+ #endif //!CONFIG_CAPDL_LOADER_VERIFIED
+ 

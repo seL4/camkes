@@ -9,6 +9,6 @@
  */
 
 procedure Rotation {
-    include "include/MyType.h";
+    include "MyType.h";
     MyType_t rotate(in MyType_t a, out MyType_t b, inout MyType_t c);
 };

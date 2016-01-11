@@ -1,0 +1,35 @@
+/*
+ * Copyright 2015, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+procedure Switch {
+    void switch_to(void);
+}
+
+component Client {
+    control;
+    dataport Buf(5000) d;
+    uses Switch s;
+}
+
+component Server {
+    dataport Buf(5000) d;
+    provides Switch s;
+}
+
+assembly {
+    composition {
+        component Client c;
+        component Server s;
+        connection seL4RPCCall conn(from c.s, to s.s);
+        connection seL4SharedData conn1(from c.d, to s.d);
+    }
+}

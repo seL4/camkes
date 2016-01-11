@@ -22,7 +22,7 @@ void s__init(void) {
 }
 
 int s_echo_int(void) {
-    char *str = "This string is in the dataport.";
+    const char *str = "This string is in the dataport.";
 
     udelay(100000);
     strcpy((char*)d, str);

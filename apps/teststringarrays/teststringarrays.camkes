@@ -1,0 +1,48 @@
+/*
+ * Copyright 2015, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+procedure P {
+    string foo(void);
+    void bar(in string x[]);
+    void baz(out string x[]);
+    void qux(inout string x[]);
+    void quux(in string x[], out string y[], inout string z[]);
+    void corge(refin string x[]);
+}
+
+component A {
+    control;
+    uses P p;
+}
+
+component B {
+    uses P p;
+    provides P q;
+}
+
+component C {
+    provides P p;
+}
+
+assembly {
+    composition {
+        component A a;
+        component B b1;
+        component B b2;
+        component B b3;
+        component C c;
+        connection seL4RPC conn0(from a.p, to b1.q);
+        connection seL4RPCCall conn1(from b1.p, to b2.q);
+        connection seL4RPC conn2(from b2.p, to b3.q);
+        connection seL4RPCCall conn3(from b3.p, to c.p);
+    }
+}

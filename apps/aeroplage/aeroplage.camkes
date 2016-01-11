@@ -1,0 +1,142 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the GNU General Public License version 2. Note that NO WARRANTY is provided.
+ * See "LICENSE_GPLv2.txt" for details.
+ *
+ * @TAG(NICTA_GPL)
+ */
+
+/* CAmkES ADL description of the system. Every system needs such a description
+ * that covers the component types, their instantiations, connections between
+ * them and system configuration. This description can be split across multiple
+ * files, using the 'import' directive that works like CPP's #include
+ * directive. For simplicity, I've just defined everything in a single file.
+ */
+
+/* Import builtin ADL descriptions of CAmkES connector types. */
+import <std_connector.camkes>;
+
+/* Component definitions: */
+
+/* The keyboard needs to be declared as a hardware component. We describe it as
+ * being controlled through a set of IO ports. The ports themselves are
+ * delineated in the configuration block below. Note, this is a PS2 keyboard.
+ */
+component Keyboard {
+    hardware;
+    provides IOPort ports;
+}
+
+/* The keyboard device driver will configure the keyboard, and then communicate
+ * with it and the switch. Below we will connect its IO ports to the keyboard
+ * and its outgoing interface to the switch.
+ */
+component KeyboardDriver {
+    /* The 'control' keyword gives this component a thread that will call the
+     * function run() implemented by the user.
+     */
+    control;
+    uses IOPort ports;
+    dataport Buf char_out;
+}
+
+component Screen {
+    hardware;
+    /* XXX: there is actually a frame buffer here as well. Normally this would
+     * be declared as a CAmkES dataport, but CAmkES does not currently support
+     * large frame device regions. Instead the frame buffer is hard coded by
+     * the patch to the CapDL initialiser.
+     */
+    //dataport Buf framebuffer;
+    provides IOPort ports;
+}
+
+component Switch {
+    control;
+    dataport Buf char_in;
+    dataport Buf low_output;
+    dataport Buf high_output;
+}
+
+/* Placeholder for virtualised Linux. */
+component MockLinux {
+    control;
+    dataport Buf keyboard_input;
+    dataport Buf framebuffer;
+}
+
+component VESADriver {
+    control;
+    dataport Buf low_input;
+    dataport Buf high_input;
+    /* XXX: This is where we would declare the corresponding side of the
+     * screen's frame buffer as a dataport.
+     */
+    //dataport Buf mock_hdmi;
+    uses IOPort ports;
+}
+
+/* The system definition: */
+assembly {
+    composition {
+        /* Instantiate each component type once. There is actually syntax for
+         * creating these as singleton types, but we don't use it here because
+         * it leads to a more dense, complicated description.
+         */
+        component Keyboard ps2;
+        component KeyboardDriver keyboarddriver;
+        component Switch s; /* XXX: Remember not to call a component like this
+                             * 'switch' as it will collide with the C keyword.
+                             */
+
+        /* The output display and its driver. */
+        component Screen video;
+        component VESADriver vesa;
+
+        /* Instantiate two Linuxes. */
+        component MockLinux low;
+        component MockLinux high;
+
+        /* Wire everything up. */
+        connection seL4HardwareIOPort keyboard(from keyboarddriver.ports, to ps2.ports);
+        connection seL4SharedData text(from keyboarddriver.char_out, to s.char_in);
+        connection seL4SharedData low_text(from s.low_output, to low.keyboard_input);
+        connection seL4SharedData high_text(from s.high_output, to high.keyboard_input);
+        connection seL4SharedData low_video(from low.framebuffer, to vesa.low_input);
+        connection seL4SharedData high_video(from high.framebuffer, to vesa.high_input);
+        /* XXX: Again, this connection should exist, but CAmkES is lacking the
+         * necessary support.
+         */
+        //connection seL4HardwareMMIO video_out(from vesa.mock_hdmi, to video.framebuffer);
+        connection seL4HardwareIOPort video_config(from vesa.ports, to video.ports);
+    }
+
+    /* This section is used to make tweaks to the system described above. Below
+     * we describe the addresses of the IO ports in use. During the build
+     * process this information is passed to the CapDL loader to tell it how to
+     * mint IO port caps.
+     */
+    configuration {
+        /* The IO ports for controlling a PS2 keyboard. */
+        ps2.ports_attributes = "0x60:0x64";
+        /* The IO ports for controlling the Bochs Graphic Array video hardware. */
+        video.ports_attributes = "0x1ce:0x1d0";
+        /* XXX: This is where and how we would declare the physical address of
+         * the BGA's frame buffer.
+         */
+        //video.framebuffer_paddr = 0xfd000000;
+        //video.framebuffer_size = 0x400000;
+
+        /* We want to make each dataport effectively a data diode by ensuring
+         * one way communication. To do this, set each of the dataport's to
+         * sides to read-only access.
+         */
+        text.to_access = "R";
+        low_text.to_access = "R";
+        high_text.to_access = "R";
+        low_video.to_access = "R";
+        high_video.to_access = "R";
+    }
+}

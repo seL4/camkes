@@ -30,7 +30,8 @@ assembly {
     }
 
     configuration {
-        uart.mem_attributes = "0x43F90000:0x1000";
+        uart.mem_paddr = 0x43F90000;
+        uart.mem_size = 0x1000;
 
 	random.ID = 1;
     }

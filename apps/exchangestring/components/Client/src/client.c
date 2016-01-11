@@ -18,7 +18,7 @@
 int run(void)
 {
 	char *ret;
-	char *input = "This is a client string.";
+	const char *input = "This is a client string.";
 	char *output = NULL;
 	char *joint = malloc(25);
 	strncpy(joint, input, 25);

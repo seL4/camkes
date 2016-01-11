@@ -15,8 +15,8 @@ void l__init(void) {
 }
 
 static struct {
-    char *key;
-    char *value;
+    const char *key;
+    const char *value;
 } dict[] = {
     {
         .key = "foo",

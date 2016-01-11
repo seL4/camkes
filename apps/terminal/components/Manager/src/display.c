@@ -25,7 +25,7 @@ static void write_char(int x, int y, char c) {
 }
 
 /* Draw a border around a region. */
-static void borderise(int x, int y, int width, int height, char *colour) {
+static void borderise(int x, int y, int width, int height, const char *colour) {
     int i, j;
     printf("%s", colour);
 

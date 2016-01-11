@@ -1,0 +1,39 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the GNU General Public License version 2. Note that NO WARRANTY is provided.
+ * See "LICENSE_GPLv2.txt" for details.
+ *
+ * @TAG(NICTA_GPL)
+ */
+
+import <std_connector.camkes>;
+
+/* We need to create at least one connection for the final assembly to be
+ * valid, so declare a procedure we will never use to make this work.
+ */
+procedure Dummy {
+    void dummy();
+}
+
+component Client {
+    control;
+    uses Dummy dummy;
+}
+
+component Server {
+    provides Dummy dummy;
+}
+
+assembly {
+    composition {
+        component Client client;
+        component Server server;
+        connection seL4RPC unused(from client.dummy, to server.dummy);
+    }
+    configuration {
+        client.dma_pool = 4 * 1024 * 1024;
+    }
+}
+

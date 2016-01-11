@@ -1,0 +1,23 @@
+#
+# Copyright 2014, NICTA
+#
+# This software may be distributed and modified according to the terms of
+# the GNU General Public License version 2. Note that NO WARRANTY is provided.
+# See "LICENSE_GPLv2.txt" for details.
+#
+# @TAG(NICTA_GPL)
+#
+
+menuconfig APP_DHCP
+    bool "DHCP server and clients"
+    default n
+    help
+        An application based on a DHCP server setup with some clients. Intended
+        to be the subject of a verification case study.
+
+config APP_DHCP_DEBUG
+    bool "Enable debug printing"
+    default y
+    depends on APP_DHCP
+    help
+        Enable debug print outs for this application.

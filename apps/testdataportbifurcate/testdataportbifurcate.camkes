@@ -1,0 +1,27 @@
+/*
+ * Copyright 2015, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+component Foo {
+    control;
+    dataport Buf d1;
+    dataport Buf d2;
+    dataport Buf d3;
+    dataport Buf d4;
+}
+
+assembly {
+    composition {
+        component Foo f;
+
+        connection seL4SharedData conn(from f.d1, from f.d2, to f.d3, to f.d4);
+    }
+}

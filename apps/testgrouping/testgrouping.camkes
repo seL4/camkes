@@ -1,0 +1,77 @@
+/*
+ * Copyright 2015, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+procedure P {
+    int increment(in int x);
+}
+
+component A {
+    control;
+    uses P p;
+}
+
+component B {
+    provides P p1;
+    uses P p2;
+}
+
+component C {
+    provides P p;
+}
+
+assembly {
+    composition {
+        /* First a component by itself. */
+        component A a;
+
+        /* Now some standard grouped components. */
+        group foo {
+            component B b;
+            component B c;
+        }
+
+        /* Now a group with the same name as one of the other components. */
+        group a {
+            component B d;
+            component B e;
+        }
+
+        /* Now a group with the same name as one of the contained components.
+         */
+        group f {
+            component B f;
+            component B g;
+        }
+
+        /* Now a singleton group. */
+        group bar {
+            component B h;
+        }
+
+        /* Finally a singleton group with the same name as its contained
+         * component.
+         */
+        group i {
+            component C i;
+        }
+
+        /* Wire it all together. */
+        connection seL4RPCCall conn0(from a.p, to foo.b.p1);
+        connection seL4RPCCall conn1(from foo.b.p2, to foo.c.p1);
+        connection seL4RPCCall conn2(from foo.c.p2, to a.d.p1);
+        connection seL4RPCCall conn3(from a.d.p2, to a.e.p1);
+        connection seL4RPCCall conn4(from a.e.p2, to f.f.p1);
+        connection seL4RPCCall conn5(from f.f.p2, to f.g.p1);
+        connection seL4RPCCall conn6(from f.g.p2, to bar.h.p1);
+        connection seL4RPCCall conn7(from bar.h.p2, to i.i.p);
+    }
+}

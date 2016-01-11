@@ -55,7 +55,7 @@ assembly {
 		dumb.s_attributes = "0x123:0x456";
 
 		/* The keyboard triggers interrupt 1 when data is available. */
-		keyboard.interrupt_attributes = 1;
+		keyboard.interrupt_irq_number = 1;
 	}
 }
 

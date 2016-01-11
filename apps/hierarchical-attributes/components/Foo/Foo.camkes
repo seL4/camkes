@@ -26,9 +26,9 @@ component Foo {
         component Bar nested_bar;
         component Baz nested_baz;
 
-        connection ExportRPC e0(from nested_pa0, to nested_bar.self_pa);
-        connection ExportRPC e1(from nested_pa1, to nested_bar.nested_pa);
-        connection ExportRPC e2(from nested_pa2, to nested_baz.pa);
+        export nested_bar.self_pa -> nested_pa0;
+        export nested_bar.nested_pa -> nested_pa1;
+        export nested_baz.pa -> nested_pa2;
     }
     configuration {
         nested_bar.str <- str0;

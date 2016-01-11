@@ -11,7 +11,7 @@
 
 source [file join [file dirname [info script]] procs.tcl]
 
-set timeout 300
+set timeout 600
 
 spawn make arm_multiplier_defconfig
 check_exit

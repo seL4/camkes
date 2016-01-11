@@ -1,0 +1,45 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the GNU General Public License version 2. Note that NO WARRANTY is provided.
+ * See "LICENSE_GPLv2.txt" for details.
+ *
+ * @TAG(NICTA_GPL)
+ *
+ */
+
+import <std_connector.camkes>;
+
+procedure DHCP {
+    uint32_t discover(in uint64_t hwaddr, out uint32_t siaddr);
+    uint32_t request(in uint32_t ip, in uint32_t siaddr);
+}
+
+component Client {
+    control;
+    uses DHCP dhcp;
+}
+
+component Server {
+    has mutex lock;
+    provides DHCP client1;
+    provides DHCP client2;
+    provides DHCP client3;
+    provides DHCP client4;
+}
+
+assembly {
+    composition {
+        component Client a;
+        component Client b;
+        component Client c;
+        component Client d;
+        component Server s;
+
+        connection seL4RPCCall c1(from a.dhcp, to s.client1);
+        connection seL4RPCCall c2(from b.dhcp, to s.client2);
+        connection seL4RPCCall c3(from c.dhcp, to s.client3);
+        connection seL4RPCCall c4(from d.dhcp, to s.client4);
+    }
+}

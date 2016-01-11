@@ -1,0 +1,46 @@
+/*
+ * Copyright 2015, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+procedure Post {
+    void post(in dataport_ptr_t ptr);
+}
+
+component Client {
+    control;
+    uses Post p;
+    dataport Buf d;
+}
+
+component Intermediary {
+    provides Post p1;
+    uses Post p2;
+    dataport Buf d;
+}
+
+component Server {
+    provides Post p;
+    dataport Buf d;
+}
+
+assembly {
+    composition {
+        component Client c;
+        component Intermediary i1;
+        component Intermediary i2;
+        component Server s;
+
+        connection seL4RPC conn0(from c.p, to i1.p1);
+        connection seL4RPC conn1(from i1.p2, to i2.p1);
+        connection seL4RPC conn2(from i2.p2, to s.p);
+        connection seL4SharedData conn3(from c.d, to i1.d, to i2.d, to s.d);
+    }
+}

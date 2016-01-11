@@ -13,8 +13,8 @@ ADL := rotate.camkes
 
 Client_CFILES := $(patsubst ${SOURCE_DIR}/%,%,$(wildcard ${SOURCE_DIR}/components/Client/src/*.c))
 
-Client_HFILES := components/Client/include/MyType.h
-Server_HFILES := components/Server/include/MyType.h
+Client_HFILES := MyType.h
+Server_HFILES := MyType.h
 
 Server_CFILES := $(patsubst ${SOURCE_DIR}/%,%,$(wildcard ${SOURCE_DIR}/components/Server/src/*.c))
 

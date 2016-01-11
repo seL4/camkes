@@ -22,7 +22,7 @@ component SubPipeline {
 
         connection seL4RPC internal(from uc.o, to r.i);
  
-        connection ExportRPC exp1(from r.o, to o);
-        connection ExportRPC exp2(from i, to uc.i);
+        export r.o -> o;
+        export uc.i -> i;
     }
 }

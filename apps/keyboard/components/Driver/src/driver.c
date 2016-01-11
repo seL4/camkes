@@ -44,26 +44,20 @@ static int keyboard_enable(void)
 	return 0;
 }
 
-static void keyboard_interrupt_handler(void *arg)
+void interrupt_handle(void)
 {
 	printf("Scancode: %u\n", read_scancode());
 	keypress_emit();
-	interrupt_reg_callback(&keyboard_interrupt_handler, NULL);
+    interrupt_acknowledge();
 }
 
 void kbd__init(void)
 {
-	int ret = 0;
-
 	read_status();
 	keyboard_enable();
-
-	ret = interrupt_reg_callback(&keyboard_interrupt_handler, NULL);
-	printf("reg callback: %d\n", ret);
 }
 
 int kbd_get_scancode(void)
 {
 	return read_scancode();
 }
-

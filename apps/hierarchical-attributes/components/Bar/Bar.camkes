@@ -21,7 +21,7 @@ component Bar {
     composition {
         component Baz nested_baz;
 
-        connection ExportRPC e(from nested_pa, to nested_baz.pa);
+        export nested_baz.pa -> nested_pa;
     }
     configuration {
         nested_baz.str <- str;

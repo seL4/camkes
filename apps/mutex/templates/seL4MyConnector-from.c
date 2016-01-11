@@ -14,19 +14,19 @@
 
 /*- set ep = alloc('ep', seL4_EndpointObject, read=True, write=True) -*/
 
-int /*? me.from_interface.name ?*/__run(void) {
+int /*? me.interface.name ?*/__run(void) {
     /* No setup required */
     return 0;
 }
 
-int /*? me.from_interface.name ?*/_lock(void) {
+int /*? me.interface.name ?*/_lock(void) {
     seL4_Notify(/*? ep ?*/, 0);
-    (void)seL4_Recv(/*? ep ?*/, NULL);
+    (void)seL4_Wait(/*? ep ?*/, NULL);
     return 0;
 }
 
-int /*? me.from_interface.name ?*/_unlock(void) {
+int /*? me.interface.name ?*/_unlock(void) {
     seL4_Notify(/*? ep ?*/, 1);
-    (void)seL4_Recv(/*? ep ?*/, NULL);
+    (void)seL4_Wait(/*? ep ?*/, NULL);
     return 0;
 }

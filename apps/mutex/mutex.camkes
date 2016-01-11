@@ -14,8 +14,8 @@ import "components/A/A.camkes";
 import "components/B/B.camkes";
 
 connector seL4MyConnector {
-    from Procedure user template "seL4MyConnector-from.c";
-    to Procedure implementer template "seL4MyConnector-to.c";
+    from Procedure template "seL4MyConnector-from.c";
+    to Procedure template "seL4MyConnector-to.c";
 }
 
 assembly {
