@@ -12,6 +12,7 @@
 #include <sel4/sel4.h>
 #include <stddef.h>
 #include <sync/mutex.h>
+#include <utils/util.h>
 
 /*- set ep = alloc('ep', seL4_EndpointObject, read=True, write=True) -*/
 /*- set aep = alloc('aep', seL4_NotificationObject, read=True, write=True) -*/
@@ -36,14 +37,17 @@ void /*? me.interface.name ?*/__init(void) {
 
 int /*? me.interface.name ?*/__run(void) {
     while (1) {
-        seL4_MessageInfo_t info = seL4_Wait(/*? ep ?*/, NULL);
+        seL4_MessageInfo_t info = seL4_Recv(/*? ep ?*/, NULL);
         assert(seL4_MessageInfo_get_length(info) == 1);
         if (seL4_GetMR(0) == 0) {
-            (void)sync_mutex_lock(&mutex);
+            int result UNUSED = sync_mutex_lock(&mutex);
+            assert(result == 0);
         } else {
-            (void)sync_mutex_unlock(&mutex);
+            int result UNUSED = sync_mutex_unlock(&mutex);
+            assert(result == 0);
         }
-        seL4_Notify(/*? ep ?*/, 0 /* ignored */);
+        info = seL4_MessageInfo_new(0, 0, 0, 0);
+        seL4_Send(/*? ep ?*/, info);
     }
 
     assert(!"unreachable");
