@@ -14,7 +14,7 @@
 #include <sync/mutex.h>
 
 /*- set ep = alloc('ep', seL4_EndpointObject, read=True, write=True) -*/
-/*- set aep = alloc('aep', seL4_AsyncEndpointObject, read=True, write=True) -*/
+/*- set aep = alloc('aep', seL4_NotificationObject, read=True, write=True) -*/
 
 static sync_mutex_t mutex;
 
