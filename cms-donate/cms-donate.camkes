@@ -1,0 +1,37 @@
+/*
+ * Copyright 2015, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+import "components/Client/Client.camkes";
+import "components/Intermediate/Intermediate.camkes";
+import "components/Server/Server.camkes";
+
+assembly {
+        composition {
+                component Client client;
+		component Intermediate interm;
+                component Server server;
+
+                connection seL4RPC client_interm(from client.i, to interm.r);
+                connection seL4RPC interm_server(from interm.i, to server.i);
+        }
+	configuration {
+		client._priority = 50;
+		client._period = 10000;
+		client._budget = 10000;
+		interm.r_sc = "none";
+		interm.r_priority = 60;
+		interm.i_sc = "none";
+		interm.i_priority = 60;
+		server.i_sc = "none";
+		server.i_priority = 70;
+	}
+}
