@@ -33,3 +33,7 @@ assembly {
 		server.i_priority = 70;
 	}
 }
+
+/* FIXME: CAmkES-RT fails to generate correct code if using seL4RPCCall
+ * connector instead of seL4RPC
+ */

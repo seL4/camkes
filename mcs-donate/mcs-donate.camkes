@@ -36,7 +36,7 @@ assembly {
 
 /*
 Scenarios to consider:
-client.priority > server.i_priority
-client.priority = server.i_priority
-client.priority < server.i_priority
+client.priority > server.i_priority -- Fail
+client.priority = server.i_priority -- Succeed
+client.priority < server.i_priority -- Succeed
 */

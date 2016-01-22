@@ -34,10 +34,9 @@ assembly {
 /*
 Scenarios to consider:
 - priority:
-	- client priority == server priority
-	- client priority < server priority
-	- client priority > server priority
-	- does it matter?
+	- client priority == server priority - succeed
+	- client priority < server priority  - succeed
+	- client priority > server priority  - succeed
 - scheduling context
 	- client has enough SC: succeed 
 	- client doesn't have enough SC: succeed (roll over to the next period)
@@ -48,6 +47,6 @@ Scenarios to consider:
 	- budget < period: succeed - shorter delay
 	- budget = period: succeed - no delay
 
-should we time how long the calls take? or does it matter (thinking behind this: tell the difference between a call succedding in one period or having to wait for it to reset and continuing when it goes over budget and also how long the period is)
+should we time how long the calls take? or does it matter (thinking behind this: tell the difference between a call succeeding in one period or having to wait for it to reset and continuing when it goes over budget and also how long the period is)
 
 */

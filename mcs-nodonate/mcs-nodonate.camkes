@@ -39,10 +39,9 @@ assembly {
 /*
 Scenarios to consider:
 - priority:
-	- client priority == server priority
-	- client priority < server priority
-	- client priority > server priority
-	- does it matter?
+	- client priority == server priority - succeed
+	- client priority < server priority  - succeed
+	- client priority > server priority  - succeed
 - scheduling context
 	- client has enough SC: succeed 
 	- client doesn't have enough SC: succeed (roll over to the next period)
