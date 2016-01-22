@@ -29,8 +29,6 @@ assembly {
 		client._budget = 10000;
 		interm.r_sc = "none";
 		interm.r_priority = 60;
-		interm.i_sc = "none";
-		interm.i_priority = 60;
 		server.i_sc = "none";
 		server.i_priority = 70;
 	}
