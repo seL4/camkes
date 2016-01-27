@@ -30,4 +30,3 @@ assembly {
 	}
 }
 
-//FIXME: Fails if sink does NOT have scheduling context.
