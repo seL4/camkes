@@ -10,6 +10,7 @@
 
 import <std_connector.camkes>;
 import "components/Client/Client.camkes";
+import "components/Dummy/Dummy.camkes";
 import "components/Server/Server.camkes";
 import "components/UpperCase/UpperCase.camkes";
 import "components/Reverse/Reverse.camkes";
@@ -20,6 +21,7 @@ import "components/Pipeline/Pipeline.camkes";
 assembly {
     composition {
         component Client c;
+        component Dummy d;
         component Server s;
 
         component Pipeline p1;
@@ -29,6 +31,7 @@ assembly {
         connection seL4RPC pipeline_connection(from p1.o, to p2.i);
         connection seL4RPC server_external(from p2.o, to s.i);
         connection seL4RPC extra_external(from c.o2, to p1.extra);
+        connection seL4RPC extra_external_dummy(from d.o, to p2.extra);
     }
 }
 
