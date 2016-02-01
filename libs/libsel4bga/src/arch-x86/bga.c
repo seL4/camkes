@@ -9,7 +9,7 @@
  */
 
 /* The code in this file was partially extracted from David Pollack's summer
- * project, ssh://hg//data/hg_root/summer_students/davidp/sel4vga.
+ * project.
  */
 
 #include <assert.h>
