@@ -11,7 +11,7 @@
 
 source [file join [file dirname [info script]] procs.tcl]
 
-set timeout 600
+set timeout 1200
 
 spawn make ia32_socket_defconfig
 check_exit
