@@ -1,0 +1,20 @@
+#
+# Copyright 2014, NICTA
+#
+# This software may be distributed and modified according to the terms of
+# the BSD 2-Clause license. Note that NO WARRANTY is provided.
+# See "LICENSE_BSD2.txt" for details.
+#
+# @TAG(NICTA_BSD)
+#
+
+This is a regression test for the cached hardware dataports feature of CAmkES.
+It enables caching for a hardware dataport containing a uart device, and does
+a test write to the device. It also tests error-handling, by flushing an
+invalid range of addresses from the cached dataport.
+
+THIS IS UNSAFE! It only exists to test that the cached hardware dataports
+feature compiles and runs. The fact that there is no unusual behaviour when
+using cached memory-mapped registers on the KZM simulator in qemu (the
+platform for this app when running regression tests) is luck. Never enable
+caching for a dataport backed by memory-mapped registers.

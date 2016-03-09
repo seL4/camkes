@@ -1,0 +1,47 @@
+/*
+ * Copyright 2014, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+
+import "components/Driver/Driver.camkes";
+
+component Uart {
+    hardware;
+    dataport Buf registers;
+}
+
+/* WARNING!
+ * This program is a regression test for CAmkES and should NOT be used as
+ * a reference for writing software. Caching memory-mapped registers is
+ * dangerous as when a cache line is written back to memory, all the addresses
+ * in the line are written. If these are the addresses of memory-mapped
+ * registers, writing to them can cause unexpected hardware behaviour.
+ */
+
+assembly {
+    composition {
+        component Driver driver;
+        component Uart uart;
+
+        connection seL4HardwareMMIO c(from driver.registers, to uart.registers);
+    }
+    configuration {
+        uart.registers_attributes = "0x43F90000:0x1000";
+
+        /* WARNING!
+         * Never do this in a real-world scenario.
+         * Cached hardware dataports should only be used on dataports backed by
+         * memory. Enabling caching for memory-mapped registers can lead to
+         * unexpected device behaviour.
+         */
+        uart.registers_cached = true;
+    }
+}
+

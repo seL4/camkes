@@ -21,6 +21,7 @@ go to our website for details.
 The applications in this repository are:
 
 adder: demonstrates the use of dataport wrapper to pass pointers via CAmkES RPC
+cached-hardware-dataport: regression test for cached hardware dataports
 epit: demonstrates the use of CAmkES interrupt connector to receive hardware interrupts
 exchangestring: demonstrates how to pass string arguments between components
 filter: demonstrates the use of a component to filter communication
