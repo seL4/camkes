@@ -12,7 +12,7 @@
 RESULT=0
 
 for t in $(ls tests); do
-    if [ "$t" != "run-all.sh" ]; then
+    if [ "$t" != "run-all.sh" -a "$t" != "run-all-xml.sh" ]; then
         if [[ -x "tests/$t" ]]; then
             echo -n " Running $t ... "
             ./tests/$t &>/dev/null
