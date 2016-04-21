@@ -10,13 +10,16 @@
 
 # This fragment is expected to included by other tests.
 
+# Allow a --sequential flag that disables parallel compilation of muslc
+set jobs [expr {[lindex $argv 0] eq "--sequential" ? "--jobs=1" : "--jobs"}];
+
 spawn make silentoldconfig
 check_exit
 
 spawn make clean
 check_exit
 
-spawn make -j libmuslc
+spawn make $jobs libmuslc
 check_exit
 
 spawn make
