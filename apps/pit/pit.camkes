@@ -1,0 +1,37 @@
+/*
+ * Copyright 2016, NICTA
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(NICTA_BSD)
+ */
+
+import <std_connector.camkes>;
+import "components/Driver/Driver.camkes";
+
+component PIT {
+    hardware;
+    provides IOPort command;
+    provides IOPort channel0;
+    emits DataAvailable irq;
+}
+
+assembly {
+    composition {
+        component PIT pit;
+        component Driver drv;
+
+        connection seL4HardwareIOPort pit_command(from drv.command, to pit.command);
+        connection seL4HardwareIOPort pit_channel0(from drv.channel0, to pit.channel0);
+	    connection seL4HardwareInterrupt irq(from pit.irq, to drv.irq);
+    }
+
+    configuration {
+        pit.command_attributes = "0x43:0x43";
+        pit.channel0_attributes = "0x40:0x40";
+        pit.irq_irq_number = 0;
+    }
+}
+

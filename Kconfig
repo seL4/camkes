@@ -89,6 +89,7 @@ menu "Applications"
     source "apps/testdataportrpc/Kconfig"
     source "apps/testcamkes438/Kconfig"
     source "apps/testltouser/Kconfig"
+    source "apps/pit/Kconfig"
 endmenu
 
 source "tools/camkes/Kconfig"
