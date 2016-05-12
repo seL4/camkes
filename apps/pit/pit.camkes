@@ -31,7 +31,10 @@ assembly {
     configuration {
         pit.command_attributes = "0x43:0x43";
         pit.channel0_attributes = "0x40:0x40";
-        pit.irq_irq_number = 0;
+        pit.irq_irq_type = "isa";
+        pit.irq_irq_vector = 42;
+        pit.irq_irq_ioapic = 0;
+        pit.irq_irq_ioapic_pin = 2;
     }
 }
 
