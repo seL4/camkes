@@ -29,7 +29,7 @@ assembly {
 		client_2._priority = 50;
 		client_2._period = 10000;
 		client_2._budget = 10000;
-		server.i_sc = "none";
+		server.i_passive = true;
 		server.i_priority = 60;
 	}
 }
