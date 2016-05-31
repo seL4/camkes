@@ -9,4 +9,4 @@
 #
 
 apps-$(CONFIG_APP_TESTSEL4ASYNCH) += testsel4async
-testsel4async: libsel4 libmuslc libsel4platsupport libsel4muslccamkes libsel4camkes libsel4sync libsel4debug libsel4bench
+testsel4async: libsel4 libmuslc libsel4platsupport libsel4muslccamkes libsel4camkes libsel4sync libsel4bench

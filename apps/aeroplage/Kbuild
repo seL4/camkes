@@ -9,4 +9,4 @@
 #
 
 apps-$(CONFIG_APP_AEROPLAGE) += aeroplage
-aeroplage: libsel4 libmuslc libsel4muslccamkes libsel4camkes libsel4sync libsel4debug libsel4bench libringbuffer libsel4bga libsel4keyboard
+aeroplage: libsel4 libmuslc libsel4muslccamkes libsel4camkes libsel4sync libsel4bench libringbuffer libsel4bga libsel4keyboard

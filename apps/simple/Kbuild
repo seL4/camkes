@@ -9,4 +9,4 @@
 #
 
 apps-$(CONFIG_APP_SIMPLE) += simple
-simple: libsel4 libmuslc libsel4platsupport libsel4muslccamkes libsel4camkes libsel4sync libsel4debug libsel4bench
+simple: libsel4 libmuslc libsel4platsupport libsel4muslccamkes libsel4camkes libsel4sync libsel4bench
