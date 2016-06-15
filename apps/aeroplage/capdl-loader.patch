@@ -21,7 +21,7 @@ index edd7a3c..85adeb8 100644
 +     * space. We need this because CAmkES does not currently support large
 +     * frame MMIO regions.
 +     */
-+    if (!strcmp(elf_name, "vesa.group.bin")) {
++    if (!strcmp(elf_name, "vesa_group_bin")) {
 +        static int done = 0;
 +        if (!done) {
 +            uintptr_t bga_addr = 0xfd000000; // Physical address of the frame buffer
