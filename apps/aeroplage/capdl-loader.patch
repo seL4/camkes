@@ -8,12 +8,13 @@
 # @TAG(NICTA_BSD)
 #
 
-diff -r 9259bdf00f0e src/main.c
---- a/src/main.c	Tue Mar 25 09:39:50 2014 +1100
-+++ b/src/main.c	Tue Mar 25 15:03:01 2014 +1100
-@@ -401,6 +401,38 @@
-          */
-         elf32_getProgramHeaderTable(elf_file)[i].p_type = PT_NULL;
+diff --git a/capdl-loader-app/src/main.c b/capdl-loader-app/src/main.c
+index edd7a3c..85adeb8 100644
+--- a/capdl-loader-app/src/main.c
++++ b/capdl-loader-app/src/main.c
+@@ -494,6 +494,38 @@ elf_load_frames(const char *elf_name, CDL_ObjID pd, CDL_Model *spec,
+             elf64_getProgramHeaderTable(elf_file)[i].p_type = PT_NULL;
+         }
      }
 +
 +    /* XXX: Hack to map the BGA frame buffer into the VESA driver's address
@@ -34,7 +35,7 @@ diff -r 9259bdf00f0e src/main.c
 +                for (unsigned int j = 0; j < frames; j++) {
 +                    if (paddr + (1 << size) * j == bga_addr) {
 +                        seL4_CPtr sel4_pd = orig_caps(pd);
-+                        int err = seL4_Page_Map(bootinfo->deviceRegions[i].frames.start + j,
++                        int err = seL4_ARCH_Page_Map(bootinfo->deviceRegions[i].frames.start + j,
 +                            sel4_pd, bga_vaddr, seL4_AllRights, CDL_VM_CacheDisabled);
 +                        assert(err == 0);
 +                        goto found;
@@ -48,5 +49,5 @@ diff -r 9259bdf00f0e src/main.c
 +        }
 +    }
  }
- #endif //!CONFIG_CAPDL_LOADER_VERIFIED
  
+ /* Sort the untyped objects from largest to smallest.
