@@ -90,6 +90,7 @@ menu "Applications"
     source "apps/testcamkes438/Kconfig"
     source "apps/testltouser/Kconfig"
     source "apps/pit/Kconfig"
+    source "apps/testsyscalls/Kconfig"
 endmenu
 
 source "tools/camkes/Kconfig"
