@@ -9,4 +9,4 @@
 #
 
 apps-$(CONFIG_APP_HIERARCHICAL_ATTRIBUTES) += hierarchical-attributes
-hierarchical-attributes: libsel4 libmuslc libsel4platsupport libsel4muslccamkes libsel4sync libsel4bench
+hierarchical-attributes: libsel4 libmuslc libsel4platsupport libsel4muslccamkes libsel4camkes libsel4sync libsel4bench
