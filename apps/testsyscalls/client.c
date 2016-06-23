@@ -77,6 +77,9 @@ static void test_madvise(void) {
 int run(void) {
     test_madvise();
 
+    /* Run tests in other component. */
+    other_call();
+
     printf("All OK\n");
     return 0;
 }

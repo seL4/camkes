@@ -10,21 +10,23 @@
 
 import <std_connector.camkes>;
 
+procedure ControlFlowTransfer {
+    void call(void);
+}
+
 component Client {
     control;
+    uses ControlFlowTransfer other;
+}
 
-    /* This component doesn't need any interfaces, but CAmkES requires all systems to have at least
-     * one connection. To pacify it, we give this component two interfaces that we'll wire to each
-     * other.
-     */
-    emits Ev unused;
-    consumes Ev ignored;
+component Server {
+    provides ControlFlowTransfer other;
 }
 
 assembly {
     composition {
         component Client client;
-        /* Dummy connection to pacify CAmkES. */
-        connection seL4Asynch unused(from client.unused, to client.ignored);
+        component Server server;
+        connection seL4RPCCall transfer(from client.other, to server.other);
     }
 }
