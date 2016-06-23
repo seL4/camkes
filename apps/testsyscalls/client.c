@@ -21,6 +21,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/mman.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include <utils/util.h>
 
 static void test_madvise(void) {
@@ -74,8 +76,16 @@ static void test_madvise(void) {
     }
 }
 
+static void test_getpid(void) {
+    /* Check that our PID is what we expect. */
+    pid_t pid = getpid();
+    assert(pid == 2);
+}
+
 int run(void) {
     test_madvise();
+
+    test_getpid();
 
     /* Run tests in other component. */
     other_call();
