@@ -82,10 +82,18 @@ static void test_getpid(void) {
     assert(pid == 2);
 }
 
+static void test_getppid(void) {
+    /* Check that our parent is the CapDL initialiser. */
+    pid_t pid = getppid();
+    assert(pid == 1);
+}
+
 int run(void) {
     test_madvise();
 
     test_getpid();
+
+    test_getppid();
 
     /* Run tests in other component. */
     other_call();

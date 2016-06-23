@@ -24,6 +24,14 @@ static void test_getpid(void) {
     assert(pid == 3);
 }
 
+static void test_getppid(void) {
+    /* Check that our parent is the CapDL initialiser. */
+    pid_t pid = getppid();
+    assert(pid == 1);
+}
+
 void other_call(void) {
     test_getpid();
+
+    test_getppid();
 }
