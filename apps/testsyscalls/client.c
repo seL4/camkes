@@ -128,6 +128,107 @@ static void test_mincore(void) {
     }
 }
 
+static void test_mlock(void) {
+
+    static char page[2 * PAGE_SIZE_4K] ALIGN(PAGE_SIZE_4K);
+
+    /* Standard mlock on a page-aligned region. */
+    int r = mlock(page, sizeof page);
+    assert(r == 0);
+
+    /* Mlock on a non-page-sized region. */
+    r = mlock(page, sizeof page - 42);
+    assert(r == 0);
+
+    /* XXX: As with the madvise tests, we need to disable these to avoid touching TLS. */
+    if (0) {
+
+    /* Confirm an invalid addr is detected. */
+    r = mlock((void*)page + 42, sizeof page - 42);
+    assert(r == -1);
+    assert(errno == EINVAL);
+
+    /* Confirm an invalid length is detected. */
+    r = mlock(page, SIZE_MAX);
+    assert(r == -1);
+    assert(errno == ENOMEM);
+
+    /* Confirm an unmapped region is detected. */
+    void *BAD_ADDR = (void*)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
+    r = mlock(BAD_ADDR, PAGE_SIZE_4K);
+    assert(r == -1);
+    assert(errno == ENOMEM);
+
+    }
+}
+
+static void test_munlock(void) {
+
+    static char page[2 * PAGE_SIZE_4K] ALIGN(PAGE_SIZE_4K);
+
+    /* Standard munlock on a page-aligned region. */
+    int r = munlock(page, sizeof page);
+    assert(r == 0);
+
+    /* Munlock on a non-page-sized region. */
+    r = munlock(page, sizeof page - 42);
+    assert(r == 0);
+
+    /* XXX: As with the madvise tests, we need to disable these to avoid touching TLS. */
+    if (0) {
+
+    /* Confirm an invalid addr is detected. */
+    r = munlock((void*)page + 42, sizeof page - 42);
+    assert(r == -1);
+    assert(errno == EINVAL);
+
+    /* Confirm an invalid length is detected. */
+    r = munlock(page, SIZE_MAX);
+    assert(r == -1);
+    assert(errno == ENOMEM);
+
+    /* Confirm an unmapped region is detected. */
+    void *BAD_ADDR = (void*)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
+    r = munlock(BAD_ADDR, PAGE_SIZE_4K);
+    assert(r == -1);
+    assert(errno == ENOMEM);
+
+    }
+}
+
+static void test_mlockall(void) {
+
+    /* Standard mlockall. */
+    int r = mlockall(MCL_CURRENT);
+    assert(r == 0);
+
+    r = mlockall(MCL_FUTURE);
+    assert(r == 0);
+
+    r = mlockall(MCL_CURRENT|MCL_FUTURE);
+    assert(r == 0);
+
+    /* XXX: As with the madvise tests, we need to disable these to avoid touching TLS. */
+    if (0) {
+
+    /* Confirm invalid flags are rejected. */
+    static const int BAD_FLAGS = -1;
+    static_assert((BAD_FLAGS & ~(MCL_CURRENT|MCL_FUTURE)) != 0,
+        "bad value chosen for BAD_FLAGS that collides with valid flags");
+    r = mlockall(BAD_FLAGS);
+    assert(r == -1);
+    assert(errno == EINVAL);
+
+    }
+}
+
+static void test_munlockall(void) {
+
+    /* Standard munlockall. */
+    int r = munlockall();
+    assert(r == 0);
+}
+
 static void test_getpid(void) {
     /* Check that our PID is what we expect. */
     pid_t pid = getpid();
@@ -144,6 +245,14 @@ int run(void) {
     test_madvise();
 
     test_mincore();
+
+    test_mlock();
+
+    test_munlock();
+
+    test_mlockall();
+
+    test_munlockall();
 
     test_getpid();
 
