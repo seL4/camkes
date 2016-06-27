@@ -10,5 +10,6 @@
 
 component Client {
         control;
+        dataport Buf unused;
 }
 

@@ -16,6 +16,8 @@ assembly {
     composition {
         component Client client1;
         component Client client2;
+
+        connection seL4SharedData unused(from client1.unused, to client2.unused);
     }
     configuration {
         client1._priority = 100;
