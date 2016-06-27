@@ -14,7 +14,7 @@
 
 #define IPRINT(format, ...) printf("%s: " format, get_instance_name(), ##__VA_ARGS__); 
 
-#define MAX  100000llu
+#define MAX_VALUE  100000llu
 #define RATE  10000llu
 
 uint64_t acc = 0;
@@ -23,7 +23,7 @@ int run() {
 
     IPRINT("--- Starting ---\n");
 
-    while (acc < MAX) {
+    while (acc < MAX_VALUE) {
         /* do calculations to waste time */
         acc *= 17;
         acc++;
@@ -36,4 +36,5 @@ int run() {
 
     IPRINT("*** DONE %llu ***\n", acc);
 
+    return 0;
 }
