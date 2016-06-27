@@ -18,12 +18,16 @@
 #include <assert.h>
 #include <camkes.h>
 #include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <utils/util.h>
+
+extern char __executable_start[1]; /* start of our address space provided by the linker. */
 
 static void test_madvise(void) {
 
@@ -67,9 +71,57 @@ static void test_madvise(void) {
     assert(errno == EINVAL);
 
     /* Confirm that regions outside our address space are rejected. */
-    extern char __executable_start[1]; /* start of our address space provided by the linker. */
     void *BAD_ADDR = (void*)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
     r = madvise(BAD_ADDR, PAGE_SIZE_4K, MADV_NORMAL);
+    assert(r == -1);
+    assert(errno == ENOMEM);
+
+    }
+}
+
+static void test_mincore(void) {
+
+    static char page[2 * PAGE_SIZE_4K] ALIGN(PAGE_SIZE_4K);
+
+    /* Standard mincore on a page-aligned region. */
+    unsigned char vec[sizeof page / PAGE_SIZE_4K] = { 0 };
+    int r = mincore(page, sizeof page, vec);
+    assert(r == 0);
+    assert(vec[0] & 1);
+    assert(vec[1] & 1);
+
+    /* Mincore on a non-page-sized region. */
+    memset(vec, 0, sizeof vec);
+    r = mincore(page, sizeof page - 42, vec);
+    assert(r == 0);
+    assert(vec[0] & 1);
+    assert(vec[1] & 1);
+
+    /* XXX: As with the madvise tests, we need to disable these to avoid touching TLS. */
+    if (0) {
+
+    /* Confirm an invalid vec is detected. */
+    r = mincore(page, sizeof page, NULL);
+    assert(r == -1);
+    assert(errno == EFAULT);
+
+    r = mincore(page, sizeof page, (unsigned char*)UINTPTR_MAX);
+    assert(r == -1);
+    assert(errno == EFAULT);
+
+    /* Confirm an invalid addr is detected. */
+    r = mincore((void*)page + 42, sizeof page - 42, vec);
+    assert(r == -1);
+    assert(errno == EINVAL);
+
+    /* Confirm an invalid length is detected. */
+    r = mincore(page, SIZE_MAX, vec);
+    assert(r == -1);
+    assert(errno == ENOMEM);
+
+    /* Confirm an unmapped region is detected. */
+    void *BAD_ADDR = (void*)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
+    r = mincore(BAD_ADDR, PAGE_SIZE_4K, vec);
     assert(r == -1);
     assert(errno == ENOMEM);
 
@@ -90,6 +142,8 @@ static void test_getppid(void) {
 
 int run(void) {
     test_madvise();
+
+    test_mincore();
 
     test_getpid();
 
