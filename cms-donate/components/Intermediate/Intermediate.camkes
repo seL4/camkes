@@ -11,7 +11,7 @@
 import "../../interfaces/Echo.idl4";
 
 component Intermediate{
-	provides Echo r;
+        provides Echo r;
         uses Echo i;
 }
 

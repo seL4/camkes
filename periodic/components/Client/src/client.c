@@ -24,14 +24,14 @@ int run() {
     IPRINT("--- Starting ---\n");
 
     while (acc < MAX) {
-	/* do calculations to waste time */
-	acc *= 17;
-	acc++;
-	acc /= 17;
-	acc++;
-	if (acc % RATE == 0) {
-		IPRINT("acc = %llu\n", acc);
-	}
+        /* do calculations to waste time */
+        acc *= 17;
+        acc++;
+        acc /= 17;
+        acc++;
+        if (acc % RATE == 0) {
+            IPRINT("acc = %llu\n", acc);
+        }
     }
 
     IPRINT("*** DONE %llu ***\n", acc);

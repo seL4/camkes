@@ -14,43 +14,43 @@ import "components/Client/Client.camkes";
 import "components/Server/Server.camkes";
 
 assembly {
-        composition {
-                component Client client_1;
-                component Client client_2;
-                component Server server;
+    composition {
+        component Client client_1;
+        component Client client_2;
+        component Server server;
 
-                connection seL4RPC client_1_server(from client_1.i, to server.i);
-                connection seL4RPC client_2_server(from client_2.i, to server.i);
-        }
-	configuration {
-		client_1._priority = 50;
-		client_1._period = 10000;
-		client_1._budget = 10000;
-		client_2._priority = 50;
-		client_2._period = 10000;
-		client_2._budget = 10000;
-		// server.i_passive = true;
-		server.i_priority = 60;
-		server.i_period = 10000;
-		server.i_budget = 10000;
-	}
+        connection seL4RPC client_1_server(from client_1.i, to server.i);
+        connection seL4RPC client_2_server(from client_2.i, to server.i);
+    }
+    configuration {
+        client_1._priority = 50;
+        client_1._period = 10000;
+        client_1._budget = 10000;
+        client_2._priority = 50;
+        client_2._period = 10000;
+        client_2._budget = 10000;
+        // server.i_passive = true;
+        server.i_priority = 60;
+        server.i_period = 10000;
+        server.i_budget = 10000;
+    }
 }
 
 /*
 Scenarios to consider:
 - priority:
-	- client priority == server priority - succeed
-	- client priority < server priority  - succeed
-	- client priority > server priority  - succeed
+    - client priority == server priority - succeed
+    - client priority < server priority  - succeed
+    - client priority > server priority  - succeed
 - scheduling context
-	- client has enough SC: succeed 
-	- client doesn't have enough SC: succeed (roll over to the next period)
-	- server has enough SC: succeed
-	- server doesn't have enough SC: succeed (roll over to the next period)
+    - client has enough SC: succeed
+    - client doesn't have enough SC: succeed (roll over to the next period)
+    - server has enough SC: succeed
+    - server doesn't have enough SC: succeed (roll over to the next period)
 - if client/server doesn't have enough SC
-	- budget << period: succeed - longer delay
-	- budget < period: succeed - shorter delay
-	- budget = period: succeed - no delay
+    - budget << period: succeed - longer delay
+    - budget < period: succeed - shorter delay
+    - budget = period: succeed - no delay
 
 should we time how long the calls take? or does it matter (thinking behind this: tell the difference between a call succedding in one period or having to wait for it to reset and continuing when it goes over budget and also how long the period is)
 

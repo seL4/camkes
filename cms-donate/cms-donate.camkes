@@ -15,23 +15,23 @@ import "components/Intermediate/Intermediate.camkes";
 import "components/Server/Server.camkes";
 
 assembly {
-        composition {
-                component Client client;
-		component Intermediate interm;
-                component Server server;
+    composition {
+        component Client client;
+        component Intermediate interm;
+        component Server server;
 
-                connection seL4RPC client_interm(from client.i, to interm.r);
-                connection seL4RPC interm_server(from interm.i, to server.i);
-        }
-	configuration {
-		client._priority = 50;
-		client._period = 10000;
-		client._budget = 10000;
-		interm.r_passive = true;
-		interm.r_priority = 60;
-		server.i_passive = true;
-		server.i_priority = 70;
-	}
+        connection seL4RPC client_interm(from client.i, to interm.r);
+        connection seL4RPC interm_server(from interm.i, to server.i);
+    }
+    configuration {
+        client._priority = 50;
+        client._period = 10000;
+        client._budget = 10000;
+        interm.r_passive = true;
+        interm.r_priority = 60;
+        server.i_passive = true;
+        server.i_priority = 70;
+    }
 }
 
 /* FIXME: CAmkES-RT fails to generate correct code if using seL4RPCCall

@@ -14,24 +14,24 @@ import "components/Client/Client.camkes";
 import "components/Server/Server.camkes";
 
 assembly {
-        composition {
-                component Client client_1;
-                component Client client_2;
-                component Server server;
+    composition {
+        component Client client_1;
+        component Client client_2;
+        component Server server;
 
-                connection seL4RPCCall client_1_server(from client_1.i, to server.i);
-                connection seL4RPCCall client_2_server(from client_2.i, to server.i);
-        }
-	configuration {
-		client_1._priority = 50;
-		client_1._period = 10000;
-		client_1._budget = 10000;
-		client_2._priority = 50;
-		client_2._period = 10000;
-		client_2._budget = 10000;
-		server.i_passive = true;
-		server.i_priority = 60;
-	}
+        connection seL4RPCCall client_1_server(from client_1.i, to server.i);
+        connection seL4RPCCall client_2_server(from client_2.i, to server.i);
+    }
+    configuration {
+        client_1._priority = 50;
+        client_1._period = 10000;
+        client_1._budget = 10000;
+        client_2._priority = 50;
+        client_2._period = 10000;
+        client_2._budget = 10000;
+        server.i_passive = true;
+        server.i_priority = 60;
+    }
 }
 
 /*

@@ -14,19 +14,19 @@ import "components/Emitter/Emitter.camkes";
 import "components/Collector/Collector.camkes";
 
 assembly {
-        composition {
-                component Emitter source;
-                component Collector sink;
+    composition {
+        component Emitter source;
+        component Collector sink;
 
-                connection seL4Notification simpleEvent1(from source.ev, to sink.ev);
-        }
-	configuration {
-		source._priority = 30;
-		source._period = 10000;
-		source._budget = 10000;
-		sink.ev_priority = 50;
-		sink.ev_period = 10000;
-		sink.ev_budget = 7500;
-	}
+        connection seL4Notification simpleEvent1(from source.ev, to sink.ev);
+    }
+    configuration {
+        source._priority = 30;
+        source._period = 10000;
+        source._budget = 10000;
+        sink.ev_priority = 50;
+        sink.ev_period = 10000;
+        sink.ev_budget = 7500;
+    }
 }
 

@@ -13,18 +13,18 @@ import <std_connector.camkes>;
 import "components/Client/Client.camkes";
 
 assembly {
-        composition {
-                component Client client1;
-                component Client client2;
-        }
-	configuration {
-		client1._priority = 100;
-		client1._period = 10000;
-		client1._budget = 7500;
-		client2._priority = 50;
-		client2._period = 10000;
-		client2._budget = 7500;
-	}
+    composition {
+        component Client client1;
+        component Client client2;
+    }
+    configuration {
+        client1._priority = 100;
+        client1._period = 10000;
+        client1._budget = 7500;
+        client2._priority = 50;
+        client2._period = 10000;
+        client2._budget = 7500;
+    }
 }
 
 /*
@@ -33,13 +33,13 @@ Scenarios to consider:
 - client 1 period == client 2 period
 - high ratio = 3/4, low ratio = 1/4
 - client 1: budget/period ratio == 1, client 2: budget/period ratio == 1
-	- result: client 1 progress runs before client 2 progress
+    - result: client 1 progress runs before client 2 progress
 - client 1: high budget/period ratio, client 2: high budget/period ratio 
-	- result: client 1 progress >> client 2 progress
+    - result: client 1 progress >> client 2 progress
 - client 1: high budget/period ratio, client 2: low budget/period ratio 
-	- result: client 1 progress >> client 2 progress
+    - result: client 1 progress >> client 2 progress
 - client 1: low budget/period ratio, client 2: high budget/period ratio 
-	- result: client 1 progress << client 2 progress
+    - result: client 1 progress << client 2 progress
 - client 1: low budget/period ratio, client 2: low budget/period ratio
-	- result: client 1 progress == client 2 progress
+    - result: client 1 progress == client 2 progress
 */
