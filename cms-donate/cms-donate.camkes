@@ -20,8 +20,8 @@ assembly {
         component Intermediate interm;
         component Server server;
 
-        connection seL4RPC client_interm(from client.i, to interm.r);
-        connection seL4RPC interm_server(from interm.i, to server.i);
+        connection seL4RPCCall client_interm(from client.i, to interm.r);
+        connection seL4RPCCall interm_server(from interm.i, to server.i);
     }
     configuration {
         client._priority = 50;
