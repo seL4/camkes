@@ -13,18 +13,9 @@
 #include <sel4/sel4.h>
 
 int run(void) {
-    int i;
-    unsigned long int ii;
 
-    printf("starting to emit a lot...\n");
-    ii = 0;
     while (1) {
-        ii++;
         ev_emit();
-
-        if (ii % 10000 == 0) {
-            printf("still emitting\n");
-        }
     }
 
     return 0;
