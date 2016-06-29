@@ -19,8 +19,7 @@ assembly {
         component Client client_2;
         component Server server;
 
-        connection seL4RPCCall client_1_server(from client_1.i, to server.i);
-        connection seL4RPCCall client_2_server(from client_2.i, to server.i);
+        connection seL4RPCCall client_1_server(from client_1.i, from client_2.i, to server.i);
     }
     configuration {
         client_1._priority = 50;
