@@ -8,7 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-/* Server of seL4Asynch testing application. The only thing we implement here
+/* Server of seL4Notification testing application. The only thing we implement here
  * is a function to effectively expose `e_emit` to our client.
  */
 

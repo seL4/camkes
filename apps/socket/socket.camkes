@@ -22,8 +22,8 @@ assembly {
 
         connection seL4SharedData a(from sender.sock, to transport.incoming);
         connection seL4SharedData b(from transport.outgoing, to receiver.sock);
-        connection seL4Asynch c(from sender.init, to transport.setup);
-        connection seL4Asynch d(from transport.init, to receiver.setup);
+        connection seL4Notification c(from sender.init, to transport.setup);
+        connection seL4Notification d(from transport.init, to receiver.setup);
     }
 }
 

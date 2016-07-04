@@ -23,7 +23,7 @@ assembly {
 
                 connection seL4RPCCall echo1(from client1.s, from client2.s, from send.s, to echo.s);
 
-                connection seL4Asynch event1(from echo.e, to client1.e, to client2.e, to send.e);
+                connection seL4Notification event1(from echo.e, to client1.e, to client2.e, to send.e);
 
                 connection seL4SharedData data1(from echo.d, to client1.d, to client2.d, to send.d);
         }

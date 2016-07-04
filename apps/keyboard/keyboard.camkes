@@ -38,7 +38,7 @@ assembly {
 		connection seL4HardwareIOPort cports(from client.s, to dumb.s);
 		connection seL4HardwareInterrupt irq(from keyboard.interrupt, to driver.interrupt);
 		connection seL4RPC kbd_inf(from client.kbd, to driver.kbd);
-		connection seL4Asynch KeyPressEvent(from driver.keypress, to client.keypress);
+		connection seL4Notification KeyPressEvent(from driver.keypress, to client.keypress);
 	}
 
 	configuration {
