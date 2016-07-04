@@ -8,5 +8,5 @@
 # @TAG(NICTA_BSD)
 #
 
-apps-$(CONFIG_APP_TESTSEL4ASYNCH) += testsel4async
-testsel4async: libsel4 libmuslc libsel4platsupport libsel4muslccamkes libsel4camkes libsel4sync libsel4bench
+apps-$(CONFIG_APP_TESTSEL4NOTIFICATION) += testsel4notification
+testsel4notification: libsel4 libmuslc libsel4platsupport libsel4muslccamkes libsel4camkes libsel4sync libsel4bench

@@ -13,10 +13,11 @@ source [file join [file dirname [info script]] procs.tcl]
 
 set timeout 600
 
-spawn make arm_testsel4async_defconfig
+spawn make x86_testsel4notification_defconfig
+
 check_exit
 
 source [file join [file dirname [info script]] build.tcl]
 
-source [file join [file dirname [info script]] run-arm.tcl]
+source [file join [file dirname [info script]] run-x86.tcl]
 wait_for "All OK"

@@ -8,6 +8,6 @@
 # @TAG(NICTA_BSD)
 #
 
-config APP_TESTSEL4ASYNCH
-    bool "Test seL4Asynch connector"
+config APP_TESTSEL4NOTIFICATION
+    bool "Test seL4Notification connector"
     default n
