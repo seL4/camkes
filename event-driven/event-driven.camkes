@@ -18,7 +18,7 @@ assembly {
         component Emitter source;
         component Collector sink;
 
-        connection seL4Asynch simpleEvent1(from source.ev, to sink.ev);
+        connection seL4Notification simpleEvent1(from source.ev, to sink.ev);
     }
     configuration {
         source._priority = 30;
