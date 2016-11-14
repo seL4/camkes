@@ -60,6 +60,7 @@ menu "Applications"
     source "apps/swapcounter/Kconfig"
     source "apps/aeroplage/Kconfig"
     source "apps/binary-semaphore/Kconfig"
+    source "apps/reversestring/Kconfig"
 
     source "apps/rotate/Kconfig"
     source "apps/dma-example/Kconfig"
