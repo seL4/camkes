@@ -133,10 +133,10 @@ assembly {
          * one way communication. To do this, set each of the dataport's to
          * sides to read-only access.
          */
-        text.to_access = "R";
-        low_text.to_access = "R";
-        high_text.to_access = "R";
-        low_video.to_access = "R";
-        high_video.to_access = "R";
+        s.char_in_access = "R";
+        low.keyboard_input_access = "R";
+        high.keyboard_input_access = "R";
+        vesa.low_input_access = "R";
+        vesa.high_input_access = "R";
     }
 }
