@@ -43,7 +43,7 @@ int /*? me.to_interface.name ?*/__run(void) {
         } else {
             (void)sync_mutex_unlock(&mutex);
         }
-        seL4_Notify(/*? ep ?*/, 0 /* ignored */);
+        seL4_Signal(/*? ep ?*/);
     }
 
     assert(!"unreachable");

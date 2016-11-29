@@ -20,13 +20,17 @@ int /*? me.from_interface.name ?*/__run(void) {
 }
 
 int /*? me.from_interface.name ?*/_lock(void) {
-    seL4_Notify(/*? ep ?*/, 0);
-    (void)seL4_Recv(/*? ep ?*/, NULL);
+    seL4_MessageInfo_t info = seL4_MessageInfo_new(0, 0, 0, 1);
+    seL4_SetMR(0, 0);
+    seL4_Send(/*? ep ?*/, info);
+    seL4_Wait(/*? ep ?*/, NULL);
     return 0;
 }
 
 int /*? me.from_interface.name ?*/_unlock(void) {
-    seL4_Notify(/*? ep ?*/, 1);
-    (void)seL4_Recv(/*? ep ?*/, NULL);
+    seL4_MessageInfo_t info = seL4_MessageInfo_new(0, 0, 0, 1);
+    seL4_SetMR(0, 1);
+    seL4_Send(/*? ep ?*/, info);
+    seL4_Wait(/*? ep ?*/, NULL);
     return 0;
 }
