@@ -93,6 +93,7 @@ menu "Applications"
     source "apps/testltouser/Kconfig"
     source "apps/pit/Kconfig"
     source "apps/testsyscalls/Kconfig"
+    source "apps/alignment/Kconfig"
 endmenu
 
 source "tools/camkes/Kconfig"
