@@ -31,16 +31,8 @@ static inline void memcpy_test(foo_t *a, foo_t *b) {
     memcpy(b, &intermediate, sizeof(foo_t));
 }
 
-/* On x86, uses the sse instruction "movaps" to move the
- * value pointed to by the stack pointer into the xmm0
- * register. This instruction requires that address
- * operands be 16 byte aligned.
- */
-static inline void movaps_test(void) {
-#ifdef CONFIG_ARCH_X86
-    asm volatile("movaps (%%esp), %%xmm0\n":::"xmm0");
-#endif
-}
+/* Implemented in assembly */
+void movaps_test(void);
 
 /* Hopefully this function will result in a GP fault due
  * to unaligned operands of sse instructions with alignment
