@@ -22,11 +22,7 @@ movaps_test:
      * - the register-sized return address has been pushed by the
      *   call and nothing else
      */
-#ifdef CONFIG_ARCH_IA32
-    #define STACK_OFFSET_BYTES $12
-#else
-    #define STACK_OFFSET_BYTES $8
-#endif
+    #define STACK_OFFSET_BYTES $(16 - (CONFIG_WORD_SIZE / 8))
     sub STACK_OFFSET_BYTES, %esp
 
     /* Push and pop the %xmm0 */
