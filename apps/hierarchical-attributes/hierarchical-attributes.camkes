@@ -20,10 +20,10 @@ assembly {
         component Foo foo;
         component Controller controller;
 
-        connection seL4RPC a(from controller.foo_pa, to foo.self_pa);
-        connection seL4RPC b(from controller.foo_nested_pa0, to foo.nested_pa0);
-        connection seL4RPC c(from controller.foo_nested_pa1, to foo.nested_pa1);
-        connection seL4RPC d(from controller.foo_nested_pa2, to foo.nested_pa2);
+        connection seL4RPCCall a(from controller.foo_pa, to foo.self_pa);
+        connection seL4RPCCall b(from controller.foo_nested_pa0, to foo.nested_pa0);
+        connection seL4RPCCall c(from controller.foo_nested_pa1, to foo.nested_pa1);
+        connection seL4RPCCall d(from controller.foo_nested_pa2, to foo.nested_pa2);
     }
     configuration {
         foo.str0 = "hello";

@@ -38,9 +38,9 @@ assembly {
         component Intermediary i2;
         component Server s;
 
-        connection seL4RPC conn0(from c.p, to i1.p1);
-        connection seL4RPC conn1(from i1.p2, to i2.p1);
-        connection seL4RPC conn2(from i2.p2, to s.p);
+        connection seL4RPCCall conn0(from c.p, to i1.p1);
+        connection seL4RPCCall conn1(from i1.p2, to i2.p1);
+        connection seL4RPCCall conn2(from i2.p2, to s.p);
         connection seL4SharedData conn3(from c.d, to i1.d, to i2.d, to s.d);
     }
 }

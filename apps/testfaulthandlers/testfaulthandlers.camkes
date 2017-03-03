@@ -26,6 +26,6 @@ assembly {
     composition {
         component Client c;
         component Server s;
-        connection seL4RPC unused(from c.n, to s.n);
+        connection seL4RPCCall unused(from c.n, to s.n);
     }
 }

@@ -19,7 +19,7 @@ component SubPipeline {
         component UpperCase uc;
         component Reverse r;
 
-        connection seL4RPC internal(from uc.o, to r.i);
+        connection seL4RPCCall internal(from uc.o, to r.i);
  
         export r.o -> o;
         export uc.i -> i;

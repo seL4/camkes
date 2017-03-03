@@ -30,7 +30,7 @@ assembly {
     composition {
         component Client client;
         component Server server;
-        connection seL4RPC unused(from client.dummy, to server.dummy);
+        connection seL4RPCCall unused(from client.dummy, to server.dummy);
     }
     configuration {
         client.dma_pool = 4 * 1024 * 1024;
