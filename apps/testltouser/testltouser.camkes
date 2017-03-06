@@ -21,6 +21,6 @@ component Foo {
 assembly {
     composition {
         component Foo foo;
-        connection seL4RPC conn(from foo.d2, to foo.d1);
+        connection seL4RPCCall conn(from foo.d2, to foo.d1);
     }
 }

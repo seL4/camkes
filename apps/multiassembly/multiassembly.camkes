@@ -20,8 +20,8 @@ assembly {
         component Client c;
         component Server s;
 
-        connection seL4RPC client_external(from c.o, to a.i);
-        connection seL4RPC server_external(from r.o, to s.i);
+        connection seL4RPCCall client_external(from c.o, to a.i);
+        connection seL4RPCCall server_external(from r.o, to s.i);
     }
 }
 
@@ -31,8 +31,8 @@ assembly {
         component Reverse r;
         component Append a;
 
-        connection seL4RPC internal1(from a.o, to uc.i);
-        connection seL4RPC internal2(from uc.o, to r.i);
+        connection seL4RPCCall internal1(from a.o, to uc.i);
+        connection seL4RPCCall internal2(from uc.o, to r.i);
     }
     configuration {
         a.string_to_append = "world";

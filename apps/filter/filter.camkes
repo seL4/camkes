@@ -20,8 +20,8 @@ assembly {
                 component Client client;
                 component Store store;
 
-                connection seL4RPC one(from client.l, to filter.external);
-                connection seL4RPC two(from filter.backing, to store.l);
+                connection seL4RPCCall one(from client.l, to filter.external);
+                connection seL4RPCCall two(from filter.backing, to store.l);
         }
 }
 

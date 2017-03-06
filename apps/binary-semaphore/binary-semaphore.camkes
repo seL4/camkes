@@ -38,7 +38,7 @@ assembly {
         component Server server;
         component Periodic periodic;
 
-        connection seL4RPC echo_conn(from client.echo, to server.echo);
+        connection seL4RPCCall echo_conn(from client.echo, to server.echo);
         connection seL4Notification ready_conn(from periodic.ready, to server.ready);
     }
 

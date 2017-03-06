@@ -21,7 +21,7 @@ component Pipeline {
         component SubPipeline sp;
         component Append a;
 
-        connection seL4RPC internal1(from a.o, to sp.i);
+        connection seL4RPCCall internal1(from a.o, to sp.i);
  
         export sp.o -> o;
         export a.i -> i;

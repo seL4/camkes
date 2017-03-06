@@ -25,10 +25,10 @@ assembly {
         component Pipeline p1;
         component Pipeline p2;
 
-        connection seL4RPC client_external(from c.o1, to p1.i);
-        connection seL4RPC pipeline_connection(from p1.o, to p2.i);
-        connection seL4RPC server_external(from p2.o, to s.i);
-        connection seL4RPC extra_external(from c.o2, to p1.extra);
+        connection seL4RPCCall client_external(from c.o1, to p1.i);
+        connection seL4RPCCall pipeline_connection(from p1.o, to p2.i);
+        connection seL4RPCCall server_external(from p2.o, to s.i);
+        connection seL4RPCCall extra_external(from c.o2, to p1.extra);
     }
 }
 

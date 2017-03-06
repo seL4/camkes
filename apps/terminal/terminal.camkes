@@ -19,8 +19,8 @@ assembly {
     component Client client1;
     component Client client2;
 
-    connection seL4RPC channel1(from client1.d, to display_manager.domain1);
-    connection seL4RPC channel2(from client2.d, to display_manager.domain2);
+    connection seL4RPCCall channel1(from client1.d, to display_manager.domain1);
+    connection seL4RPCCall channel2(from client2.d, to display_manager.domain2);
   }
 
   configuration {

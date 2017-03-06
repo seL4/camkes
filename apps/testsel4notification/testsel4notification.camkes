@@ -30,7 +30,7 @@ assembly {
         component Client c;
         component Server s;
 
-        connection seL4RPC notification(from c.n, to s.n);
+        connection seL4RPCCall notification(from c.n, to s.n);
         connection seL4Notification ev(from s.e, to c.e);
     }
 }

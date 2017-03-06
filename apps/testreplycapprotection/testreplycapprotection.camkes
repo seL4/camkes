@@ -69,8 +69,8 @@ assembly {
         component Caller c2;
 
         connection seL4RPCCall conn0(from g.a, from c1.t, from c2.t, to r.a);
-        connection seL4RPC conn1(from r.b1, to r.b2);
-        connection seL4RPCSimple conn2(from r.c1, to r.c2);
+        connection seL4RPCCall conn1(from r.b1, to r.b2);
+        connection seL4RPCCall conn2(from r.c1, to r.c2);
         connection seL4RPCCall conn3(from r.d1, to r.d2);
         connection seL4RPCCall conn4(from r.e, to p.e);
         connection seL4Notification conn5(from r.p1, to c1.p);

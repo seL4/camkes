@@ -26,7 +26,7 @@ assembly {
 	component Client client;
 
         connection seL4HardwareMMIO uart_mem(from drv.mem, to uart.mem);
-        connection seL4RPC uart_inf(from client.uart, to drv.uart);
+        connection seL4RPCCall uart_inf(from client.uart, to drv.uart);
     }
 
     configuration {

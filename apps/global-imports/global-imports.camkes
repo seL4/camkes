@@ -21,8 +21,8 @@ assembly {
         component Printer p;
         component Client c;
 
-        connection seL4RPC a(from c.g, to s.getter);
-        connection seL4RPC b(from c.p, to p.printer);
+        connection seL4RPCCall a(from c.g, to s.getter);
+        connection seL4RPCCall b(from c.p, to p.printer);
         connection seL4SharedData d(from c.counter, to s.counter);
     }
 }

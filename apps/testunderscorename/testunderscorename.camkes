@@ -18,7 +18,7 @@ assembly {
                 component Echo echo;
                 component Client client;
 
-                connection seL4RPC simple(from client._fault_handler, to echo.b);
+                connection seL4RPCCall simple(from client._fault_handler, to echo.b);
         }
 }
 

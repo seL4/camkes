@@ -40,9 +40,9 @@ assembly {
         component B b2;
         component B b3;
         component C c;
-        connection seL4RPC conn0(from a.p, to b1.q);
+        connection seL4RPCCall conn0(from a.p, to b1.q);
         connection seL4RPCCall conn1(from b1.p, to b2.q);
-        connection seL4RPC conn2(from b2.p, to b3.q);
+        connection seL4RPCCall conn2(from b2.p, to b3.q);
         connection seL4RPCCall conn3(from b3.p, to c.p);
     }
 }

@@ -18,7 +18,7 @@ assembly {
         component Server server;
         component Client client;
 
-        connection seL4RPC s(from client.p, to server.s);
+        connection seL4RPCCall s(from client.p, to server.s);
     }
 }
 

@@ -34,9 +34,9 @@ assembly {
         component Client c3;
         component Server s;
 
-        connection seL4RPC s1(from c1.l, to s.a);
-        connection seL4RPC s2(from c2.l, to s.b);
-        connection seL4RPC s3(from c3.l, to s.c);
+        connection seL4RPCCall s1(from c1.l, to s.a);
+        connection seL4RPCCall s2(from c2.l, to s.b);
+        connection seL4RPCCall s3(from c3.l, to s.c);
     }
 }
 

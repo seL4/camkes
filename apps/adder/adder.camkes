@@ -19,7 +19,7 @@ assembly {
         component Client client;
 
         connection seL4SharedData s(from adder.d, to client.d);
-        connection seL4RPC p(from client.a, to adder.a);
+        connection seL4RPCCall p(from client.a, to adder.a);
     }
 }
 
