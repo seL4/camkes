@@ -33,4 +33,9 @@ assembly {
         connection seL4RPCCall notification(from c.n, to s.n);
         connection seL4Notification ev(from s.e, to c.e);
     }
+    configuration {
+        c.priority = 1;
+        s.priority = 1;
+        c.e_priority = 2;
+    }
 }
