@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # CAmkES project configuration
-# Thu Mar  9 14:09:30 2017
+# Thu Mar  9 16:14:09 2017
 #
 
 #
@@ -43,7 +43,7 @@ CONFIG_XAPIC=y
 CONFIG_IOMMU=y
 # CONFIG_VTX is not set
 # CONFIG_HUGE_PAGE is not set
-CONFIG_SUPPORT_PCID=y
+# CONFIG_SUPPORT_PCID is not set
 CONFIG_SYSENTER=y
 # CONFIG_SYSCALL is not set
 CONFIG_FXSAVE=y
