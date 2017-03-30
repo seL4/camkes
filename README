@@ -36,6 +36,6 @@ mutex: demonstrates the use of user-defined connectors in CAmkES
 rotate: demonstrates the use of user-defined types as the arguments of an interface
 swapcounter:
 socket: demonstrates the use of user-defined dataports
+structs: demonstrates the use of struct and array attributes
 terminal: a prototype for a secure terminal system
 uart: demonstrates how to access hardware device memory
-
