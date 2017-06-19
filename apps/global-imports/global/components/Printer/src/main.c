@@ -8,7 +8,7 @@
  * @TAG(NICTA_BSD)
  */
 
-#include <Printer.h>
+#include <camkes.h>
 #include <stdio.h>
 #include <vec.h>
 
