@@ -1,0 +1,70 @@
+/*
+ * Copyright 2017, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+component foo {
+  control;
+  /* foo has two attributes without defaults
+     if no setting is provided for these attributes
+     no symbols will be created for them in the
+     generated templates */
+  attribute int a;
+  attribute int b = 2;
+}
+
+component bar {
+  control;
+  /* bar has two attributes both with defaults
+     if no setting is provided for these attributes
+     then the defaults will be used */
+  attribute int c = 5;
+  attribute int d = 6;
+}
+
+component baz {
+  /* This default will override the default in foo */
+  attribute int b = 1;
+  composition {
+    component foo fo;
+    component bar ba;
+  }
+  configuration {
+    /* alias fo.a as a in this component. */
+    fo.a <- a;
+
+    /* alias fo.b as b in this component.  This will
+       result in the default for b to overriede fo.b */
+    fo.b <- b;
+
+    /* Set fo.b to 4 */
+    ba.d = 4;
+
+    /* alias ba.c as c in this component.
+       As da.c does not get set in the top configuration,
+       the original default value will be used */
+    ba.c <- c;
+  }
+}
+
+assembly {
+  composition {
+    component baz da;
+  }
+  configuration {
+    /* Set da.a to 11 via some convoluted aliasing scheme.
+       If a circular reference is created, CAmkES will error */
+    da.eleven = 5 + 6;
+    da.square <- da.oneone;
+    da.oneone <- da.eleven;
+    da.scratch <- da.square;
+    da.a <- da.scratch;
+  }
+}

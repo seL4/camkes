@@ -44,7 +44,7 @@ menu "Applications"
     source "apps/uart/Kconfig"
     source "apps/epit/Kconfig"
     source "apps/keyboard/Kconfig"
-
+    source "apps/attributes/Kconfig"
     source "apps/simple/Kconfig"
     source "apps/dataport/Kconfig"
     source "apps/event/Kconfig"
