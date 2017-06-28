@@ -66,5 +66,9 @@ assembly {
     da.oneone <- da.eleven;
     da.scratch <- da.square;
     da.a <- da.scratch;
+
+    /* Make sure we can parse empty arrays and dicts */
+    baz.empty_list = [];
+    baz.empty_dict = {};
   }
 }
