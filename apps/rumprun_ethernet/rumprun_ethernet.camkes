@@ -1,0 +1,65 @@
+/*
+ * Copyright 2017, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+#include <rumprun_camkes.h>
+
+import <rumprun.camkes>;
+import "components/rump_ether/rump_ether.camkes";
+import "components/reverse_string/server.camkes";
+
+component EthDevice {
+    hardware;
+    emits IRQ irq;
+}
+
+
+assembly {
+ composition {
+     component rumprun_platform_layer rrpl;
+     component rumprun_ether rump_ether;
+     component PCIConfigIO pci_config;
+	 component EthDevice eth;
+     component Server server;
+
+
+     RUMPRUN_META_CONNECTION(rump_ether, rrpl)
+
+     connection seL4RPCCall serial_pci_config(from pci_config.putchar, to rrpl.putchar);
+
+     connection seL4SharedData conn(from rump_ether.camkes_buffer, to server.buffer);
+     connection seL4Notification simpleEvent1(from rump_ether.camkes_ev, to server.ev);
+     connection seL4Notification simpleEvent2(from server.ev1, to rump_ether.camkes_ev1);
+
+     connection seL4RPCCall pciconfig0(from rump_ether.pci_config, to pci_config.pci_config);
+     connection seL4HardwareInterrupt eth_irq(from eth.irq, to rump_ether.eth_irq);
+
+ }
+
+ configuration {
+    rump_ether.rump_config = { "rump_net": 1, 
+                                "rumprunbake_config": "sel4_ethernet", 
+                                "cmdline": "echo 6666",
+                                "pci_config_interface" : "pci_config",
+                                "eth_irq_interface" : "eth_irq",
+                                "eth_irq_number" : 11,
+                                "interfaces_to_expose": ["camkes_buffer", "camkes_ev", "camkes_ev1"] };
+    RUMPRUN_COMPONENT_CONFIGURATION(rump_ether, 0)
+
+    rump_ether.untyped_mmios = ["0xfebc0000:17", "0xf7f39000:12", "0xf7f00000:17"];
+	eth.irq_irq_type = "pci";
+	eth.irq_irq_ioapic = 0;
+	eth.irq_irq_ioapic_pin = 11;
+	eth.irq_irq_vector = 11;
+
+    pci_config.putchar_attributes = 0;
+
+ }
+}
