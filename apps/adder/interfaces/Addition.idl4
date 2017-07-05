@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 procedure Addition {
     dataport_ptr_t calculate(in dataport_ptr_t ptr);

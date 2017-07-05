@@ -1,4 +1,4 @@
-# @TAG(NICTA_BSD)
+<!--@TAG(DATA61_BSD)-->
 #
 
 This application demonstrates the use of dataport wrapper to pass pointers via CAmkES RPC

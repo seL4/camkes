@@ -1,4 +1,4 @@
-# @TAG(NICTA_BSD)
+# @TAG(DATA61_BSD)
 #
 
 config LIB_SEL4_BGA

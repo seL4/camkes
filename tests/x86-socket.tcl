@@ -1,5 +1,5 @@
 #!/usr/bin/expect -f
-# @TAG(NICTA_BSD)
+# @TAG(DATA61_BSD)
 
 source [file join [file dirname [info script]] procs.tcl]
 

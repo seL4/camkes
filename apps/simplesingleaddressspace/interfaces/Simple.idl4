@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 procedure Simple {
     string echo_string(in string s);

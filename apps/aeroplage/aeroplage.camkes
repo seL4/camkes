@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 /* CAmkES ADL description of the system. Every system needs such a description
  * that covers the component types, their instantiations, connections between

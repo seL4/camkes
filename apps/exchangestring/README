@@ -1,4 +1,4 @@
-# @TAG(NICTA_BSD)
+<!--@TAG(DATA61_BSD)-->
 #
 
 This application demonstrates how to pass string arguments between components. All strings

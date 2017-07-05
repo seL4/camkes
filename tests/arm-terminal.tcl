@@ -1,5 +1,5 @@
 #!/usr/bin/expect -f
-# @TAG(NICTA_BSD)
+# @TAG(DATA61_BSD)
 
 # Inhibit concurrency.
 set argv [list ];

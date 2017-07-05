@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 #ifndef MY_STRUCT_H_
 #define MY_STRUCT_H_

@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 import <std_connector.camkes>;
 import "components/Driver/Driver.camkes";

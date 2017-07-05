@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 /* Usage of the keyboard in this file is based on information from
  * http://www.win.tue.nl/~aeb/linux/kbd/scancodes-11.html

@@ -1,4 +1,4 @@
-<!--@TAG(NICTA_BSD)-->
+<!--@TAG(DATA61_BSD)-->
 # Aeroplage - a prototype of a multilevel terminal
 
 This application implements a prototype of a previous multilevel terminal for seL4. It currently

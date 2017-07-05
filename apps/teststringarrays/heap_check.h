@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 #ifndef HEAP_CHECK_H_
 #define HEAP_CHECK_H_

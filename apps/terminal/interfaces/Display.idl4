@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 procedure Display {
   /* Write a character to the display at position (x,y). Returns 0 on success

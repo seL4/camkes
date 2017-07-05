@@ -1,4 +1,4 @@
-# @TAG(NICTA_BSD)
+<!--@TAG(DATA61_BSD)-->
 #
 
 An example of how to implement a lock server in CAmkES. It also demonstrates how to use

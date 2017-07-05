@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# @TAG(NICTA_BSD)
+# @TAG(DATA61_BSD)
 
 import argparse, multiprocessing, os, stat, subprocess, sys
 

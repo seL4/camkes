@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 #ifndef _MYTYPE_
 #define _MYTYPE_

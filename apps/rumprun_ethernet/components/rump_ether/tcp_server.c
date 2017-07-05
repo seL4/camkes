@@ -1,19 +1,19 @@
 /*@TAG(CUSTOM)*/
 /**
  * The MIT License (MIT)
- * 
+ *
  * Copyright (c) 2014 Mathias Buus
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-/* Modifications made by Data61 */ 
+/* Modifications made by Data61 */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +36,7 @@
 #define on_error(...) { fprintf(stderr, __VA_ARGS__); fflush(stderr); exit(1); }
 
 
-/* XXX: CAmkES symbols that are linked in after this file is compiled.  
+/* XXX: CAmkES symbols that are linked in after this file is compiled.
    They need to be marked as weak and this is the current hacky way it is done */
 extern void *camkes_buffer;
 void camkes_ev_emit(void);
@@ -103,7 +103,7 @@ int main (int argc, char *argv[]) {
       snprintf(buffer_str, read +1, buf);
       camkes_ev_emit();
       camkes_ev1_wait();
-    
+
       err = send(client_fd, buffer_str, read, 0);
       if (err < 0) on_error("Client write failed\n");
     }

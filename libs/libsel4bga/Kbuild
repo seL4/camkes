@@ -1,4 +1,4 @@
-# @TAG(NICTA_BSD)
+# @TAG(DATA61_BSD)
 #
 
 libs-$(CONFIG_LIB_SEL4_BGA) += libsel4bga

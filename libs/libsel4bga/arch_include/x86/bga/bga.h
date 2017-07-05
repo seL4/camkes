@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 #ifndef _LIBGA_BGA_H_
 #define _LIBGA_BGA_H_

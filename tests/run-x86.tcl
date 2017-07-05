@@ -1,4 +1,4 @@
-# @TAG(NICTA_BSD)
+# @TAG(DATA61_BSD)
 #
 
 # This fragment is expected to included by other tests.

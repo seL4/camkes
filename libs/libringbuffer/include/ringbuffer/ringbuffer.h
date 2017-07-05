@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 /* This interface allows a user to treat a region of memory as a ring buffer,
  * to which they read or write. It is intended for unidirectional communication

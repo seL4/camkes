@@ -1,4 +1,4 @@
-<!--@TAG(NICTA_BSD)-->
+<!--@TAG(DATA61_BSD)-->
 # Swap Counter Example
 
 This directory contains a simple CAmkES example the was used for demonstration

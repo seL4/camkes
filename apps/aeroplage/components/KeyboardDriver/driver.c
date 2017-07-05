@@ -1,4 +1,4 @@
-/* @TAG(NICTA_BSD) */
+/* @TAG(DATA61_BSD) */
 
 /* CAmkES provides a generated header that prototypes all the relevant generated
  * symbols.

@@ -1,5 +1,5 @@
 #!/bin/bash
-# @TAG(NICTA_BSD)
+# @TAG(DATA61_BSD)
 
 # Generate XBM representations of the characters from the font Nimbus Mono
 # Regular.

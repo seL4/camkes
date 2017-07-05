@@ -1,5 +1,5 @@
 #!/bin/bash
-# @TAG(NICTA_BSD)
+# @TAG(DATA61_BSD)
 
 for i in `ls configs`; do
     echo -n "Testing $i ... "
