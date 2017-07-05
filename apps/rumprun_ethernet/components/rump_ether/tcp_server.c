@@ -1,3 +1,4 @@
+/*@TAG(CUSTOM)*/
 /**
  * The MIT License (MIT)
  * 
