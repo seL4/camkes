@@ -1,0 +1,6 @@
+.git/*
+.repo/*
+configs/*
+LICENSE_BSD2.txt
+.licenseignore
+*.patch
