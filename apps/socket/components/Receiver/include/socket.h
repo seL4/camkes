@@ -13,7 +13,7 @@
 #ifndef _SOCKET_
 #define _SOCKET_
 
-#include <sync/spinlock.h>
+#include <platsupport/sync/spinlock.h>
 
 typedef struct {
     sync_spinlock_t lock;
