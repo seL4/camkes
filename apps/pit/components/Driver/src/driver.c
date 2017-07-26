@@ -18,7 +18,7 @@
 
 #define IRQS_PER_SECOND 100
 
-static pstimer_t *timer = NULL;
+static pit_t timer;
 
 static int pit_port_in(void *cookie, uint32_t port, int io_size, uint32_t *result) {
     if (io_size != 1) {
@@ -61,7 +61,6 @@ void irq_handle(void)
         printf("%d seconds elapsed\n", seconds);
         count = 0;
     }
-    timer_handle_irq(timer, 0);
     irq_acknowledge();
 }
 
@@ -69,10 +68,9 @@ void pre_init(void)
 {
     int error;
     ps_io_port_ops_t ops = (ps_io_port_ops_t){.io_port_in_fn = pit_port_in, .io_port_out_fn = pit_port_out};
-    timer = pit_get_timer(&ops);
-    assert(timer);
-    timer_start(timer);
-    error = timer_periodic(timer, NS_IN_S / IRQS_PER_SECOND);
+    error = pit_init(&timer, ops);
+    assert(!error);
+    error = pit_set_timeout(&timer, NS_IN_S / IRQS_PER_SECOND, true);
     assert(!error);
     irq_acknowledge();
 }
