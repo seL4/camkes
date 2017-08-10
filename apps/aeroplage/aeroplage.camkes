@@ -46,12 +46,8 @@ component KeyboardDriver {
 
 component Screen {
     hardware;
-    /* XXX: there is actually a frame buffer here as well. Normally this would
-     * be declared as a CAmkES dataport, but CAmkES does not currently support
-     * large frame device regions. Instead the frame buffer is hard coded by
-     * the patch to the CapDL initialiser.
-     */
-    //dataport Buf framebuffer;
+    /* Adjust the buffer size according to the memory allocated to your graphics card */
+    dataport Buf(0x1000000) framebuffer;
     provides IOPort ports;
 }
 
@@ -73,10 +69,10 @@ component VESADriver {
     control;
     dataport Buf low_input;
     dataport Buf high_input;
-    /* XXX: This is where we would declare the corresponding side of the
+    /* This is the corresponding side of the
      * screen's frame buffer as a dataport.
      */
-    //dataport Buf mock_hdmi;
+    dataport Buf(0x1000000) mock_hdmi;
     uses IOPort ports;
 }
 
@@ -108,10 +104,7 @@ assembly {
         connection seL4SharedData high_text(from s.high_output, to high.keyboard_input);
         connection seL4SharedData low_video(from low.framebuffer, to vesa.low_input);
         connection seL4SharedData high_video(from high.framebuffer, to vesa.high_input);
-        /* XXX: Again, this connection should exist, but CAmkES is lacking the
-         * necessary support.
-         */
-        //connection seL4HardwareMMIO video_out(from vesa.mock_hdmi, to video.framebuffer);
+        connection seL4HardwareMMIO video_out(from vesa.mock_hdmi, to video.framebuffer);
         connection seL4HardwareIOPort video_config(from vesa.ports, to video.ports);
     }
 
@@ -125,11 +118,11 @@ assembly {
         ps2.ports_attributes = "0x60:0x64";
         /* The IO ports for controlling the Bochs Graphic Array video hardware. */
         video.ports_attributes = "0x1ce:0x1d0";
-        /* XXX: This is where and how we would declare the physical address of
-         * the BGA's frame buffer.
+        /* This is the physical address of
+         * the BGA's frame buffer and its size.
          */
-        //video.framebuffer_paddr = 0xfd000000;
-        //video.framebuffer_size = 0x400000;
+        video.framebuffer_paddr = 0xfd000000;
+        video.framebuffer_size = 0x1000000;
 
         /* We want to make each dataport effectively a data diode by ensuring
          * one way communication. To do this, set each of the dataport's to

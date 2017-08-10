@@ -172,12 +172,8 @@ static uint16_t in16(uint16_t port) {
 
 /* This function is invoked by the main CAmkES thread in this component. */
 int run(void) {
-    /* We rely on the CapDL initialiser to map the BGA frame buffer in at this
-     * address. This is hard coded here and relies on a patch (included) to the
-     * initialiser. This is because CAmkES does not currently support large
-     * device regions.
-     */
-    void *bga_ptr = (void*)0x400000;
+    /* Use the dataport address */
+    void *bga_ptr = (void*)mock_hdmi;
 
     bga = bga_init(bga_ptr, out16, in16);
     bga_set_mode(bga, 1024, 768, 24); /* 1024x768 resolution at 24 BPP */
