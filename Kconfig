@@ -103,6 +103,7 @@ menu "Applications"
     source "apps/rumprun_pthreads/Kconfig"
     source "apps/rumprun_hello/Kconfig"
     source "apps/rumprun_ethernet/Kconfig"
+    source "apps/rumprun_rust/Kconfig"
 endmenu
 
 source "tools/camkes/Kconfig"
