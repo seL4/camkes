@@ -15,13 +15,13 @@ CURRENT_DIR := $(dir $(abspath $(lastword ${MAKEFILE_LIST})))
 
 include ${RUMPRUN_BASE_DIR}/platform/sel4/rumprunlibs.mk
 
-HELLO_RUMP_CFILES := $(wildcard ${CURRENT_DIR}/hello.c)
 CAMKES_FLAGS += --cpp-flag=-I${RUMPRUN_BASE_DIR}/platform/sel4/camkes/ 
 
+# define path to the cargo project
+RUST_SOURCE_DIR := ${CURRENT_DIR}/rustest/
 
-rumprun_rumpbin := hello
+rumprun_rust_rumpbin := hellorust
 
-hello: $(HELLO_RUMP_CFILES)
-	echo ${CURRENT_DIR}
-	$(RUMPRUN_CC) $^ -o $@
-
+hellorust: $(RUST_SOURCE_DIR)/src/main.rs
+	cd $(RUST_SOURCE_DIR) &&	cargo build --target=x86_64-rumprun-netbsd
+	cp $(RUST_SOURCE_DIR)/target/x86_64-rumprun-netbsd/debug/rustest $(BUILD_DIR)/$@

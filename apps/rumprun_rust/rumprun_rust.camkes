@@ -12,17 +12,25 @@
 
 #include <rumprun_camkes.h>
 import <rumprun.camkes>;
+import "components/hellorust/hellorust.camkes";
 import "components/hello/hello.camkes";
 
 assembly {
  composition {
      component rumprun_platform_layer rrpl;
-     component rumprun hello;
-     RUMPRUN_META_CONNECTION(hello, rrpl)
+
+     component rumprun_rust hello1;
+     RUMPRUN_META_CONNECTION(hello1, rrpl)
+
+     component rumprun hello2;
+     RUMPRUN_META_CONNECTION(hello2, rrpl)
  }
 
  configuration {
-    hello.rump_config = {"cmdline": "hello World!" };
-    RUMPRUN_COMPONENT_CONFIGURATION(hello, 0)
+    hello1.rump_config = {"cmdline": "hello Rust World!" };
+    RUMPRUN_COMPONENT_CONFIGURATION(hello1, 0)
+
+    hello2.rump_config = {"cmdline": "hello World!" };
+    RUMPRUN_COMPONENT_CONFIGURATION(hello2, 1)
  }
 }

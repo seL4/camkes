@@ -24,6 +24,7 @@ all: default
 include TimeServer/TimeServer.mk
 include SerialServer/SerialServer.mk
 
+include ${SOURCE_DIR}/components/hellorust/hellorust.mk
 include ${SOURCE_DIR}/components/hello/hello.mk
 
 
