@@ -10,6 +10,8 @@
      @TAG(DATA61_BSD)
 -->
 
+# Rumpkernel running a simple rust application
+
 This application demonstrates a simple rust hello world program that runs in a 
 rumprun unikernel instance on CAmkES on seL4. Second rumpkernel runs a simpe hello app.
 
