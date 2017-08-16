@@ -1,0 +1,2 @@
+# ignore compiled rust targets
+apps/rumprun_rust/components/hellorust/rustest/target/*
