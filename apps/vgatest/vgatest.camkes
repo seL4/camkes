@@ -1,0 +1,60 @@
+/*
+ * Copyright 2017, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+/* CAmkES ADL description of the system. Every system needs such a description
+ * that covers the component types, their instantiations, connections between
+ * them and system configuration. This description can be split across multiple
+ * files, using the 'import' directive that works like CPP's #include
+ * directive. For simplicity, I've just defined everything in a single file.
+ */
+
+/* Import builtin ADL descriptions of CAmkES connector types. */
+import <std_connector.camkes>;
+
+/* Component definitions: */
+
+component Screen {
+    hardware;
+    // define the buffer size at the declaration to avoid 
+    // static assert type size mismatch (the compiler assumes
+    // 4k buffer size otherwise)
+    dataport Buf(3840) mem;
+}
+
+component VGADriver {
+    control;
+    // define the buffer size at the declaration to avoid 
+    // static assert type size mismatch (the compiler assumes
+    // 4k buffer size otherwise)
+    dataport Buf(3840) mem;
+}
+
+/* The system definition: */
+assembly {
+    composition {
+        component VGADriver vga;
+        component Screen video;
+
+        connection seL4HardwareMMIO video_out(from vga.mem, to video.mem);
+    }
+
+    configuration {
+     // this is the VGA buffer address
+    video.mem_paddr = 0xB8000;
+
+    // the vga buffer is componsed of uin16_t units, and is 80x24x2 = 3840 bytes long
+    // define the buffer size at the declaration to avoid 
+    // static assert type size mismatch (the compiler assumes
+    // 4k buffer size otherwise)
+    video.mem_size = 3840;
+    }
+}
