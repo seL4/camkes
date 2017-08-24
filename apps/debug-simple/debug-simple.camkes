@@ -1,0 +1,38 @@
+/*
+ * Copyright 2017, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+import <std_connector.camkes>;
+#include <camkes/gdb/adl.h>
+
+import "Simple.idl4";
+
+component Client {
+    control;
+    uses Simple a;
+    /* This adds the required connector interfaces for the debug server to use */
+    DEBUG_COMPONENT()
+}
+
+component Echo {
+    provides Simple b;
+}
+
+assembly {
+    composition {
+        component Echo echo;
+        component Client client;
+        connection seL4RPCCall simple(from client.a, to echo.b);
+    }
+}
+
+/* This adds the assembly and configuration parts for the debug server to connect to `client` */
+DEBUG_COMPOSITION(client, 3, "0x2f8:0x2ff")
