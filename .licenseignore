@@ -4,3 +4,5 @@ configs/*
 LICENSE_BSD2.txt
 .licenseignore
 *.patch
+.gitignore
+**/Cargo.lock
