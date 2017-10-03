@@ -34,8 +34,7 @@ def main(argv):
     for t in sorted(os.listdir(MY_DIR)):
         path = os.path.join(MY_DIR, t)
         mode = os.stat(path).st_mode
-        if t.endswith(".tcl") and not stat.S_ISDIR(mode) and \
-                os.access(path, os.X_OK):
+        if t.endswith(".tcl"):
 
             sys.stdout.write("<testcase classname='camkesnexttest' name='%s'>\n" % t)
 

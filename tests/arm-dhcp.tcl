@@ -11,14 +11,14 @@
 # @TAG(DATA61_BSD)
 #
 
-source [file join [file dirname [info script]] procs.tcl]
+source [file join [file dirname [info script]] procs.inc]
 
 set timeout 600
 
 spawn make arm_dhcp_defconfig
 check_exit
 
-source [file join [file dirname [info script]] build.tcl]
+source [file join [file dirname [info script]] build.inc]
 
-source [file join [file dirname [info script]] run-arm.tcl]
+source [file join [file dirname [info script]] run-arm.inc]
 wait_for "a: Acquired IP 192.168.1.5"

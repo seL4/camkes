@@ -33,8 +33,7 @@ def main(argv):
     for t in sorted(os.listdir(MY_DIR)):
         path = os.path.join(MY_DIR, t)
         mode = os.stat(path).st_mode
-        if t != os.path.basename(__file__) and not stat.S_ISDIR(mode) and \
-                os.access(path, os.X_OK) and t.endswith(".tcl"):
+        if t != os.path.basename(__file__) and t.endswith(".tcl"):
             sys.stdout.write(' Running %s ... ' % t)
             sys.stdout.flush()
             p = subprocess.Popen([path, str(opts.jobs)],

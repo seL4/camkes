@@ -11,11 +11,11 @@
 # @TAG(DATA61_BSD)
 #
 
-source [file join [file dirname [info script]] procs.tcl]
+source [file join [file dirname [info script]] procs.inc]
 
 set timeout 600
 
 spawn make arm_testhardwareinterrupt_defconfig
 check_exit
 
-source [file join [file dirname [info script]] build.tcl]
+source [file join [file dirname [info script]] build.inc]

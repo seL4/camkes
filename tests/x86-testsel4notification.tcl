@@ -11,7 +11,7 @@
 # @TAG(DATA61_BSD)
 #
 
-source [file join [file dirname [info script]] procs.tcl]
+source [file join [file dirname [info script]] procs.inc]
 
 set timeout 600
 
@@ -19,7 +19,7 @@ spawn make x86_testsel4notification_defconfig
 
 check_exit
 
-source [file join [file dirname [info script]] build.tcl]
+source [file join [file dirname [info script]] build.inc]
 
-source [file join [file dirname [info script]] run-x86.tcl]
+source [file join [file dirname [info script]] run-x86.inc]
 wait_for "All OK"

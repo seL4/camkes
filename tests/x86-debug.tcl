@@ -11,14 +11,14 @@
 # @TAG(DATA61_BSD)
 #
 
-source [file join [file dirname [info script]] procs.tcl]
+source [file join [file dirname [info script]] procs.inc]
 
 set timeout 600
 
 spawn make x86_debug_simple_defconfig
 check_exit
 
-source [file join [file dirname [info script]] build.tcl]
+source [file join [file dirname [info script]] build.inc]
 
 spawn qemu-system-i386 -nographic -cpu Haswell -enable-kvm -no-kvm-irqchip -kernel images/kernel-ia32-pc99 -initrd images/capdl-loader-experimental-image-ia32-pc99 -device isa-serial,chardev=ch0     -device isa-serial,chardev=ch1     -chardev file,path=/dev/tty,id=ch0     -chardev socket,host=127.0.0.1,port=1234,id=ch1,server,wait
 set qemuID $spawn_id
