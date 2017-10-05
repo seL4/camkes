@@ -41,6 +41,8 @@ menu "Libraries"
     source "libs/libsel4simple/Kconfig"
     source "libs/libsel4simple-default/Kconfig"
     source "libs/libsel4bga/Kconfig"
+    source "libs/libsel4serialserver/Kconfig"
+    source "libs/libsel4test/Kconfig"
     source "libs/rumprun/Kconfig"
 endmenu
 
