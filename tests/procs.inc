@@ -29,5 +29,8 @@ proc wait_for { t } {
         timeout {
             exit 1
         }
+        eof {
+            exit 1
+        }
     }
 }
