@@ -20,7 +20,7 @@ check_exit
 
 source [file join [file dirname [info script]] build.inc]
 
-spawn qemu-system-i386 -nographic -cpu Haswell -enable-kvm -no-kvm-irqchip -kernel images/kernel-ia32-pc99 -initrd images/capdl-loader-experimental-image-ia32-pc99 -device isa-serial,chardev=ch0     -device isa-serial,chardev=ch1     -chardev file,path=/dev/tty,id=ch0     -chardev socket,host=127.0.0.1,port=1234,id=ch1,server,wait
+spawn qemu-system-i386 -nographic -cpu Haswell -kernel images/kernel-ia32-pc99 -initrd images/capdl-loader-experimental-image-ia32-pc99 -device isa-serial,chardev=ch0     -device isa-serial,chardev=ch1     -chardev file,path=/dev/tty,id=ch0     -chardev socket,host=127.0.0.1,port=1234,id=ch1,server,wait
 set qemuID $spawn_id
 
 wait_for "connection on: disconnected:tcp:127.0.0.1:1234,server"
