@@ -21,4 +21,4 @@ check_exit
 source [file join [file dirname [info script]] build.inc]
 
 source [file join [file dirname [info script]] run-arm.inc]
-wait_for "EPIT time out..."
+wait_for "EPIT time out...6"
