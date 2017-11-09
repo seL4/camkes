@@ -51,6 +51,7 @@ assembly {
                                 "pci_config_interface" : "pci_config",
                                 "eth_irq_interface" : "eth_irq",
                                 "eth_irq_number" : 11,
+                                "rumprun_memory_size" : 32 * 1024 * 1024,
                                 "interfaces_to_expose": ["camkes_buffer", "camkes_ev", "camkes_ev1"] };
     RUMPRUN_COMPONENT_CONFIGURATION(rump_ether, 0)
 
