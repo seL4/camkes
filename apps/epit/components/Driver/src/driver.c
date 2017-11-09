@@ -78,6 +78,7 @@ void irq_handle(void)
 {
 	/* Clear status bit. */
 	REG_VAL(KZM_EPIT_STAT_ADDR) = 0x1;
+	irq_acknowledge();
 
 	printf("EPIT time out...%d\n", count++);
 }
