@@ -75,7 +75,7 @@ static inline uint8_t ps2_read_output(void) {
 #define ps2_dual_control(byte1, byte2) do {ps2_single_control(byte1);io_out8(KEYBOARD_CONTROL_WRITE_CCB, byte2);} while(0)
 #define ps2_write_output(byte) io_out8(KEYBOARD_OUTPUT_BUFFER, byte)
 
-void keyboard_init(int enable_interrupt, in8_fn in8, out8_fn out8) {
+void sel4keyboard_init(int enable_interrupt, in8_fn in8, out8_fn out8) {
     io_in8 = in8;
     io_out8 = out8;
 
@@ -114,7 +114,7 @@ void keyboard_init(int enable_interrupt, in8_fn in8, out8_fn out8) {
     assert(error == 0xfa);
 }
 
-void keyboard_reset() {
+void sel4keyboard_reset() {
     uint8_t config;
     /* disable ports and interrupts */
     // get old internal configuration
@@ -127,7 +127,7 @@ void keyboard_reset() {
     ps2_single_control(0xA7);
 }
 
-int keyboard_get_scancode(int *scancode) {
+int sel4keyboard_get_scancode(int *scancode) {
     /* see if there is a waiting scancode */
     if( (_ps2_read_control() & 0x1) == 0) {
         return 0;

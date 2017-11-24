@@ -67,7 +67,7 @@ static char codes[255] = {
     [0x76] = 033, // esc
 };
 
-char keyboard_code_to_char(int index) {
+char sel4keyboard_code_to_char(int index) {
     if (index > sizeof(codes) || index < 0) {
         return 0;
     }

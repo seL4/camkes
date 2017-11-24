@@ -32,7 +32,7 @@ static void out8(uint16_t port, uint8_t value) {
 }
 
 int run(void) {
-    keyboard_init(0, in8, out8);
+    sel4keyboard_init(0, in8, out8);
 
     ringbuffer_t *output = rb_new((void*)char_out, sizeof(*char_out));
     if (output == NULL) {
@@ -48,7 +48,7 @@ int run(void) {
         static int escape_state = 0;
         static int break_code = 0;
 
-        while(!keyboard_get_scancode(&c));
+        while(!sel4keyboard_get_scancode(&c));
 
         /* first parse escape codes etc */
         switch (c) {
@@ -90,7 +90,7 @@ int run(void) {
                 break;
         }
 
-        char c1 = keyboard_code_to_char(c);
+        char c1 = sel4keyboard_code_to_char(c);
         if (c1 != 0) {
             rb_transmit_byte(output, (unsigned char)c1);
         }
