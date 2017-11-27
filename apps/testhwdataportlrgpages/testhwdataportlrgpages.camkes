@@ -1,0 +1,38 @@
+/*
+ * Copyright 2017, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+import <std_connector.camkes>;
+
+component Main {
+    control;
+    dataport Buf(0x1000000) buffer;
+}
+
+
+component HWBuffer {
+    hardware;
+    dataport Buf(0x1000000) largebuffer;
+}
+
+
+assembly {
+    composition {
+        component Main main;
+        component HWBuffer buffer;
+        connection seL4HardwareMMIO buffer_con(from main.buffer, to buffer.largebuffer);
+    }
+
+    configuration {
+        buffer.largebuffer_paddr = 0xc0000000;
+        buffer.largebuffer_size = 0x1000000;
+    }
+}
