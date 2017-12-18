@@ -14,4 +14,4 @@
 
 
 apps-$(CONFIG_APP_RUMPRUN_ETHERNET) += rumprun_ethernet
-rumprun_ethernet: rumprun libsel4muslccamkes libsel4camkes
+rumprun_ethernet: rumprun-toplevel-support rumprun-bottomlevel-support libsel4muslccamkes libsel4camkes

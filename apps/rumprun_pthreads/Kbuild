@@ -14,4 +14,4 @@
 
 
 apps-$(CONFIG_APP_RUMPRUN_PTHREADS) += rumprun_pthreads
-rumprun_pthreads: rumprun libsel4muslccamkes libsel4camkes
+rumprun_pthreads: rumprun-toplevel-support rumprun-bottomlevel-support libsel4muslccamkes libsel4camkes

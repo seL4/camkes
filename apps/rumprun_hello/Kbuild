@@ -14,4 +14,4 @@
 
 
 apps-$(CONFIG_APP_RUMPRUN_HELLO) += rumprun_hello
-rumprun_hello: rumprun libsel4muslccamkes libsel4camkes
+rumprun_hello: rumprun-toplevel-support rumprun-bottomlevel-support libsel4muslccamkes libsel4camkes

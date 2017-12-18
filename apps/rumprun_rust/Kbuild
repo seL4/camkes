@@ -14,4 +14,4 @@
 
 
 apps-$(CONFIG_APP_RUMPRUN_RUST) += rumprun_rust
-rumprun_rust: rumprun libsel4muslccamkes libsel4camkes
+rumprun_rust: rumprun-toplevel-support rumprun-bottomlevel-support libsel4muslccamkes libsel4camkes
