@@ -15,10 +15,10 @@ source [file join [file dirname [info script]] procs.inc]
 
 set timeout 600
 
-spawn make x86_testhwdataportlrgpages_defconfig
+spawn make arm_testhwdataportlrgpages_defconfig
 check_exit
 
 source [file join [file dirname [info script]] build.inc]
 
-source [file join [file dirname [info script]] run-x86.inc]
+source [file join [file dirname [info script]] run-arm.inc]
 wait_for "Hello, World!"
