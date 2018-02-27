@@ -56,7 +56,7 @@ static void test_madvise(void) {
     if (0) {
 
     /* Confirm that invalid advice is rejected. */
-    const int BAD_ADVICE = -1;
+    #define BAD_ADVICE -1
     static_assert(BAD_ADVICE != MADV_NORMAL &&
                   BAD_ADVICE != MADV_RANDOM &&
                   BAD_ADVICE != MADV_SEQUENTIAL &&
@@ -214,7 +214,7 @@ static void test_mlockall(void) {
     if (0) {
 
     /* Confirm invalid flags are rejected. */
-    static const int BAD_FLAGS = -1;
+    #define BAD_FLAGS -1
     static_assert((BAD_FLAGS & ~(MCL_CURRENT|MCL_FUTURE)) != 0,
         "bad value chosen for BAD_FLAGS that collides with valid flags");
     r = mlockall(BAD_FLAGS);
