@@ -14,7 +14,7 @@
 #include <string.h>
 
 int count = 0;
-inline void udelay(uint32_t us){
+static inline void udelay(uint32_t us){
 	volatile int i;
 	for(; us > 0; us--)
 		for(i = 0; i < 100; i++);
