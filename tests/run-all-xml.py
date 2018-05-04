@@ -25,56 +25,60 @@ def main(argv):
         default=multiprocessing.cpu_count(), help='number of parallel jobs')
     parser.add_argument('--verbose', '-v', action='store_true',
         help='be verbose with output')
+    parser.add_argument('--project-dir', dest='project_dir', default=os.getcwd())
     opts = parser.parse_args(argv[1:])
 
     printable = set(string.printable)
 
     sys.stdout.write("<testsuite>\n")
 
-    for t in sorted(os.listdir(MY_DIR)):
-        path = os.path.join(MY_DIR, t)
-        mode = os.stat(path).st_mode
-        if t.endswith(".tcl"):
+    for app in sorted(os.listdir(os.path.join(opts.project_dir, 'apps'))):
+        for t in sorted(os.listdir(os.path.join(opts.project_dir, 'apps', app))):
+            path = os.path.join(opts.project_dir, 'apps', app, t)
+            mode = os.stat(path).st_mode
+            if t.endswith(".tcl"):
 
-            sys.stdout.write("<testcase classname='camkesnexttest' name='%s'>\n" % t)
+                sys.stdout.write("<testcase classname='camkesnexttest' name='%s'>\n" % t)
 
-            sys.stdout.write('Running %s ... ' % t)
-            sys.stdout.flush()
-
-            # Subprocess for running the test_process
-            # It is assumed that this script will be located in projects/camkes/tests relative
-            # to the project's top level directory. The working directory from which to run
-            # the build commands is determined relative to this script's location, so this script
-            # can be run from any location.
-            test_process = subprocess.Popen([path, str(opts.jobs)], cwd=os.path.join(MY_DIR, '../../..'),
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-            lines = []
-
-            for line in iter(test_process.stdout.readline, b''):
-                sys.stdout.write(escape_xml(line))
-                lines.append(line)
-
-            test_process.wait()
-
-            if test_process.returncode == 0:
-                sys.stdout.write('-- Passed --\n')
-            else:
-
-                sys.stdout.write("<failure type='failure'>\n")
-
-                sys.stdout.write('-- Failed --\n')
-
-                # Print the output within the <failed> tag
-                output = filter(lambda x: x in printable, "\n".join(lines))
-                sys.stdout.write(' -- output %s --\n%s' % (t, escape_xml(output)))
-
+                sys.stdout.write('Running %s ... ' % t)
                 sys.stdout.flush()
-                sys.stderr.flush()
 
-                sys.stdout.write("</failure>\n")
+                # Subprocess for running the test_process
+                # It is assumed that this script will be located in projects/camkes/tests relative
+                # to the project's top level directory. The working directory from which to run
+                # the build commands is determined relative to this script's location, so this script
+                # can be run from any location.
+                my_env = os.environ.copy()
+                my_env["SCRIPT_DIR"] = MY_DIR
+                test_process = subprocess.Popen([path, str(opts.jobs)], cwd=opts.project_dir, env=my_env,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            sys.stdout.write("</testcase>\n")
+                lines = []
+
+                for line in iter(test_process.stdout.readline, b''):
+                    sys.stdout.write(escape_xml(line))
+                    lines.append(line)
+
+                test_process.wait()
+
+                if test_process.returncode == 0:
+                    sys.stdout.write('-- Passed --\n')
+                else:
+
+                    sys.stdout.write("<failure type='failure'>\n")
+
+                    sys.stdout.write('-- Failed --\n')
+
+                    # Print the output within the <failed> tag
+                    output = filter(lambda x: x in printable, "\n".join(lines))
+                    sys.stdout.write(' -- output %s --\n%s' % (t, escape_xml(output)))
+
+                    sys.stdout.flush()
+                    sys.stderr.flush()
+
+                    sys.stdout.write("</failure>\n")
+
+                sys.stdout.write("</testcase>\n")
 
     sys.stdout.write("</testsuite>\n")
 

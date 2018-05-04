@@ -22,6 +22,7 @@ def main(argv):
         default=multiprocessing.cpu_count(), help='number of parallel jobs')
     parser.add_argument('--verbose', '-v', action='store_true',
         help='be verbose with output')
+    parser.add_argument('--project-dir', dest='project_dir', default=os.getcwd())
     opts = parser.parse_args(argv[1:])
 
     result = 0
@@ -30,25 +31,28 @@ def main(argv):
     if not opts.verbose:
         pipes['stdout'] = pipes['stderr'] = subprocess.PIPE
 
-    for t in sorted(os.listdir(MY_DIR)):
-        path = os.path.join(MY_DIR, t)
-        mode = os.stat(path).st_mode
-        if t != os.path.basename(__file__) and t.endswith(".tcl"):
-            sys.stdout.write(' Running %s ... ' % t)
-            sys.stdout.flush()
-            p = subprocess.Popen([path, str(opts.jobs)],
-                cwd=os.path.join(MY_DIR, '../../..'), **pipes)
-            stdout, stderr = p.communicate()
-            if p.returncode == 0:
-                sys.stdout.write('\033[32mPassed\033[0m\n')
-            else:
-                result = p.returncode
-                sys.stdout.write('\033[31mFailed\033[0m\n')
-                if not opts.verbose:
-                    sys.stdout.write(' -- stdout %s --\n%s' % (t, stdout))
-                    sys.stderr.write(' -- stderr %s --\n%s' % (t, stderr))
+    for app in sorted(os.listdir(os.path.join(opts.project_dir, 'apps'))):
+        for t in sorted(os.listdir(os.path.join(opts.project_dir, 'apps', app))):
+            path = os.path.join(opts.project_dir, 'apps', app, t)
+            mode = os.stat(path).st_mode
+            if t != os.path.basename(__file__) and t.endswith(".tcl"):
+                sys.stdout.write(' Running %s ... ' % t)
                 sys.stdout.flush()
-                sys.stderr.flush()
+                my_env = os.environ.copy()
+                my_env["SCRIPT_DIR"] = MY_DIR
+                p = subprocess.Popen([path, str(opts.jobs)], env=my_env,
+                    cwd=os.path.join(MY_DIR, '../../..'), **pipes)
+                stdout, stderr = p.communicate()
+                if p.returncode == 0:
+                    sys.stdout.write('\033[32mPassed\033[0m\n')
+                else:
+                    result = p.returncode
+                    sys.stdout.write('\033[31mFailed\033[0m\n')
+                    if not opts.verbose:
+                        sys.stdout.write(' -- stdout %s --\n%s' % (t, stdout))
+                        sys.stderr.write(' -- stderr %s --\n%s' % (t, stderr))
+                    sys.stdout.flush()
+                    sys.stderr.flush()
 
     return result
 
