@@ -11,10 +11,13 @@
 # @TAG(DATA61_BSD)
 #
 
+set appname [file tail [file dirname [info script]]]
+
 source [file join $::env(SCRIPT_DIR) procs.inc]
 
 set arm_defconfig arm_dmaexample_largeframe_defconfig
 set x86_defconfig x86_dmaexample_largeframe_defconfig
+set extra_cmake_args -DCAmkESLargeFramePromotion=ON
 
 set testscript {
 	wait_for "Allocating 4MB..."

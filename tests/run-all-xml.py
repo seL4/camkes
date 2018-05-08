@@ -26,6 +26,7 @@ def main(argv):
     parser.add_argument('--verbose', '-v', action='store_true',
         help='be verbose with output')
     parser.add_argument('--project-dir', dest='project_dir', default=os.getcwd())
+    parser.add_argument('--cmake', dest='cmake', action='store_true', help='Use CMake instead of kbuild')
     opts = parser.parse_args(argv[1:])
 
     printable = set(string.printable)
@@ -50,6 +51,7 @@ def main(argv):
                 # can be run from any location.
                 my_env = os.environ.copy()
                 my_env["SCRIPT_DIR"] = MY_DIR
+                my_env["CMAKE"] = "1" if opts.cmake else "0"
                 test_process = subprocess.Popen([path, str(opts.jobs)], cwd=opts.project_dir, env=my_env,
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 

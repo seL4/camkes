@@ -1,4 +1,3 @@
-#!/usr/bin/expect -f
 #
 # Copyright 2017, Data61
 # Commonwealth Scientific and Industrial Research Organisation (CSIRO)
@@ -10,16 +9,8 @@
 #
 # @TAG(DATA61_BSD)
 #
+#
 
-set appname [file tail [file dirname [info script]]]
+# This fragment is expected to included by other tests.
 
-source [file join $::env(SCRIPT_DIR) procs.inc]
-
-set arm_defconfig arm_testsyscalls_defconfig
-set x86_defconfig x86_testsyscalls_defconfig
-
-set testscript {
-	wait_for "All OK"
-}
-
-source [file join $::env(SCRIPT_DIR) test.inc]
+spawn ./simulate

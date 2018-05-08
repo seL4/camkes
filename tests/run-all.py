@@ -23,6 +23,7 @@ def main(argv):
     parser.add_argument('--verbose', '-v', action='store_true',
         help='be verbose with output')
     parser.add_argument('--project-dir', dest='project_dir', default=os.getcwd())
+    parser.add_argument('--cmake', dest='cmake', action='store_true', help='Use CMake instead of kbuild')
     opts = parser.parse_args(argv[1:])
 
     result = 0
@@ -40,6 +41,7 @@ def main(argv):
                 sys.stdout.flush()
                 my_env = os.environ.copy()
                 my_env["SCRIPT_DIR"] = MY_DIR
+                my_env["CMAKE"] = "1" if opts.cmake else "0"
                 p = subprocess.Popen([path, str(opts.jobs)], env=my_env,
                     cwd=os.path.join(MY_DIR, '../../..'), **pipes)
                 stdout, stderr = p.communicate()

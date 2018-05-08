@@ -11,6 +11,8 @@
 # @TAG(DATA61_BSD)
 #
 
+set appname [file tail [file dirname [info script]]]
+
 source [file join $::env(SCRIPT_DIR) procs.inc]
 
 set x86_defconfig x86_keyboard_defconfig
