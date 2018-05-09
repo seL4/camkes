@@ -32,7 +32,11 @@ assembly {
     }
 
     configuration {
+#ifdef SABRE
+        buffer.largebuffer_paddr = 0x20000000;
+#else
         buffer.largebuffer_paddr = 0xc0000000;
+#endif
         buffer.largebuffer_size = 0x1000000;
     }
 }
