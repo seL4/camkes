@@ -16,14 +16,20 @@ set appname [file tail [file dirname [info script]]]
 source [file join $::env(SCRIPT_DIR) procs.inc]
 
 set x86_defconfig x86_debug_simple_defconfig
-
+if {$::env(CMAKE) == 1} {
+	set binary_location client_group_bin
+	set capdl_image_name capdl-loader-image-ia32-pc99
+} else {
+	set binary_location stage/x86/pc99/bin/client_group_bin
+	set capdl_image_name capdl-loader-experimental-image-ia32-pc99
+}
 set testscript {
-	spawn qemu-system-i386 -nographic -cpu Haswell -kernel images/kernel-ia32-pc99 -initrd images/capdl-loader-experimental-image-ia32-pc99 -device isa-serial,chardev=ch0     -device isa-serial,chardev=ch1     -chardev file,path=/dev/tty,id=ch0     -chardev socket,host=127.0.0.1,port=1234,id=ch1,server,wait
+	spawn qemu-system-i386 -nographic -cpu Haswell -kernel images/kernel-ia32-pc99 -initrd images/$capdl_image_name -device isa-serial,chardev=ch0     -device isa-serial,chardev=ch1     -chardev file,path=/dev/tty,id=ch0     -chardev socket,host=127.0.0.1,port=1234,id=ch1,server,wait
 	set qemuID $spawn_id
 
 	wait_for "connection on: disconnected:tcp:127.0.0.1:1234,server"
 
-	spawn gdb stage/x86/pc99/bin/client_group_bin
+	spawn gdb $binary_location
 	set gdbID $spawn_id
 
 	wait_for "(gdb)"
