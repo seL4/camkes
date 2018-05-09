@@ -16,5 +16,6 @@ project(attributes C)
 
 DeclareCAmkESComponent(foo SOURCES foo.c)
 DeclareCAmkESComponent(bar SOURCES bar.c)
+DeclareCAmkESComponent(baz)
 
 DeclareCAmkESRootserver(attributes.camkes)
