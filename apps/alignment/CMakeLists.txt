@@ -14,8 +14,8 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(alignment C)
 
-if (NOT KernelSel4ArchIA32)
-    message(FATAL_ERROR "alignment application only supported on ia32")
+if (NOT KernelArch STREQUAL x86)
+    message(FATAL_ERROR "alignment application only supported on x86")
 endif()
 
 DeclareCAmkESComponent(Client SOURCES client.c common/common.S INCLUDES common)
