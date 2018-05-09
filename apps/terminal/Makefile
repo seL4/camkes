@@ -14,7 +14,10 @@
 TARGETS := $(notdir ${SOURCE_DIR}).cdl
 ADL := $(notdir ${SOURCE_DIR}).camkes
 
-PRIORITY_TARGETS = ${STAGE_DIR}/include/terminal_terminal.h
+all: default
+
+${SOURCE_DIR}/${ADL}: ${STAGE_DIR}/include/terminal_terminal.h
+
 
 Client_CFILES := $(patsubst ${SOURCE_DIR}/%,%,$(wildcard ${SOURCE_DIR}/components/Client/src/*.c))
 
