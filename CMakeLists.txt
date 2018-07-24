@@ -13,7 +13,7 @@
 cmake_minimum_required(VERSION 3.8.2)
 
 # Set some options we know we need here. Applications can override them
-if (${CapDLLoaderMaxObjects} LESS 20000)
+if (("${CapDLLoaderMaxObjects}" STREQUAL "") OR ("${CapDLLoaderMaxObjects}" LESS 20000))
     set(CapDLLoaderMaxObjects 20000 CACHE STRING "" FORCE)
 endif()
 if (${KernelRootCNodeSizeBits} LESS 17)
