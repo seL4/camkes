@@ -16,7 +16,7 @@ project(global-imports C)
 
 # Include the 'global' component. This directory can be moved anywhere in the file system
 # and only this import needs to be updated
-add_subdirectory(global)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/global)
 
 DeclareCAmkESComponent(Client SOURCES components/Client/src/main.c LIBS GetterIface PrinterIface ServerInterface)
 

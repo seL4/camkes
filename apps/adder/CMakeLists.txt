@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(adder C)
 
-add_subdirectory(components/Adder)
-add_subdirectory(components/Client)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/components/Adder)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/components/Client)
 
 DeclareCAmkESRootserver(adder.camkes)
