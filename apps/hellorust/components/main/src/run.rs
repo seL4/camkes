@@ -9,30 +9,24 @@
 //
 // @TAG(DATA61_BSD)
 //
-#![feature(compiler_builtins_lib)]
-#![feature(panic_implementation)]
-#![no_std]
-
-use core::panic::PanicInfo;
-
-
 #[allow(dead_code)]
 #[no_mangle]
 extern "C" {
-    fn printf(val: *const u8);
+    fn printf(val: *const i8);
 }
 
-// This is the camkes entry point for this app
+
+#[allow(dead_code)]
+fn println_sel4(s: String) {
+    unsafe {
+        printf((s + "\n\0").as_ptr() as *const i8);
+    }
+}
+
+
 #[no_mangle]
 pub extern "C" fn run() -> isize {
-    unsafe {printf(b"Hello, world!!\n\0" as *const u8)};
-    0
-}
-
-
-#[panic_implementation]
-#[no_mangle]
-pub extern fn panic(_info: &PanicInfo) -> ! {
-	loop{}
+  println_sel4(format!("Hello world!"));
+  0
 }
 
