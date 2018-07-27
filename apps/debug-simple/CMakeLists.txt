@@ -31,4 +31,4 @@ set(KernelIRQController PIC CACHE STRING "" FORCE)
 
 # Since we cannot use generator expressions in CPP_FLAGS we have to hard code the include path
 # that we want
-DeclareCAmkESRootserver(debug-simple.camkes CPP_FLAGS -I${CMAKE_SOURCE_DIR}/tools/camkes/libsel4camkes/include)
+DeclareCAmkESRootserver(debug-simple.camkes CPP_FLAGS -I${CMAKE_SOURCE_DIR}/projects/camkes-tool/libsel4camkes/include)

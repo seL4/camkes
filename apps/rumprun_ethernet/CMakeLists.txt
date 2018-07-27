@@ -16,11 +16,11 @@ project(rumprun_ethernet C)
 
 DeclareCAmkESComponent(Server SOURCES components/reverse_string/server.c INCLUDES include)
 
-include(../rumprun_common.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../rumprun_common.cmake)
 
 DeclareExternalRumprunProject(
     rump_ether_external
-    ${CMAKE_CURRENT_SOURCE_DIR}/components/rump_ether
+    ${CMAKE_CURRENT_LIST_DIR}/components/rump_ether
     bin/reverse)
 
 DeclareRumprunCAmkESComponent(rumprun_ether

@@ -14,11 +14,11 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(rumprun_hello C)
 
-include(../rumprun_common.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../rumprun_common.cmake)
 
 DeclareExternalRumprunProject(
     hello_external
-    ${CMAKE_CURRENT_SOURCE_DIR}/components/hello
+    ${CMAKE_CURRENT_LIST_DIR}/components/hello
     bin/hello)
 
 DeclareRumprunCAmkESComponent(rumprun

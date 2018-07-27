@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(rumprun_rust C)
 
-include(../rumprun_common.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../rumprun_common.cmake)
 
 add_custom_target(a_rumptools_target)
 add_dependencies(a_rumptools_target rumprun_toplevel_support)
@@ -24,7 +24,7 @@ set(tool_location $<TARGET_PROPERTY:rumprun_toplevel_support,RUMPRUN_TOOLCHAIN_P
 set(bin_file ${CMAKE_CURRENT_BINARY_DIR}/output/rustest)
 add_custom_command(
     OUTPUT ${bin_file}
-    COMMAND  cd ${CMAKE_CURRENT_SOURCE_DIR}/components/hellorust/rustest && 
+    COMMAND  cd ${CMAKE_CURRENT_LIST_DIR}/components/hellorust/rustest &&
        ${CMAKE_COMMAND} -E env
         PATH=$ENV{PATH}:${tool_location}
         cargo build --target ${tuple} --target-dir ${CMAKE_CURRENT_BINARY_DIR} -Z unstable-options --out-dir ${CMAKE_CURRENT_BINARY_DIR}/output
@@ -38,7 +38,7 @@ DeclareRumprunCAmkESComponent(rumprun_rust
 
 DeclareExternalRumprunProject(
     hello_external
-    ${CMAKE_CURRENT_SOURCE_DIR}/components/hello
+    ${CMAKE_CURRENT_LIST_DIR}/components/hello
     bin/hello)
 
 DeclareRumprunCAmkESComponent(rumprun

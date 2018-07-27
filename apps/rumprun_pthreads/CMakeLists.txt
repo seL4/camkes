@@ -14,11 +14,12 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(rumprun_pthreads C)
 
-include(../rumprun_common.cmake)
+
+include(${CMAKE_CURRENT_LIST_DIR}/../rumprun_common.cmake)
 
 DeclareExternalRumprunProject(
 	rump_pthreads_external
-	${CMAKE_CURRENT_SOURCE_DIR}/components/pthreads
+	${CMAKE_CURRENT_LIST_DIR}/components/pthreads
 	bin/pthreads)
 
 DeclareRumprunCAmkESComponent(rumprun_pthreads
