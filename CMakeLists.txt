@@ -23,7 +23,6 @@ set(KernelNumDomains 1 CACHE STRING "" FORCE)
 
 # Add our libraries
 add_subdirectory(libs/libringbuffer)
-add_subdirectory(libs/libsel4keyboard)
 add_subdirectory(libs/libsel4bga)
 
 # Make sure CAMKES_APP is definition that can be changed in the ccmake-gui
