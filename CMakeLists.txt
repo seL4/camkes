@@ -21,9 +21,6 @@ if (${KernelRootCNodeSizeBits} LESS 17)
 endif()
 set(KernelNumDomains 1 CACHE STRING "" FORCE)
 
-# Add our libraries
-add_subdirectory(libs/libringbuffer)
-
 # Make sure CAMKES_APP is definition that can be changed in the ccmake-gui
 set(CAMKES_APP "${CAMKES_APP}" CACHE STRING "CAmkES application to build")
 
