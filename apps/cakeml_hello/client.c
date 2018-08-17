@@ -42,6 +42,14 @@ int run() {
     i = h_rainbow(100, 200, &j, &k);
     printf("Hello_rainbow: (%d, %d) -> %d (%d, %d)\n", 100, 200, i, j, k);
 
+    h_input_string("Hello CakeML!");
+
+    h_input_strings("Foo!", "Bar!");
+
+    char * input_str = "Hello world";
+    char * reversed = h_reverse_string(input_str);
+    printf("Hello_reverse_string: \"%s\" -> \"%s\"\n", input_str, reversed);
+
     g_bye();
     return 0;
 }

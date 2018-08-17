@@ -58,6 +58,22 @@ val s_bye_def = process_topdecs `
     fun s_bye u = TextIO.print "Goodbye: bye\n"
 `;
 
+val s_input_string_def = process_topdecs `
+    fun s_input_string s = TextIO.print ("Received this string from C: " ^ s ^ "\n")
+`;
+
+val s_input_strings_def = process_topdecs `
+    fun s_input_strings s1 s2 = let
+      val _ = TextIO.print "Received these strings from C:\n";
+      val _ = TextIO.print (s1 ^ "\n");
+      val _ = TextIO.print (s2 ^ "\n");
+    in () end
+`;
+
+val s_reverse_string_def = process_topdecs `
+  fun s_reverse_string s = String.implode (List.rev (String.explode s));
+`;
+
 val _ = app append_prog [
     pre_init_def,
     post_init_def,
@@ -68,7 +84,10 @@ val _ = app append_prog [
     s_output_def,
     s_in_out_def,
     s_rainbow_def,
-    s_bye_def
+    s_bye_def,
+    s_input_string_def,
+    s_input_strings_def,
+    s_reverse_string_def
 ]
 
 val _ = ml_prog_update (close_module NONE);

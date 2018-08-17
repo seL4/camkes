@@ -23,6 +23,9 @@ procedure Hello {
     void output(out unsigned int i);
     void in_out(inout unsigned int i);
     unsigned int rainbow(in unsigned int i, in unsigned char j, out unsigned int k, out unsigned char l);
+    void input_string(in string s);
+    void input_strings(in string s1, in string s2);
+    string reverse_string(in string s);
 };
 
 procedure Goodbye {
