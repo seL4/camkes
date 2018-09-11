@@ -22,64 +22,28 @@
 
 if {[info exists override_timeout]} {set timeout $override_timeout} else {set timeout 600}
 
-if {$::env(CMAKE) == 1} {
-    if {![info exists extra_cmake_args]} {
-        set extra_cmake_args ""
-    }
+if {![info exists extra_cmake_args]} {
+    set extra_cmake_args ""
+}
 
-    if {[info exists arm_defconfig]} {
-        set cmake_props -DARM=TRUE\ -DPLATFORM=sabre\ -DCAMKES_APP=$appname\ $extra_cmake_args
-        source [file join $::env(SCRIPT_DIR) build-cmake.inc]
-        source [file join $::env(SCRIPT_DIR) run-cmake.inc]
-        eval $testscript
-        cd ../
-
-    }
-    if {[info exists x86_defconfig]} {
-        set cmake_props  -DPLATFORM=ia32\ -DCAMKES_APP=$appname\ $extra_cmake_args
-        source [file join $::env(SCRIPT_DIR) build-cmake.inc]
-        source [file join $::env(SCRIPT_DIR) run-cmake.inc]
-        eval $testscript
-        cd ../
-    }
-    if {[info exists x86_64_defconfig]} {
-        set cmake_props  -DPLATFORM=x86_64\ -DCAMKES_APP=$appname\ $extra_cmake_args
-        source [file join $::env(SCRIPT_DIR) build-cmake.inc]
-        source [file join $::env(SCRIPT_DIR) run-cmake.inc]
-        eval $testscript
-        cd ../
-    }
-} {
-    if {[info exists arm_defconfig]} {
-        spawn make $arm_defconfig
-        check_exit
-
-        source [file join $::env(SCRIPT_DIR) build-kbuild.inc]
-
-        source [file join $::env(SCRIPT_DIR) run-arm.inc]
-
-        eval $testscript
-    }
-
-    if {[info exists x86_defconfig]} {
-        spawn make $x86_defconfig
-        check_exit
-
-        source [file join $::env(SCRIPT_DIR) build-kbuild.inc]
-
-        source [file join $::env(SCRIPT_DIR) run-x86.inc]
-
-        eval $testscript
-    }
-
-    if {[info exists x86_64_defconfig]} {
-        spawn make $x86_64_defconfig
-        check_exit
-
-        source [file join $::env(SCRIPT_DIR) build-kbuild.inc]
-
-        source [file join $::env(SCRIPT_DIR) run-x86_64.inc]
-
-        eval $testscript
-    }
+if {[info exists arm_defconfig]} {
+    set cmake_props -DARM=TRUE\ -DPLATFORM=sabre\ -DCAMKES_APP=$appname\ $extra_cmake_args
+    source [file join $::env(SCRIPT_DIR) build-cmake.inc]
+    source [file join $::env(SCRIPT_DIR) run-cmake.inc]
+    eval $testscript
+    cd ../
+}
+if {[info exists x86_defconfig]} {
+    set cmake_props  -DPLATFORM=ia32\ -DCAMKES_APP=$appname\ $extra_cmake_args
+    source [file join $::env(SCRIPT_DIR) build-cmake.inc]
+    source [file join $::env(SCRIPT_DIR) run-cmake.inc]
+    eval $testscript
+    cd ../
+}
+if {[info exists x86_64_defconfig]} {
+    set cmake_props  -DPLATFORM=x86_64\ -DCAMKES_APP=$appname\ $extra_cmake_args
+    source [file join $::env(SCRIPT_DIR) build-cmake.inc]
+    source [file join $::env(SCRIPT_DIR) run-cmake.inc]
+    eval $testscript
+    cd ../
 }
