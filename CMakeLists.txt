@@ -46,13 +46,13 @@ else()
 endif()
 
 if (SIMULATION)
-    ApplyCommonSimulationSettings()
+    ApplyCommonSimulationSettings(${KernelArch})
     GenerateSimulateScript()
 endif()
 
 ApplyCommonReleaseVerificationSettings(${RELEASE} FALSE)
 
-ApplyData61ElfLoaderSettings()
+ApplyData61ElfLoaderSettings(${KernelArch})
 
 find_file(CAMKES_CMAKE camkes.cmake PATHS ${CMAKE_SOURCE_DIR}/projects/camkes-tool/ CMAKE_FIND_ROOT_PATH_BOTH)
 mark_as_advanced(FORCE CAMKES_CMAKE)
