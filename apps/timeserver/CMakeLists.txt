@@ -14,5 +14,7 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(timeserver C)
 
+set(CAmkESCPP ON CACHE BOOL "" FORCE)
+
 DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
 DeclareCAmkESRootserver(timeserver.camkes)
