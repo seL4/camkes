@@ -42,6 +42,7 @@ elseif ("${PLATFORM}" IN_LIST valid_arm_platform)
     if ((NOT ARM) AND (NOT AARCH32) AND ("${CROSS_COMPILER_PREFIX}" STREQUAL ""))
         message(WARNING "Looks like you building for ARM without using a cross compiler")
     endif()
+    ApplyData61ElfLoaderSettings(${KernelARMPlatform} ${KernelARMSel4Arch})
 else()
     message(FATAL_ERROR "Unsupported platform")
 endif()
@@ -52,4 +53,3 @@ endif()
 
 ApplyCommonReleaseVerificationSettings(${RELEASE} FALSE)
 
-ApplyData61ElfLoaderSettings(${KernelArch})
