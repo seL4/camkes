@@ -30,14 +30,14 @@ assembly {
 
     configuration {
 	/* Freescale i.MX31 (KZM) */
-        epit.mem_paddr = 0x53F98000;
-        epit.mem_size = 0x1000;
-	epit.irq_irq_number = 27;
+//        epit.mem_paddr = 0x53F98000;
+//        epit.mem_size = 0x1000;
+//	epit.irq_irq_number = 27;
 
-	/* Freescale i.MX6 (Sabralite) */
-       // epit.mem_paddr = 0x020D0000;
-       // epit.mem_size = 0x1000;
-	//epit.irq_irq_number = 88;
+	/* Freescale i.MX6 (Sabrelite) */
+        epit.mem_paddr = 0x020D0000;
+        epit.mem_size = 0x1000;
+	    epit.irq_irq_number = 88;
     }
 }
 

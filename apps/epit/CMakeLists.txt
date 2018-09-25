@@ -14,9 +14,9 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(epit C)
 
-# CAmkES spec is hard coded for the kzm
+# CAmkES spec is hard coded for the sabre
 set(KernelArch arm CACHE STRING "" FORCE)
-set(KernelARMPlatform kzm CACHE STRING "" FORCE)
+set(KernelARMPlatform sabre CACHE STRING "" FORCE)
 
 DeclareCAmkESComponent(Driver SOURCES components/Driver/src/driver.c)
 
