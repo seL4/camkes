@@ -11,6 +11,7 @@
 #
 
 cmake_minimum_required(VERSION 3.8.2)
+set(CMAKE_C_STANDARD 11)
 
 # Set some options we know we need here. Applications can override them
 if (("${CapDLLoaderMaxObjects}" STREQUAL "") OR ("${CapDLLoaderMaxObjects}" LESS 20000))
