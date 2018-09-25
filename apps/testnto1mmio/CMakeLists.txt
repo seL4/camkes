@@ -14,10 +14,10 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(testnto1mmio C)
 
-# This only works on kzm
+# This only works on sabre
 set(KernelArch arm CACHE STRING "" FORCE)
 set(KernelArmSel4Arch aarch32 CACHE STRING "" FORCE)
-set(KernelARMPlatform kzm CACHE STRING "" FORCE)
+set(KernelARMPlatform sabre CACHE STRING "" FORCE)
 
 DeclareCAmkESComponent(Driver1 SOURCES driver1.c INCLUDES .)
 DeclareCAmkESComponent(Driver2 SOURCES driver2.c INCLUDES .)
