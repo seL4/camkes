@@ -16,6 +16,8 @@ project(rumprun_ethernet C)
 
 DeclareCAmkESComponent(Server SOURCES components/reverse_string/server.c INCLUDES include)
 
+includeGlobalComponents()
+
 include(${CMAKE_CURRENT_LIST_DIR}/../rumprun_common.cmake)
 
 DeclareExternalRumprunProject(
