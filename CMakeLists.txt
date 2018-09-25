@@ -25,8 +25,10 @@ mark_as_advanced(FORCE GLOBAL_COMPONENTS_PATH)
 if("${GLOBAL_COMPONENTS_PATH}" STREQUAL "GLOBAL_COMPONENTS_PATH-NOTFOUND")
     message(FATAL_ERROR "Failed to find global-components.cmake. Consider cmake -DGLOBAL_COMPONENTS_PATH=/path/to/global-components.cmake")
 endif()
-include(${GLOBAL_COMPONENTS_PATH})
 
+function(includeGlobalComponents)
+include(${GLOBAL_COMPONENTS_PATH})
+endfunction()
 
 # We only support one application being built at a time
 include(apps/${CAMKES_APP}/CMakeLists.txt)
