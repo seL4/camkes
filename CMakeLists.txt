@@ -30,6 +30,24 @@ function(includeGlobalComponents)
 include(${GLOBAL_COMPONENTS_PATH})
 endfunction()
 
+# figure out the valid apps
+set(app_names "")
+file(GLOB apps apps/*)
+foreach(ARG ${apps})
+    get_filename_component(filename ${ARG} NAME)
+    list(APPEND app_names "${filename}")
+endforeach()
+string(REPLACE ";" "\n  " app_names_error "${app_names}")
+
+if ("${CAMKES_APP}" STREQUAL "")
+    message(FATAL_ERROR "Missing option -DCAMKES_APP=<app> to build. Valid apps:\n  ${app_names_error}")
+endif()
+
+list(FIND app_names "${CAMKES_APP}" app_exists)
+if(${app_exists} EQUAL -1)
+    message(FATAL_ERROR "Invalid value for option -DCAMKES_APP=${CAMKES_APP}. Valid options:\n  ${app_names_error}")
+endif()
+
 # We only support one application being built at a time
 include(apps/${CAMKES_APP}/CMakeLists.txt)
 
