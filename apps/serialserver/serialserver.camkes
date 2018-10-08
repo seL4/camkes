@@ -1,0 +1,49 @@
+/*
+ * Copyright 2018, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+import <std_connector.camkes>;
+import <SerialServer/SerialServer.camkes>;
+import <TimeServer/TimeServer.camkes>;
+import <global-connectors.camkes>;
+
+component Client {
+    control;
+    uses PutChar serial_putchar;
+    uses GetChar serial_getchar;
+}
+
+assembly {
+    composition {
+        component Client client;
+        component SerialServer serial;
+        component TimeServer time_server;
+
+        connection seL4RPCCall serial_time_server(from time_server.putchar, to serial.processed_putchar);
+        connection seL4RPCCall serial_client(from client.serial_putchar, to serial.processed_putchar);
+
+        connection seL4SerialServer serial_input(from client.serial_getchar, to serial.getchar);
+        connection seL4TimeServer serialserver_timer(from serial.timeout, to time_server.the_timer);
+    }
+
+    configuration {
+        client.putchar_attributes = 0;
+        client.serial_getchar_global_endpoint = "client";
+        client.serial_getchar_badge = "1";
+        client.serial_getchar_attributes = "0";
+        client.serial_getchar_shmem_size = 0x1000;
+
+        serial.timeout_attributes = 1;
+        time_server.putchar_attributes = 0;
+
+        time_server.timers_per_client = 1;
+    }
+}
