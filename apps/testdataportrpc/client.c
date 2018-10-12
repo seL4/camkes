@@ -66,26 +66,6 @@ int run(void) {
     assert(other_errors == 0);
     b_register_error_handler(NULL);
 
-    printf("Testing larger two page unaligned dataport...\n");
-    static char s2[5000];
-    memcpy(s2, lorem, sizeof(s2) - 1);
-    s2[sizeof(s2) - 1] = '\0';
-    ret = d_echo(s2);
-    assert(strcmp(s2, ret) == 0);
-    free(ret);
-
-    printf("Test overwriting two page unaligned dataport...\n");
-    overrun_errors = 0;
-    other_errors = 0;
-    d_register_error_handler(handler);
-    static char s2a[5001];
-    memcpy(s2a, lorem, sizeof(s2a) - 1);
-    s2a[sizeof(s2a) - 1] = '\0';
-    ret = d_echo(s2a);
-    assert(overrun_errors == 1);
-    assert(other_errors == 0);
-    d_register_error_handler(NULL);
-
     printf("Testing larger two page aligned dataport...\n");
     static char s3[PAGE_SIZE_4K * 2];
     memcpy(s3, lorem, sizeof(s3) - 1);

@@ -25,10 +25,6 @@ char *b_echo(const char *s) {
     return echo(s);
 }
 
-char *d_echo(const char *s) {
-    return echo(s);
-}
-
 char *f_echo(const char *s) {
     return echo(s);
 }

@@ -22,9 +22,6 @@ component Client {
     dataport Buf a;
     uses Echo b;
 
-    dataport Buf(5000) c;
-    uses Echo d;
-
     dataport Buf(8192) e;
     uses Echo f;
 
@@ -39,9 +36,6 @@ component Client {
 component Server {
     dataport Buf a;
     provides Echo b;
-
-    dataport Buf(5000) c;
-    provides Echo d;
 
     dataport Buf(8192) e;
     provides Echo f;
@@ -60,22 +54,20 @@ assembly {
         component Server s;
 
         connection seL4RPCCall c1(from c.b, to s.b);
-        connection seL4RPCCall c2(from c.d, to s.d);
         connection seL4RPCCall c3(from c.f, to s.f);
         connection seL4RPCCall c4(from c.h, to s.h);
         connection seL4RPCCall c5(from c.j, to s.j);
 
         connection seL4SharedData d1(from c.a, to s.a);
-        connection seL4SharedData d2(from c.c, to s.c);
         connection seL4SharedData d3(from c.e, to s.e);
         connection seL4SharedData d4(from c.g, to s.g);
         connection seL4SharedData d5(from c.i, to s.i);
     }
     configuration {
         c1.buffer = "d1";
-        c2.buffer = "d2";
         c3.buffer = "d3";
         c4.buffer = "d4";
         c5.buffer = "d5";
+        d5.size = 8192;
     }
 }

@@ -18,12 +18,12 @@ procedure Switch {
 
 component Client {
     control;
-    dataport Buf(5000) d;
+    dataport Buf(8192) d;
     uses Switch s;
 }
 
 component Server {
-    dataport Buf(5000) d;
+    dataport Buf(8192) d;
     provides Switch s;
 }
 
