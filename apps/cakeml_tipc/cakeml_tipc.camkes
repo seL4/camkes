@@ -1,0 +1,149 @@
+/*
+ * Copyright 2018, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+import <std_connector.camkes>;
+import <global-connectors.camkes>;
+import <VirtQueue/VirtQueue.camkes>;
+import <TimeServer/TimeServer.camkes>;
+
+/* Clients */
+component Client {
+    control;
+    uses VirtQueueDrv send;
+    uses VirtQueueDev recv;
+    emits Callback self;
+    consumes Callback virtqueue_wait;
+    attribute int client_id;
+    /* Timer Server */
+    uses Timer timeout;
+    attribute string timeout_global_endpoint = "client";
+    attribute string timeout_badge = "1";
+}
+
+/* CakeML Filter */
+component CakeMLFilter {
+    control;
+    uses VirtQueueDev client0_incoming;
+    uses VirtQueueDrv client1_outgoing;
+    emits Callback self;
+    consumes Callback virtqueue_wait;
+}
+
+assembly {
+    composition {
+        component CakeMLFilter filter;
+        component Client client0;
+        component Client client1;
+        component Client client2;
+        component Client client3;
+
+        component VirtQueueInit vqinit0;
+        component VirtQueueInit vqinit1;
+        component VirtQueueInit vqinit2;
+        component VirtQueueInit vqinit3;
+        component VirtQueueInit vqinit4;
+
+        component TimeServer time_server;
+
+        /* Filter connections */
+        connection seL4VirtQueues virtq_conn0(to vqinit0.init, from client0.send, from filter.client0_incoming);
+        connection seL4VirtQueues virtq_conn1(to vqinit1.init, from filter.client1_outgoing, from client1.recv);
+        /* Client connections */
+        connection seL4VirtQueues virtq_conn2(to vqinit2.init, from client1.send, from client2.recv);
+        connection seL4VirtQueues virtq_conn3(to vqinit3.init, from client2.send, from client3.recv);
+        connection seL4VirtQueues virtq_conn4(to vqinit4.init, from client3.send, from client0.recv);
+        /* Callback connections */
+        connection seL4GlobalAsynchCallback client0_global_callback(from client0.self, to client0.virtqueue_wait);
+        connection seL4GlobalAsynchCallback client1_global_callback(from client1.self, to client1.virtqueue_wait);
+        connection seL4GlobalAsynchCallback client2_global_callback(from client2.self, to client2.virtqueue_wait);
+        connection seL4GlobalAsynchCallback client3_global_callback(from client3.self, to client3.virtqueue_wait);
+        connection seL4GlobalAsynch cakeml_filter_global_callback(from filter.self, to filter.virtqueue_wait);
+        /* Timeserver connections */
+        connection seL4TimeServer client_timer(from client0.timeout, from client1.timeout, from client2.timeout,
+                                               from client3.timeout,
+                                               to time_server.the_timer);
+    }
+
+    configuration {
+        filter.client0_incoming_id = 0;
+        filter.client0_incoming_attributes = "10";
+        filter.client0_incoming_global_endpoint = "client0";
+        filter.client0_incoming_badge = 10;
+        filter.client1_outgoing_id = 1;
+        filter.client1_outgoing_attributes = "10";
+        filter.client1_outgoing_global_endpoint = "client1";
+        filter.client1_outgoing_badge = 10;
+        filter.self_global_endpoint = "filter";
+        filter.virtqueue_wait_global_endpoint = "filter";
+        filter.environment = "cakeml";
+
+        client0.send_id = 0;
+        client0.send_attributes = "10";
+        client0.send_global_endpoint = "filter";
+        client0.send_badge = 10;
+        client0.recv_id = 1;
+        client0.recv_attributes = "10";
+        client0.recv_global_endpoint = "client3";
+        client0.recv_badge = 10;
+        client0.virtqueue_wait_global_endpoint = "client0";
+        client0.self_global_endpoint = "client0";
+        client0.client_id = 0;
+
+        client1.send_id = 0;
+        client1.send_attributes = "10";
+        client1.send_global_endpoint = "client2";
+        client1.send_badge = 10;
+        client1.recv_id = 1;
+        client1.recv_attributes = "10";
+        client1.recv_global_endpoint = "filter";
+        client1.recv_badge = 10;
+        client1.virtqueue_wait_global_endpoint = "client1";
+        client1.self_global_endpoint = "client1";
+        client1.client_id = 1;
+
+        client2.send_id = 0;
+        client2.send_attributes = "10";
+        client2.send_global_endpoint = "client3";
+        client2.send_badge = 10;
+        client2.recv_id = 1;
+        client2.recv_attributes = "10";
+        client2.recv_global_endpoint = "client1";
+        client2.recv_badge = 10;
+        client2.virtqueue_wait_global_endpoint = "client2";
+        client2.self_global_endpoint = "client2";
+        client2.client_id = 2;
+
+        client3.send_id = 0;
+        client3.send_attributes = "10";
+        client3.send_global_endpoint = "client0";
+        client3.send_badge = 10;
+        client3.recv_id = 1;
+        client3.recv_attributes = "10";
+        client3.recv_global_endpoint = "client1";
+        client3.recv_badge = 10;
+        client3.virtqueue_wait_global_endpoint = "client3";
+        client3.self_global_endpoint = "client3";
+        client3.client_id = 3;
+
+        vqinit0.init_topology = [{ "drv" : "client0.send", "dev" : "filter.client0_incoming" }];
+        vqinit1.init_topology = [{ "drv" : "filter.client1_outgoing", "dev" : "client1.recv" }];
+        vqinit2.init_topology = [{ "drv" : "client1.send", "dev" : "client2.recv" }];
+        vqinit3.init_topology = [{ "drv" : "client2.send", "dev" : "client3.recv" }];
+        vqinit4.init_topology = [{ "drv" : "client3.send", "dev" : "client0.recv" }];
+
+        client0.timeout_attributes = 1;
+        client1.timeout_attributes = 2;
+        client2.timeout_attributes = 3;
+        client3.timeout_attributes = 4;
+        time_server.timers_per_client = 1;
+    }
+}
