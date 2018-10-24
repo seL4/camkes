@@ -61,12 +61,6 @@ val post_init_def = (append_prog o process_topdecs) `
     ]
 `;
 
-val select_loop_def = (append_prog o process_topdecs) `
-    fun select_loop f vqs = case VirtQueue.select vqs of
-        None => ()
-    |   Some vq => (f vq; select_loop f vqs)
-`;
-
 val callback_def = (append_prog o process_topdecs) `
     fun callback badge = let
         fun forward_message vq = case vq of
@@ -85,7 +79,7 @@ val callback_def = (append_prog o process_topdecs) `
                 (* Server has finished handling the message, dequeue it from the used queue *)
                 val _ = VirtQueue.driver_recv vq;
                 in () end
-        in select_loop forward_message [vq_client0_incoming, vq_client1_outgoing] end
+        in VirtQueue.select_loop forward_message [vq_client0_incoming, vq_client1_outgoing] end
 `;
 
 val get_global_endpoint_def = (append_prog o process_topdecs) `
