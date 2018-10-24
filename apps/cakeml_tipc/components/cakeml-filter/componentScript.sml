@@ -84,9 +84,10 @@ val callback_def = (append_prog o process_topdecs) `
 
 val get_global_endpoint_def = (append_prog o process_topdecs) `
     fun get_global_endpoint u = let
-        val buf = Word8Array.array 9 (Word8.fromInt 0);
+        val word_size = Utils.get_word_size ()
+        val buf = Word8Array.array (word_size + 1) (Word8.fromInt 0);
         val _ = #(get_global_endpoint) "" buf;
-        in Utils.bytes_to_int buf 1 8 end
+        in Utils.bytes_to_int buf 1 word_size end
 `;
 
 val run_loop_def = (append_prog o process_topdecs) `
