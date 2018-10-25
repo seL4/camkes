@@ -12,16 +12,28 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
+include(${CMAKE_SOURCE_DIR}/projects/cakeml_libs/meta_utils/meta_utils.cmake)
+
 project(cakeml_hello C)
 
 DeclareCAmkESComponent(Client
     SOURCES client.c
 )
 
+DeclareCakeMLMetaUtils(
+    ${CMAKE_SOURCE_DIR}/projects/cakeml_libs/meta_utils
+    meta_utils
+    meta_utils_target
+    meta_utils_target_files
+    meta_utils_path
+)
+
 DeclareCAmkESComponent(Hello
     CAKEML_SOURCES componentScript.sml
     # Demonstrate that we can override the heap size
     CAKEML_HEAP_SIZE 51
+    CAKEML_INCLUDES ${meta_utils_path}
+    CAKEML_DEPENDS meta_utils_target ${meta_utils_target_files}
 )
 
 DeclareCAmkESRootserver(cakeml_hello.camkes)
