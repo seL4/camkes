@@ -28,6 +28,21 @@ if("${GLOBAL_COMPONENTS_PATH}" STREQUAL "GLOBAL_COMPONENTS_PATH-NOTFOUND")
 endif()
 include(${GLOBAL_COMPONENTS_PATH})
 
+find_file(CAKEML_META_PATH meta_utils.cmake PATHS ${CMAKE_SOURCE_DIR}/projects/cakeml_libs/meta_utils/ CMAKE_FIND_ROOT_PATH_BOTH)
+mark_as_advanced(FORCE CAKEML_META_PATH)
+if("${LIBCAKEML_PATH}" STREQUAL "CAKEML_META_PATH-NOTFOUND")
+    message(FATAL_ERROR "Failed to find meta_utils.cmake. Consider cmake -DCAKEML_META_PATH=/path/to/meta_utils.cmake")
+endif()
+include(${CAKEML_META_PATH})
+
+DeclareCakeMLMetaUtils(
+    ${CMAKE_SOURCE_DIR}/projects/cakeml_libs/meta_utils
+    meta_utils
+    meta_utils_target
+    meta_utils_target_files
+    meta_utils_path
+)
+
 DeclareCAmkESComponent(Client
     SOURCES components/client/client.c
     LIBS virtqueue vswitch
@@ -40,10 +55,11 @@ CakeMLPP(components/cakeml-filter
 DeclareCAmkESComponent(CakeMLFilter
     CAKEML_SOURCES components/cakeml-filter/componentScript.sml
                    ${CMAKE_CURRENT_BINARY_DIR}/components/cakeml-filter/virtqueueScript.sml
-    CAKEML_INCLUDES ${CAKEMLDIR}/semantics/alt_semantics
+    CAKEML_INCLUDES ${CAKEML_INCLUDES} ${meta_utils_path}
     SOURCES components/cakeml-filter/global_endpoint.c
     LIBS vswitch
     CAKEML_HEAP_SIZE 50
+    CAKEML_DEPENDS meta_utils_target ${meta_utils_target_files}
 )
 
 DeclareCAmkESRootserver(cakeml_tipc.camkes)

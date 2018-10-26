@@ -10,32 +10,13 @@
  * @TAG(DATA61_BSD)
  *)
 
-open preamble basis bigStepTheory semanticPrimitivesTheory ml_translatorTheory
-     ml_translatorLib ml_progLib cfLib virtqueueTheory;
+open preamble basis virtqueueTheory camkesUtils;
 
 val _ = new_theory "component";
 
 val _ = translation_extends "virtqueue";
 
 val _ = ml_prog_update (open_module "Component");
-
-fun derive_eval_thm_bytes for_eval v_name e len = let
-    val th = get_ml_prog_state () |> get_thm
-    val th = MATCH_MP ml_progTheory.ML_code_Dlet_var th
-           |> REWRITE_RULE [ml_progTheory.ML_code_env_def]
-    val th = th |> CONV_RULE(RESORT_FORALL_CONV(sort_vars["e","s3"]))
-              |> SPEC e
-    val st = th |> SPEC_ALL |> concl |> dest_imp |> #1 |> strip_comb |> #2 |> el 1
-    val new_st = ``^st with refs := ^st.refs ++ [W8array (REPLICATE ^(numSyntax.term_of_int len) 0w)]``
-    val goal = th |> SPEC new_st |> SPEC_ALL |> concl |> dest_imp |> fst
-    val lemma = goal |> (EVAL THENC SIMP_CONV(srw_ss())[semanticPrimitivesTheory.state_component_equality])
-    val v_thm = prove(mk_imp(lemma |> concl |> rand, goal),
-    rpt strip_tac \\ rveq \\ match_mp_tac(#2(EQ_IMP_RULE lemma))
-    \\ asm_simp_tac bool_ss [])
-    |> GEN_ALL |> SIMP_RULE std_ss [] |> SPEC_ALL;
-    val v_tm = v_thm |> concl |> strip_comb |> #2 |> last
-    val v_def = define_abbrev false v_name v_tm
-    in v_thm |> REWRITE_RULE [GSYM v_def] end
 
 fun declare_virtqueue (name: string) (role: term) = let
     val term_e = ``Con (SOME (Long "VirtQueue" (Short ^(role)))) [App Aw8alloc [Lit (IntLit 8); Lit (Word8 0w)]]``;
