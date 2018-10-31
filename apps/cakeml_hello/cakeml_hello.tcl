@@ -15,7 +15,7 @@ set appname [file tail [file dirname [info script]]]
 
 source [file join $::env(SCRIPT_DIR) procs.inc]
 
-set x86_defconfig cakeml_hello_defconfig
+set x86_64_defconfig cakeml_hello_defconfig
 set extra_cmake_args "-DCAKEMLDIR=/cakeml -DCAKEML_BIN=/cake-x64-64/cake"
 
 set testscript {
