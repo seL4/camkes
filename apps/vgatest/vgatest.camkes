@@ -25,17 +25,15 @@ import <std_connector.camkes>;
 component Screen {
     hardware;
     // define the buffer size at the declaration to avoid 
-    // static assert type size mismatch (the compiler assumes
-    // 4k buffer size otherwise)
-    dataport Buf(3840) mem;
+    // static assert type size mismatch
+    dataport Buf(4096) mem;
 }
 
 component VGADriver {
     control;
     // define the buffer size at the declaration to avoid 
-    // static assert type size mismatch (the compiler assumes
-    // 4k buffer size otherwise)
-    dataport Buf(3840) mem;
+    // static assert type size mismatch
+    dataport Buf(4096) mem;
 }
 
 /* The system definition: */
@@ -48,13 +46,13 @@ assembly {
     }
 
     configuration {
-     // this is the VGA buffer address
-    video.mem_paddr = 0xB8000;
+         // this is the VGA buffer address
+        video.mem_paddr = 0xB8000;
 
-    // the vga buffer is componsed of uin16_t units, and is 80x24x2 = 3840 bytes long
-    // define the buffer size at the declaration to avoid 
-    // static assert type size mismatch (the compiler assumes
-    // 4k buffer size otherwise)
-    video.mem_size = 3840;
+        // the vga buffer is composed of uin16_t units, and is
+        // 80x24x2 = 3840 bytes long, which rounds up to one 4K page
+        // define the buffer size at the declaration to avoid
+        // static assert type size mismatch
+        video.mem_size = 4096;
     }
 }
