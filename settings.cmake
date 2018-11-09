@@ -29,7 +29,7 @@ set(CAMKES_APP "${CAMKES_APP}" CACHE STRING "CAmkES application to build")
 set(SIMULATION ON CACHE BOOL "Try and use simultable features")
 set(RELEASE OFF CACHE BOOL "Performance optimized build")
 set(PLATFORM "x86_64" CACHE STRING "Platform to use")
-set(valid_arm_platform "sabre;kzm;exynos5410;exynos5422;tx1")
+set(valid_arm_platform "sabre;kzm;exynos5410;exynos5422;tx1;zynq7000")
 set(valid_x86_platform "ia32;x86_64")
 set_property(CACHE PLATFORM PROPERTY STRINGS "${valid_x86_platform};${valid_arm_platform}")
 
