@@ -1,0 +1,86 @@
+/*
+ * Copyright 2018, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+import <std_connector.camkes>;
+import <SerialServer/SerialServer.camkes>;
+import <TimeServer/TimeServer.camkes>;
+import <VirtQueue/VirtQueue.camkes>;
+import <global-connectors.camkes>;
+
+component Client {
+    control;
+    uses PutChar serial_putchar;
+    uses GetChar serial_getchar;
+    /* Virtqueue connection for read and write */
+    uses VirtQueueDrv read;
+    uses VirtQueueDrv write;
+    emits Callback self;
+    consumes Callback serial_wait;
+}
+
+assembly {
+    composition {
+        component Client client;
+        component SerialServer serial;
+        component TimeServer time_server;
+        component VirtQueueInit serial_vqinit0;
+        component VirtQueueInit serial_vqinit1;
+
+        connection seL4RPCCall serial_time_server(from time_server.putchar, to serial.processed_putchar);
+        connection seL4RPCCall serial_client(from client.serial_putchar, to serial.processed_putchar);
+
+        connection seL4SerialServer serial_input(from client.serial_getchar, to serial.getchar);
+        connection seL4TimeServer serialserver_timer(from serial.timeout, to time_server.the_timer);
+
+        connection seL4VirtQueues serial_virtq_conn0(to serial_vqinit0.init, from client.write, from serial.write);
+        connection seL4VirtQueues serial_virtq_conn1(to serial_vqinit1.init, from client.read, from serial.read);
+        connection seL4GlobalAsynchCallback client_global_callback(from client.self, to client.serial_wait);
+        connection seL4GlobalAsynchCallback serial_global_callback(from serial.self, to serial.serial_wait);
+    }
+
+    configuration {
+        client.putchar_attributes = 0;
+        client.serial_getchar_global_endpoint = "client";
+        client.serial_getchar_badge = "1";
+        client.serial_getchar_attributes = "0";
+        client.serial_getchar_shmem_size = 0x1000;
+
+        serial.timeout_attributes = 1;
+        time_server.putchar_attributes = 0;
+
+        time_server.timers_per_client = 1;
+        client.read_id = 0;
+        client.read_attributes = "10";
+        client.read_global_endpoint = "serial";
+        client.read_badge = 10;
+        client.write_id = 1;
+        client.write_attributes = "10";
+        client.write_global_endpoint = "serial";
+        client.write_badge = 10;
+        client.serial_wait_global_endpoint = "client";
+        client.self_global_endpoint = "client";
+
+        serial.read_id = 0;
+        serial.read_attributes = "10";
+        serial.read_global_endpoint = "client";
+        serial.read_badge = 10;
+        serial.write_id = 1;
+        serial.write_attributes = "10";
+        serial.write_global_endpoint = "client";
+        serial.write_badge = 10;
+        serial.serial_wait_global_endpoint = "serial";
+        serial.self_global_endpoint = "serial";
+
+        serial_vqinit0.init_topology = [{ "drv" : "client.write", "dev" : "serial.write" }];
+        serial_vqinit1.init_topology = [{ "drv" : "client.read", "dev" : "serial.read"}];
+    }
+}
