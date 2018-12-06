@@ -28,10 +28,9 @@ val post_init_def = (append_prog o process_topdecs) `
 
 val client_transfer_string_def = (append_prog o process_topdecs) `
     fun client_transfer_string s = let
-        val dummy_arr = Word8Array.array 0 (Word8.fromInt 0)
-        val ln = cut_at_null s in
-        if match_string ln then
-            #(emit_string) ln dummy_arr
+        val dummy_arr = Word8Array.array 0 (Word8.fromInt 0) in
+        if match_string s then
+            #(emit_string) s dummy_arr
         else
             ()
     end
