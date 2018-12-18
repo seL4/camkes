@@ -11,8 +11,9 @@
 #include <camkes.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
-#define IPRINT(format, ...) printf("%s: " format, get_instance_name(), ##__VA_ARGS__); 
+#define IPRINT(format, ...) printf("%s: " format, get_instance_name(), ##__VA_ARGS__);
 
 #define MAX_VALUE  100000llu
 #define RATE  10000llu
@@ -30,11 +31,11 @@ int run() {
         acc /= 17;
         acc++;
         if (acc % RATE == 0) {
-            IPRINT("acc = %llu\n", acc);
+            IPRINT("acc = %"PRIuPTR"\n", acc);
         }
     }
 
-    IPRINT("*** DONE %llu ***\n", acc);
+    IPRINT("*** DONE %"PRIuPTR" ***\n", acc);
 
     return 0;
 }
