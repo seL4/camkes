@@ -25,15 +25,18 @@ assembly {
     }
     configuration {
         client_1._priority = 50;
+        client_2._priority = 50;
+        server.i_priority = 60;
+
+        /* The following parameters only have an effect on
+        the MCS kernel */
         client_1._period = 10000;
         client_1._budget = 10000;
-        client_2._priority = 50;
         client_2._period = 10000;
         client_2._budget = 10000;
-        // server.i_passive = true;
-        server.i_priority = 60;
         server.i_period = 10000;
         server.i_budget = 10000;
+        // server.i_passive = true;
     }
 }
 

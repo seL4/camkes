@@ -24,9 +24,12 @@ assembly {
     }
     configuration {
         source._priority = 30;
+        sink.ev_priority = 50;
+
+        /* The following parameters only have an effect on
+        the MCS kernel */
         source._period = 10000;
         source._budget = 10000;
-        sink.ev_priority = 50;
         sink.ev_period = 10000;
         sink.ev_budget = 7500;
     }

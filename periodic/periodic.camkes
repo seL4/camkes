@@ -23,9 +23,12 @@ assembly {
     }
     configuration {
         client1._priority = 100;
+        client2._priority = 50;
+
+        /* The following parameters only have an effect on
+        the MCS kernel */
         client1._period = 10000;
         client1._budget = 7500;
-        client2._priority = 50;
         client2._period = 10000;
         client2._budget = 7500;
     }
