@@ -32,6 +32,7 @@ int run() {
         acc++;
         if (acc % RATE == 0) {
             IPRINT("acc = %"PRIuPTR"\n", acc);
+            seL4_Yield();
         }
     }
 
