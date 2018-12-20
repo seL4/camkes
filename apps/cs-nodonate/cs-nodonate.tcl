@@ -19,7 +19,6 @@ set x86_defconfig true
 set arm_defconfig true
 
 set testscript {
-    wait_for "echo_parameter: 0 -> 0 (returned = 0)"
     wait_for "After the client"
 }
 

@@ -19,7 +19,6 @@ set x86_defconfig true
 set arm_defconfig true
 
 set testscript {
-    wait_for "After the client_2"
     wait_for "After the client_1"
 }
 

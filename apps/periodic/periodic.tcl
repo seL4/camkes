@@ -20,7 +20,6 @@ set arm_defconfig true
 
 set testscript {
     wait_for "client2: *** DONE 100000 ***"
-    wait_for "client1: *** DONE 100000 ***"
 }
 
 source [file join $::env(SCRIPT_DIR) test.inc]

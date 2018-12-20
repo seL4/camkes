@@ -20,7 +20,6 @@ set arm_defconfig true
 
 set testscript {
     wait_for "After the client_2"
-    wait_for "After the client_1"
 }
 
 source [file join $::env(SCRIPT_DIR) test.inc]
