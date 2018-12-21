@@ -39,7 +39,11 @@ void /*? me.interface.name ?*/__init(void) {
 
 int /*? me.interface.name ?*/__run(void) {
     while (1) {
+        /*- if options.realtime -*/
         seL4_MessageInfo_t info = seL4_Wait(/*? ep ?*/, NULL);
+        /*- else -*/
+        seL4_MessageInfo_t info = seL4_Recv(/*? ep ?*/, NULL);
+        /*- endif -*/
         assert(seL4_MessageInfo_get_length(info) == 1);
         if (seL4_GetMR(0) == 0) {
             int result UNUSED = sync_mutex_lock(&mutex);
