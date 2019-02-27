@@ -1,0 +1,200 @@
+/*
+ * Copyright 2019, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+import <std_connector.camkes>;
+import <global-connectors.camkes>;
+import <Ethdriver/Ethdriver.camkes>;
+import <PicoServer/PicoServer.camkes>;
+import <TimeServer/TimeServer.camkes>;
+
+/*
+ * This is a sample PicoServer application. There are two components, Echo and Listener.
+ * Echo will listen on a particular port and forward any messages to Listener.
+ * Listener will then print the message out to the serial port.
+ *
+ * Usage:
+ *      netcat <IP address assigned below> 1234
+ */
+
+component Echo {
+    control;
+
+    uses PicoControl echo_control;
+    uses PicoRecv echo_recv;
+    uses PicoSend echo_send;
+
+    /* This field is exclusive to this application and not necessary elsewhere */
+    attribute string ip_addr;
+}
+
+component Listener {
+    control;
+
+    uses PicoControl listener_control;
+    uses PicoRecv listener_recv;
+    uses PicoSend listener_send;
+
+    /* This field is exclusive to this application and not necessary elsewhere */
+    attribute string ip_addr;
+}
+
+assembly {
+    composition {
+        /* Echo component */
+        component Echo echo;
+
+        /* Listener component */
+        component Listener listener;
+
+        /* PicoServer component */
+        component PicoServer picoserver;
+
+        /* Ethdriver component */
+#ifdef KernelArchArm
+        component EthdriverARMPlat ethdriver;
+#endif /* KernelArchArm */
+#ifdef KernelArchX86
+        component Ethdriver82574 ethdriver;
+        component HWEthDriver82574 hwethdriver;
+#endif /* KernelArchX86 */
+
+        /* Timer component */
+        component TimeServer time_server;
+
+        /*
+         * Connections
+         */
+
+#ifdef KernelArchX86
+        connection seL4HardwareMMIO ethdrivermmio(from ethdriver.EthDriver, to hwethdriver.mmio);
+        connection seL4HardwareInterrupt hwethirq(from hwethdriver.irq, to ethdriver.irq);
+#endif /* KernelArchX86 */
+
+        /* Timer to PicoServer */
+        connection seL4TimeServer picoserver_timer(from picoserver.timer, to time_server.the_timer);
+        connection seL4GlobalAsynchCallback picoserver_timer_int(from time_server.timer_notification, to picoserver.timer_complete);
+
+        /* Driver to PicoServer */
+        connection seL4Ethdriver eth_driver_conn(from picoserver.ethdriver, to ethdriver.client);
+
+        /* PicoServer to Echo */
+        connection seL4PicoServerSignal echo_server_control(from echo.echo_control, to picoserver.pico_control);
+        connection seL4PicoServer echo_server_recv(from echo.echo_recv, to picoserver.pico_recv);
+        connection seL4PicoServer echo_server_send(from echo.echo_send, to picoserver.pico_send);
+
+        /* PicoServer to Listener */
+        connection seL4PicoServerSignal listener_server_control(from listener.listener_control, to picoserver.pico_control);
+        connection seL4PicoServer listener_server_recv(from listener.listener_recv, to picoserver.pico_recv);
+        connection seL4PicoServer listener_server_send(from listener.listener_send, to picoserver.pico_send);
+    }
+
+    configuration {
+
+        /*
+         * Non-platform specific configurations
+         */
+
+        /* Ethernet driver configuration */
+        ethdriver.simple = true;
+        ethdriver.cnode_size_bits = 12;
+        ethdriver.simple_untyped20_pool = 2;
+        ethdriver.heap_size = 0x10000;
+        ethdriver.dma_pool = 0x200000;
+
+        time_server.timers_per_client = 8;
+
+        /*
+         * Echo config
+         */
+
+        /*
+         * The attributes of the *_(control/send/recv) interfaces should be the same and unique between
+         * different components, this determines the client ID of this component with respect to
+         * the PicoServer component
+         */
+        echo.echo_control_attributes = "1";
+        echo.echo_recv_attributes = "1";
+        echo.echo_recv_shmem_size = 0x1000;
+        echo.echo_send_attributes = "1";
+        echo.echo_send_shmem_size = 0x1000;
+        /* This control global endpoint is bound towards the PicoServer's seL4PicoServerSignal connection */
+        echo.echo_control_global_endpoint = "echo_endpoint";
+        /* This config is only exclusive to this app and should match the picoserver.ip_addr field */
+        echo.ip_addr = "192.168.168.2";
+
+        /*
+         * Listener config
+         */
+        listener.listener_control_attributes = "2";
+        listener.listener_recv_attributes = "2";
+        listener.listener_recv_shmem_size = 0x1000;
+        listener.listener_send_attributes = "2";
+        listener.listener_send_shmem_size = 0x1000;
+        /* This control global endpoint is bound towards the PicoServer's seL4PicoServerSignal connection */
+        listener.listener_control_global_endpoint = "listener_endpoint";
+        /* This config is only exclusive to this app and should match the picoserver.ip_addr field */
+        listener.ip_addr = "192.168.168.2";
+
+        /*
+         * PicoServer config
+         */
+        picoserver.timer_attributes = 1;
+        picoserver.timer_global_endpoint = "picoserver_timer";
+        picoserver.timer_complete_global_endpoint = "picoserver_timer";
+
+        /* IP address to assign to the networking device */
+        picoserver.ip_addr = "192.168.168.2";
+        picoserver.multicast_addr = "0.0.0.0";
+        /* This should match the number of clients connected to this component */
+        picoserver.num_clients = 2;
+
+        picoserver.ethdriver_attributes = "1";
+        picoserver.ethdriver_shmem_size = 0x1000;
+        /* This control global endpoint is bound towards the Ethdriver component */
+        picoserver.ethdriver_global_endpoint = "picoserver_endpoint";
+        /* This should match the MAC address of the ethernet device */
+        picoserver.ethdriver_mac = [0x00, 0x19, 0xb8, 0x00, 0xf0, 0x72];
+
+        picoserver.heap_size = 0x40000;
+
+        /*
+         * Platform specific configurations. Depending on the system or board, you will need
+         * to modify these configurations accordingly.
+         */
+
+        /* x86 */
+
+#ifdef KernelArchX86
+        /* Ethernet card configuration */
+        hwethdriver.mmio_paddr = 0xf7f00000;
+        hwethdriver.mmio_size = 0x20000;
+        hwethdriver.irq_irq_type = "pci";
+        hwethdriver.irq_irq_ioapic = 0;
+        hwethdriver.irq_irq_ioapic_pin = 20;
+        hwethdriver.irq_irq_vector = 20;
+
+        /* Ethernet driver configuration */
+        ethdriver.iospaces = "0x12:0x0:0x19:0";
+        ethdriver.iospace_id = 0x12;
+        ethdriver.pci_bdf = "0:0x19.0";
+#endif /* KernelArchX86 */
+
+        /* ARM */
+
+#ifdef KernelArchArm
+        /* Ethernet driver configuration */
+        ethdriver.promiscuous_mode = 0;
+        // This should match the MAC address of the ethernet device
+        ethdriver.mac = [0x00, 0x19, 0xb8, 0x00, 0xf0, 0x72];
+#endif /* KernelArchArm */
+    }
+}
