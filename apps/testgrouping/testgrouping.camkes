@@ -41,8 +41,7 @@ assembly {
             component B c;
         }
 
-        /* Now a group with the same name as one of the other components. */
-        group a {
+        group baz {
             component B d;
             component B e;
         }
@@ -69,9 +68,9 @@ assembly {
         /* Wire it all together. */
         connection seL4RPCCall conn0(from a.p, to foo.b.p1);
         connection seL4RPCCall conn1(from foo.b.p2, to foo.c.p1);
-        connection seL4RPCCall conn2(from foo.c.p2, to a.d.p1);
-        connection seL4RPCCall conn3(from a.d.p2, to a.e.p1);
-        connection seL4RPCCall conn4(from a.e.p2, to f.f.p1);
+        connection seL4RPCCall conn2(from foo.c.p2, to baz.d.p1);
+        connection seL4RPCCall conn3(from baz.d.p2, to baz.e.p1);
+        connection seL4RPCCall conn4(from baz.e.p2, to f.f.p1);
         connection seL4RPCCall conn5(from f.f.p2, to f.g.p1);
         connection seL4RPCCall conn6(from f.g.p2, to bar.h.p1);
         connection seL4RPCCall conn7(from bar.h.p2, to i.i.p);
