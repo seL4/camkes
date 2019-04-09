@@ -27,21 +27,21 @@ if {![info exists extra_cmake_args]} {
 }
 
 if {[info exists arm_defconfig]} {
-    set cmake_props -DARM=TRUE\ -DPLATFORM=sabre\ -DCAMKES_APP=$appname\ $extra_cmake_args
+    set cmake_props [concat -DARM=TRUE -DPLATFORM=sabre -DCAMKES_APP=$appname $extra_cmake_args]
     source [file join $::env(SCRIPT_DIR) build-cmake.inc]
     source [file join $::env(SCRIPT_DIR) run-cmake.inc]
     eval $testscript
     cd ../
 }
 if {[info exists x86_defconfig]} {
-    set cmake_props  -DPLATFORM=ia32\ -DCAMKES_APP=$appname\ $extra_cmake_args
+    set cmake_props [concat -DPLATFORM=ia32 -DCAMKES_APP=$appname $extra_cmake_args]
     source [file join $::env(SCRIPT_DIR) build-cmake.inc]
     source [file join $::env(SCRIPT_DIR) run-cmake.inc]
     eval $testscript
     cd ../
 }
 if {[info exists x86_64_defconfig]} {
-    set cmake_props  -DPLATFORM=x86_64\ -DCAMKES_APP=$appname\ $extra_cmake_args
+    set cmake_props [concat -DPLATFORM=x86_64 -DCAMKES_APP=$appname $extra_cmake_args]
     source [file join $::env(SCRIPT_DIR) build-cmake.inc]
     source [file join $::env(SCRIPT_DIR) run-cmake.inc]
     eval $testscript

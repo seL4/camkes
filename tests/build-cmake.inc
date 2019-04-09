@@ -24,7 +24,7 @@ check_exit
 
 cd build
 
-spawn ../init-build.sh $cmake_props
+spawn ../init-build.sh {*}$cmake_props
 check_exit
 
 spawn ninja -j $jobs
