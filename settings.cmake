@@ -52,11 +52,11 @@ elseif ("${PLATFORM}" IN_LIST valid_arm_platform)
         set(KernelArmSel4Arch aarch64 CACHE STRING "" FORCE)
     endif()
     if ((NOT ARM) AND (NOT AARCH32) AND (NOT AARCH64) AND ("${CROSS_COMPILER_PREFIX}" STREQUAL ""))
-        message(WARNING "Looks like you building for ARM without using a cross compiler")
+        message(WARNING "Looks like you are building for ARM without using a cross-compiler")
     endif()
     ApplyData61ElfLoaderSettings(${KernelARMPlatform} ${KernelArmSel4Arch})
 else()
-    message(FATAL_ERROR "Unsupported platform")
+    message(FATAL_ERROR "Unsupported platform \"${PLATFORM}\"")
 endif()
 
 if (SIMULATION)
@@ -64,4 +64,3 @@ if (SIMULATION)
 endif()
 
 ApplyCommonReleaseVerificationSettings(${RELEASE} FALSE)
-
