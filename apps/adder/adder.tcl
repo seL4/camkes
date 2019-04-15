@@ -16,6 +16,7 @@ source [file join $::env(SCRIPT_DIR) procs.inc]
 
 set arm_defconfig arm_adder_defconfig
 set x86_defconfig x86_adder_defconfig
+set riscv true
 
 set testscript {
 	wait_for "client: result was 1270"

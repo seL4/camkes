@@ -18,6 +18,7 @@ source [file join $::env(SCRIPT_DIR) procs.inc]
 set appname global-imports
 set arm_defconfig arm_global_imports_defconfig
 set x86_defconfig x86_global_imports_defconfig
+set riscv true
 
 set testscript {
 	wait_for "Hello, World!"

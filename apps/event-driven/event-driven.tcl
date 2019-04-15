@@ -17,6 +17,7 @@ source [file join $::env(SCRIPT_DIR) procs.inc]
 
 set x86_defconfig true
 set arm_defconfig true
+set riscv true
 
 set testscript {
     wait_for "Got 100 events!"

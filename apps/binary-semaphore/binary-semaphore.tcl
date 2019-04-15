@@ -17,6 +17,7 @@ source [file join $::env(SCRIPT_DIR) procs.inc]
 
 set arm_defconfig arm_binary_semaphore_defconfig
 set x86_defconfig x86_binary_semaphore_defconfig
+set riscv true
 
 set testscript {
 	wait_for "Echoing: 42 == 42"

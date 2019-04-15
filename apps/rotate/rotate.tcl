@@ -17,6 +17,7 @@ source [file join $::env(SCRIPT_DIR) procs.inc]
 
 set arm_defconfig arm_rotate_defconfig
 set x86_defconfig x86_rotate_defconfig
+set riscv true
 
 set testscript {
 	wait_for "Afterwards we have (ret)2, (in)2, (out)4, (inout)2"

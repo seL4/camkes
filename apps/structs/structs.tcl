@@ -17,6 +17,7 @@ source [file join $::env(SCRIPT_DIR) procs.inc]
 
 set arm_defconfig arm_structs_defconfig
 set x86_defconfig x86_structs_defconfig
+set riscv true
 
 set testscript {
 	wait_for "array_in_struct: array length: 4, first element 3"

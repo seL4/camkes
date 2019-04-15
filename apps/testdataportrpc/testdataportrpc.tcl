@@ -17,6 +17,7 @@ source [file join $::env(SCRIPT_DIR) procs.inc]
 
 set arm_defconfig arm_testdataportrpc_defconfig
 set x86_defconfig x86_testdataportrpc_defconfig
+set riscv true
 
 set testscript {
 	wait_for "All OK"

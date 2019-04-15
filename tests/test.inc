@@ -47,3 +47,10 @@ if {[info exists x86_64_defconfig]} {
     eval $testscript
     cd ../
 }
+if {[info exists riscv]} {
+    set cmake_props [concat -DRISCV64=TRUE -DPLATFORM=spike -DCAMKES_APP=$appname $extra_cmake_args]
+    source [file join $::env(SCRIPT_DIR) build-cmake.inc]
+    source [file join $::env(SCRIPT_DIR) run-cmake.inc]
+    eval $testscript
+    cd ../
+}

@@ -17,6 +17,7 @@ source [file join $::env(SCRIPT_DIR) procs.inc]
 
 set arm_defconfig arm_testfaulthandlers_defconfig
 set x86_defconfig x86_testfaulthandlers_defconfig
+set riscv true
 
 set testscript {
 	wait_for "FAULT HANDLER"
