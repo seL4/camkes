@@ -11,6 +11,9 @@
 #
 
 cmake_minimum_required(VERSION 3.8.2)
+
+include(easy-settings.cmake)
+
 set(CMAKE_C_STANDARD 11)
 
 # Set some options we know we need here. Applications can override them
@@ -22,13 +25,7 @@ if(("${KernelRootCNodeSizeBits}" STREQUAL "") OR ("${KernelRootCNodeSizeBits}" L
 endif()
 set(KernelNumDomains 1 CACHE STRING "" FORCE)
 
-# Make sure CAMKES_APP is definition that can be changed in the ccmake-gui
-set(CAMKES_APP "${CAMKES_APP}" CACHE STRING "CAmkES application to build")
-
 # Define some meta options
-set(SIMULATION ON CACHE BOOL "Try and use simultable features")
-set(RELEASE OFF CACHE BOOL "Performance optimized build")
-set(PLATFORM "x86_64" CACHE STRING "Platform to use")
 set(valid_arm_platform "sabre;kzm;exynos5410;exynos5422;tx1;zynq7000")
 set(valid_x86_platform "ia32;x86_64")
 set(valid_riscv_platform "spike")
