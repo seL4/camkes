@@ -12,7 +12,7 @@
 
 cmake_minimum_required(VERSION 3.8.2)
 
-include(easy-settings.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/easy-settings.cmake)
 
 set(CMAKE_C_STANDARD 11)
 
