@@ -29,5 +29,6 @@ assembly {
 
     configuration {
         cakemlfilter.environment = "CakeML";
+        cakemlfilter.filter_regex = "This.*";
     }
 }

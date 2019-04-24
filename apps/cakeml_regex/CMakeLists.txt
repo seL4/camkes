@@ -16,17 +16,6 @@ include(${CMAKE_SOURCE_DIR}/projects/cakeml_libs/meta_utils/meta_utils.cmake)
 
 project(cakeml_regex C)
 
-set(FilterRegex "This.*" CACHE STRING "Regular expression that the filter will match inputs against")
-
-# Generate an ML file that defines a single constant containing the regex to use for
-# filtering. The main filter script depends on this generated file.
-set(regexFile "${CMAKE_CURRENT_BINARY_DIR}/cmakeConstants.sml")
-file(GENERATE OUTPUT "${regexFile}" CONTENT
-"structure cmakeConstants = struct
-   val filter_regex = \"${FilterRegex}\";
- end
-")
-
 DeclareCakeMLMetaUtils(
     ${CMAKE_SOURCE_DIR}/projects/cakeml_libs/meta_utils
     meta_utils
@@ -37,7 +26,7 @@ DeclareCakeMLMetaUtils(
 
 DeclareCAmkESComponent(CakeMLFilter
     SOURCES components/CakeMLFilter/emit_string.c
-    CAKEML_SOURCES components/CakeMLFilter/filterProgScript.sml "${regexFile}" components/CakeMLFilter/componentScript.sml
+    CAKEML_SOURCES components/CakeMLFilter/filterProgScript.sml components/CakeMLFilter/componentScript.sml
     CAKEML_HEAP_SIZE 100
     CAKEML_INCLUDES ${meta_utils_path} "/$(HOLDIR)/examples/formal-languages/regular" "${CAKEMLDIR}/semantics/proofs"
     CAKEML_DEPENDS meta_utils_target ${meta_utils_target_files}

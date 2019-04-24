@@ -13,4 +13,5 @@
 component CakeMLFilter {
     provides TransferString client;
     uses TransferString server;
+    attribute string filter_regex;
 }

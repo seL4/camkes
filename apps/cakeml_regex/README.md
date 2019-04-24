@@ -103,18 +103,13 @@ Both the producer and the consumer are implemented in C.
 
 ### Customising the Filter Regex
 
-The regular expression (regex) that is used for filtering is configured through the CMake build system. The file `apps/cakeml-filter/CMakeLists.txt` declares a variable `FilterRegex`, which is provided to the filter program through a generated Standard ML file called `cmakeConstants.sml`.
-
-To change the regex used for filtering, simply delete the build directory and override the regex using `-D`:
+The regular expression (regex) that is used for filtering is configured through the cakeml_regex.camkes `configuration` section.
 
 ```
-rm -rf build
-mkdir build
-cd build
-../init-build.sh -DCAKEMLDIR=/path/to/cakeml -DCAMKES_APP=cakeml_regex -DFilterRegex=".*"
+    configuration {
+        cakemlfilter.filter_regex = "This.*";
+    }
 ```
-
-You can then continue the build using `ninja` (see instructions above)
 
 The regular expression should be provided as a Standard ML string, using the operators and syntax defined here:
 

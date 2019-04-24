@@ -22,7 +22,7 @@ val _ = new_theory "filterProg";
 (* build system.                                                             *)
 (*---------------------------------------------------------------------------*)
 
-val the_regexp = cmakeConstants.filter_regex;
+val the_regexp = camkesConstants.filter_regex;
 
 val _ = translation_extends "camkesStart";
 
