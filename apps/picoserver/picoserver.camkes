@@ -128,8 +128,7 @@ assembly {
         echo.echo_send_shmem_size = 0x1000;
         /* This control global endpoint is bound towards the PicoServer's seL4PicoServerSignal connection */
         echo.echo_control_global_endpoint = "echo_endpoint";
-        /* This config is only exclusive to this app and should match the picoserver.ip_addr field */
-        echo.ip_addr = "192.168.168.2";
+        echo.ip_addr = PICOSERVER_IP_ADDR;
 
         /*
          * Listener config
@@ -141,8 +140,7 @@ assembly {
         listener.listener_send_shmem_size = 0x1000;
         /* This control global endpoint is bound towards the PicoServer's seL4PicoServerSignal connection */
         listener.listener_control_global_endpoint = "listener_endpoint";
-        /* This config is only exclusive to this app and should match the picoserver.ip_addr field */
-        listener.ip_addr = "192.168.168.2";
+        listener.ip_addr = PICOSERVER_IP_ADDR;
 
         /*
          * PicoServer config
@@ -152,7 +150,7 @@ assembly {
         picoserver.timer_complete_global_endpoint = "picoserver_timer";
 
         /* IP address to assign to the networking device */
-        picoserver.ip_addr = "192.168.168.2";
+        picoserver.ip_addr = PICOSERVER_IP_ADDR;
         picoserver.multicast_addr = "0.0.0.0";
         /* This should match the number of clients connected to this component */
         picoserver.num_clients = 2;

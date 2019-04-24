@@ -32,6 +32,8 @@ elseif("${KernelArch}" STREQUAL "arm")
     set(cpp_define -DKernelArchArm)
 endif()
 
+set(PICOSERVER_IP_ADDR "192.168.168.2" CACHE STRING "IP address for the Picoserver component")
+
 DeclareCAmkESComponent(
     Echo
     SOURCES
@@ -53,4 +55,9 @@ DeclareCAmkESComponent(
     PicoServer-client
 )
 
-DeclareCAmkESRootserver(picoserver.camkes CPP_FLAGS ${cpp_define})
+DeclareCAmkESRootserver(
+    picoserver.camkes
+    CPP_FLAGS
+    ${cpp_define}
+    -DPICOSERVER_IP_ADDR=\"${PICOSERVER_IP_ADDR}\"
+)
