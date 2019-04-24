@@ -16,15 +16,6 @@ import <Ethdriver/Ethdriver.camkes>;
 import <PicoServer/PicoServer.camkes>;
 import <TimeServer/TimeServer.camkes>;
 
-/*
- * This is a sample PicoServer application. There are two components, Echo and Listener.
- * Echo will listen on a particular port and forward any messages to Listener.
- * Listener will then print the message out to the serial port.
- *
- * Usage:
- *      netcat <IP address assigned below> 1234
- */
-
 component Echo {
     control;
 
