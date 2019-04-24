@@ -191,8 +191,8 @@ assembly {
 #ifdef KernelArchArm
         /* Ethernet driver configuration */
         ethdriver.promiscuous_mode = 0;
-        // This should match the MAC address of the ethernet device
-        ethdriver.mac = [0x00, 0x19, 0xb8, 0x00, 0xf0, 0x72];
+        // Inherits the MAC address of the PicoServer component
+        ethdriver.mac <- picoserver.ethdriver_mac;
 #endif /* KernelArchArm */
     }
 }
