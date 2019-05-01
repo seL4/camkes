@@ -52,5 +52,5 @@ int run(void)
     timeout_stop(0);
     printf("BOOM!\n");
 
-	return 0;
+    return 0;
 }
