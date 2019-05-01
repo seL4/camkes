@@ -34,7 +34,7 @@ int run(void)
         printf("Tick\n");
     }
     uint64_t t2 = timeout_time();
-    assert(t2 - t1 > TICKS * WAIT);
+    assert(t2 - t1 >= TICKS * WAIT);
 
     /* test a relative timeout */
     timeout_oneshot_relative(0, WAIT);
@@ -47,7 +47,7 @@ int run(void)
     seL4_Wait(notification, &badge);
     printf("Tick\n");
     t2 = timeout_time();
-    assert(t2 - t1 > WAIT);
+    assert(t2 - t1 >= WAIT);
 
     timeout_stop(0);
     printf("BOOM!\n");
