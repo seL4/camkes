@@ -26,6 +26,8 @@ endif()
 
 include(${CAMKES_HELPERS_PATH})
 
+include(ExternalProject)
+
 function(DeclareExternalRumprunProject external_target_name source_dir files)
 
 	add_custom_target(${external_target_name}-toolchains)
