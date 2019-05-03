@@ -12,17 +12,8 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
-find_file(RUMPRUN_PATH rumprun PATHS ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/projects CMAKE_FIND_ROOT_PATH_BOTH)
-mark_as_advanced(FORCE RUMPRUN_PATH)
-if("${RUMPRUN_PATH}" STREQUAL "RUMPRUN_PATH-NOTFOUND")
-    message(FATAL_ERROR "Failed to find rumprun. Consider cmake -DRUMPRUN_PATH=/path/to/rumprun")
-endif()
-
-find_file(CAMKES_HELPERS_PATH camkes_helpers.cmake PATHS ${RUMPRUN_PATH}/platform/sel4/camkes/ CMAKE_FIND_ROOT_PATH_BOTH)
-mark_as_advanced(FORCE CAMKES_RUMPRUN_PATH)
-if("${CAMKES_HELPERS_PATH}" STREQUAL "CAMKES_HELPERS_PATH-NOTFOUND")
-    message(FATAL_ERROR "Failed to find camkes_helpers.cmake. Consider cmake -DCAMKES_HELPERS_PATH=/path/to/camkes_helpers.cmake")
-endif()
+RequireFile(RUMPRUN_PATH rumprun PATHS "${CMAKE_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}/projects")
+RequireFile(CAMKES_HELPERS_PATH camkes_helpers.cmake PATHS "${RUMPRUN_PATH}/platform/sel4/camkes/")
 
 include(${CAMKES_HELPERS_PATH})
 
