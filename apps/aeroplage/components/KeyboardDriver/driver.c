@@ -14,7 +14,9 @@
  * symbols.
  */
 #include <camkes.h>
+#include <camkes/io.h>
 
+#include <assert.h>
 #include <keyboard/codes.h>
 #include <keyboard/keyboard.h>
 #include <ringbuffer/ringbuffer.h>
@@ -23,15 +25,25 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+static ps_io_port_ops_t io_port_ops;
+
 static uint8_t in8(uint16_t port) {
-    return ports_in8(port);
+    uint32_t result = 0;
+    int error = ps_io_port_in(&io_port_ops, port, IOSIZE_8, &result);
+    if (error) {
+        return 0;
+    }
+    return (uint8_t) result;
 }
 
 static void out8(uint16_t port, uint8_t value) {
-    ports_out8(port, value);
+    ps_io_port_out(&io_port_ops, port, IOSIZE_8, value);
 }
 
 int run(void) {
+    int error = camkes_io_port_ops(&io_port_ops);
+    assert(!error);
+
     sel4keyboard_init(0, in8, out8);
 
     ringbuffer_t *output = rb_new((void*)char_out, sizeof(*char_out));

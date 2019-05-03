@@ -14,6 +14,7 @@
  * generated symbols.
  */
 #include <camkes.h>
+#include <camkes/io.h>
 
 #include <assert.h>
 #include <bga/bga.h>
@@ -21,6 +22,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+
+static ps_io_port_ops_t io_port_ops;
 
 /* The following code drives the Bochs Graphics Array (BGA) video device to
  * display the various components of the multilevel terminal. Note that it only
@@ -163,15 +166,23 @@ static void write_high(char c) {
 
 /* Callbacks used below. */
 static void out16(uint16_t port, uint16_t value) {
-    ports_out16((unsigned int)port, (unsigned int)value);
+    ps_io_port_out(&io_port_ops, port, IOSIZE_16, value);
 }
 
 static uint16_t in16(uint16_t port) {
-    return (uint16_t)ports_in16((unsigned int)port);
+    uint32_t result = 0;
+    int error = ps_io_port_in(&io_port_ops, port, IOSIZE_16, &result);
+    if (error) {
+        return 0;
+    }
+    return (uint16_t) result;
 }
 
 /* This function is invoked by the main CAmkES thread in this component. */
 int run(void) {
+    int error = camkes_io_port_ops(&io_port_ops);
+    assert(!error);
+
     /* Use the dataport address */
     void *bga_ptr = (void*)mock_hdmi;
 
