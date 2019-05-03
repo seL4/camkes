@@ -12,6 +12,7 @@
 
 #include <autoconf.h>
 #include <camkes.h>
+#include <camkes/io.h>
 #include <stdio.h>
 #include <platsupport/plat/pit.h>
 #include <utils/time.h>
@@ -19,38 +20,6 @@
 #define IRQS_PER_SECOND 100
 
 static pit_t timer;
-
-static int pit_port_in(void *cookie, uint32_t port, int io_size, uint32_t *result) {
-    if (io_size != 1) {
-        return -1;
-    }
-    switch(port) {
-    case 0x43:
-        *result = command_in8(port);
-        return 0;
-    case 0x40:
-        *result = channel0_in8(port);
-        return 0;
-    default:
-        return -1;
-    }
-}
-
-static int pit_port_out(void *cookie, uint32_t port, int io_size, uint32_t val) {
-    if (io_size != 1) {
-        return -1;
-    }
-    switch(port) {
-    case 0x43:
-        command_out8(port, val);
-        return 0;
-    case 0x40:
-        channel0_out8(port, val);
-        return 0;
-    default:
-        return -1;
-    }
-}
 
 void irq_handle(void)
 {
@@ -67,7 +36,9 @@ void irq_handle(void)
 void pre_init(void)
 {
     int error;
-    ps_io_port_ops_t ops = (ps_io_port_ops_t){.io_port_in_fn = pit_port_in, .io_port_out_fn = pit_port_out};
+    ps_io_port_ops_t ops = {0};
+    error = camkes_io_port_ops(&ops);
+    assert(!error);
     error = pit_init(&timer, ops);
     assert(!error);
     error = pit_set_timeout(&timer, NS_IN_S / IRQS_PER_SECOND, true);
