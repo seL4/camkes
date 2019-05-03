@@ -14,8 +14,10 @@
  * http://www.win.tue.nl/~aeb/linux/kbd/scancodes-11.html
  */
 
+#include <assert.h>
 #include <stdio.h>
 #include <camkes.h>
+#include <camkes/io.h>
 
 #define KEYBOARD_STATUS_PORT    0x64 /* Control port. */
 #define KEYBOARD_DATA_PORT      0x60 /* Input/output port. */
@@ -26,10 +28,21 @@
 #define KEYBOARD_ENABLE		0xae /* Keyboard enable command. */
 #define KEYBOARD_DISABLE	0xad /* Keyboard disable command. */
 
+static ps_io_port_ops_t io_port_ops;
+
+static uint8_t port_in8(uint16_t port) {
+    uint32_t result = 0;
+    int error = ps_io_port_in(&io_port_ops, port, IOSIZE_8, &result);
+    if (error) {
+        return 0;
+    }
+    return (uint8_t) result;
+}
+
 static uint8_t read_status(void)
 {
 	char c;
-	c = s_in8(KEYBOARD_STATUS_PORT);
+	c = port_in8(KEYBOARD_STATUS_PORT);
 
 	printf("Current Status: 0x%x\n", c);
 	return c;
@@ -37,12 +50,12 @@ static uint8_t read_status(void)
 
 static uint8_t read_scancode(void)
 {
-	return s_in8(KEYBOARD_DATA_PORT);
+	return port_in8(KEYBOARD_DATA_PORT);
 }
 
 static int keyboard_enable(void)
 {
-	s_out8(KEYBOARD_STATUS_PORT, KEYBOARD_ENABLE);
+    ps_io_port_out(&io_port_ops, KEYBOARD_STATUS_PORT, IOSIZE_8, KEYBOARD_ENABLE);
 	return 0;
 }
 
@@ -55,6 +68,8 @@ void interrupt_handle(void)
 
 void kbd__init(void)
 {
+    int error = camkes_io_port_ops(&io_port_ops);
+    assert(!error);
 	read_status();
 	keyboard_enable();
 }
