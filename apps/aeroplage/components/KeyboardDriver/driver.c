@@ -27,7 +27,8 @@
 
 static ps_io_port_ops_t io_port_ops;
 
-static uint8_t in8(uint16_t port) {
+static uint8_t in8(uint16_t port)
+{
     uint32_t result = 0;
     int error = ps_io_port_in(&io_port_ops, port, IOSIZE_8, &result);
     if (error) {
@@ -36,17 +37,19 @@ static uint8_t in8(uint16_t port) {
     return (uint8_t) result;
 }
 
-static void out8(uint16_t port, uint8_t value) {
+static void out8(uint16_t port, uint8_t value)
+{
     ps_io_port_out(&io_port_ops, port, IOSIZE_8, value);
 }
 
-int run(void) {
+int run(void)
+{
     int error = camkes_io_port_ops(&io_port_ops);
     assert(!error);
 
     sel4keyboard_init(0, in8, out8);
 
-    ringbuffer_t *output = rb_new((void*)char_out, sizeof(*char_out));
+    ringbuffer_t *output = rb_new((void *)char_out, sizeof(*char_out));
     if (output == NULL) {
         abort();
     }
@@ -60,46 +63,46 @@ int run(void) {
         static int escape_state = 0;
         static int break_code = 0;
 
-        while(!sel4keyboard_get_scancode(&c));
+        while (!sel4keyboard_get_scancode(&c));
 
         /* first parse escape codes etc */
         switch (c) {
-            case 0xf0:
-                break_code = 0xf0;
+        case 0xf0:
+            break_code = 0xf0;
+            continue;
+        case 0xe0:
+        case 0xe1:
+            escape_code = c;
+            escape_state = 0;
+            continue;
+        default:
+            /* need to do actual parsing */
+            switch (escape_code) {
+            case 0xe1:
+                /* need to ignore two scancodes */
+                escape_state++;
+                if (escape_state == 2) {
+                    escape_code = 0;
+                    break_code = 0;
+                }
                 continue;
             case 0xe0:
-            case 0xe1:
-                escape_code = c;
-                escape_state = 0;
+                /* key down */
+                break_code = 0;
+                escape_code = 0;
                 continue;
             default:
-                /* need to do actual parsing */
-                switch(escape_code) {
-                    case 0xe1:
-                        /* need to ignore two scancodes */
-                        escape_state++;
-                        if (escape_state == 2) {
-                            escape_code = 0;
-                            break_code = 0;
-                        }
-                        continue;
-                    case 0xe0:
-                        /* key down */
-                        break_code = 0;
-                        escape_code = 0;
-                        continue;
-                    default:
-                        if (!break_code) {
-                            break_code = 0;
-                            escape_code = 0;
-                            continue;
-                        }
-                        /* key up */
-                        break_code = 0;
-                        escape_code = 0;
-                        break;
+                if (!break_code) {
+                    break_code = 0;
+                    escape_code = 0;
+                    continue;
                 }
+                /* key up */
+                break_code = 0;
+                escape_code = 0;
                 break;
+            }
+            break;
         }
 
         char c1 = sel4keyboard_code_to_char(c);

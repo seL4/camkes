@@ -46,7 +46,8 @@ extern char *to_pixels(char c);
 #define CHAR_HEIGHT 26
 
 /* Draw a single character on the screen at (x, y). */
-static void draw(unsigned int x, unsigned int y, char c) {
+static void draw(unsigned int x, unsigned int y, char c)
+{
     /* Get the character's XBM representation. */
     char *pixels = to_pixels(c);
     assert(pixels != NULL);
@@ -70,13 +71,14 @@ static void draw(unsigned int x, unsigned int y, char c) {
             char block = pixels[(j + i * row_width) / 8];
             unsigned int offset = (j + i * row_width) % 8;
             bga_set_pixel(bga, x + j, y + i,
-                (block & (1 << offset)) ? white: black);
+                          (block & (1 << offset)) ? white : black);
         }
     }
 }
 
 /* Draw a string on the screen starting at (x, y). */
-static void draw_string(unsigned int x, unsigned int y, const char *s) {
+static void draw_string(unsigned int x, unsigned int y, const char *s)
+{
     while (*s != '\0') {
         draw(x, y, *s++);
         x += CHAR_WIDTH;
@@ -88,7 +90,8 @@ static void draw_string(unsigned int x, unsigned int y, const char *s) {
 #define HEIGHT 300
 
 /* Draw coloured borders around each input's virtual framebuffer. */
-static void borders(void) {
+static void borders(void)
+{
     char purple[] = { 210, 101, 141 };
     char blue[] = { 197, 103, 0 };
 
@@ -122,7 +125,8 @@ static void borders(void) {
 }
 
 /* Return true if we're capable of displaying this character. */
-static bool printable(char c) {
+static bool printable(char c)
+{
     return (c >= 'A' && c <= 'Z') ||
            (c >= 'a' && c <= 'z') ||
            (c == ' ') ||
@@ -130,7 +134,8 @@ static bool printable(char c) {
 }
 
 /* Write a character to the low domain. */
-static void write_low(char c) {
+static void write_low(char c)
+{
     if (!printable(c)) {
         return;
     }
@@ -138,8 +143,9 @@ static void write_low(char c) {
     /* Again, magic numbers are basically pixel alignments. */
     static unsigned int x = 100 + 2;
     static unsigned int y = 100 + 4 + CHAR_HEIGHT;
-    if (y >= 100 + HEIGHT - CHAR_HEIGHT)
+    if (y >= 100 + HEIGHT - CHAR_HEIGHT) {
         return;
+    }
     draw(x, y, c);
     x += CHAR_WIDTH;
     if (x >= 100 + WIDTH - 3) {
@@ -149,13 +155,16 @@ static void write_low(char c) {
 }
 
 /* Write a character to the high domain. */
-static void write_high(char c) {
-    if (!printable(c))
+static void write_high(char c)
+{
+    if (!printable(c)) {
         return;
+    }
     static unsigned int x = 200 + WIDTH + 2;
     static unsigned int y = 100 + 4 + CHAR_HEIGHT;
-    if (y >= 100 + HEIGHT - CHAR_HEIGHT)
+    if (y >= 100 + HEIGHT - CHAR_HEIGHT) {
         return;
+    }
     draw(x, y, c);
     x += CHAR_WIDTH;
     if (x >= 200 + 2 * WIDTH - 3) {
@@ -165,11 +174,13 @@ static void write_high(char c) {
 }
 
 /* Callbacks used below. */
-static void out16(uint16_t port, uint16_t value) {
+static void out16(uint16_t port, uint16_t value)
+{
     ps_io_port_out(&io_port_ops, port, IOSIZE_16, value);
 }
 
-static uint16_t in16(uint16_t port) {
+static uint16_t in16(uint16_t port)
+{
     uint32_t result = 0;
     int error = ps_io_port_in(&io_port_ops, port, IOSIZE_16, &result);
     if (error) {
@@ -179,22 +190,23 @@ static uint16_t in16(uint16_t port) {
 }
 
 /* This function is invoked by the main CAmkES thread in this component. */
-int run(void) {
+int run(void)
+{
     int error = camkes_io_port_ops(&io_port_ops);
     assert(!error);
 
     /* Use the dataport address */
-    void *bga_ptr = (void*)mock_hdmi;
+    void *bga_ptr = (void *)mock_hdmi;
 
     bga = bga_init(bga_ptr, out16, in16);
     bga_set_mode(bga, 1024, 768, 24); /* 1024x768 resolution at 24 BPP */
 
-    ringbuffer_t *low = rb_new((void*)low_input, sizeof(*low_input));
+    ringbuffer_t *low = rb_new((void *)low_input, sizeof(*low_input));
     if (low == NULL) {
         abort();
     }
 
-    ringbuffer_t *high = rb_new((void*)high_input, sizeof(*high_input));
+    ringbuffer_t *high = rb_new((void *)high_input, sizeof(*high_input));
     if (high == NULL) {
         abort();
     }
