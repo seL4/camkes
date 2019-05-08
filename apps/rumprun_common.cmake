@@ -12,9 +12,9 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
-RequireFile(RUMPRUN_PATH rumprun PATHS "${CMAKE_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}/projects")
+RequireFile(RUMPRUN_PATH rumprun PATHS "${CMAKE_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}/tools")
 RequireFile(CAMKES_HELPERS_PATH camkes_helpers.cmake PATHS "${RUMPRUN_PATH}/platform/sel4/camkes/")
-
+add_subdirectory(${RUMPRUN_PATH} ${CMAKE_CURRENT_BINARY_DIR}/rumprun)
 include(${CAMKES_HELPERS_PATH})
 
 include(ExternalProject)
