@@ -15,7 +15,7 @@ cmake_minimum_required(VERSION 3.7.2)
 project(pit C)
 
 # This requires an x86 kernel with a PIC interrupt controller
-if (NOT "${KernelArch}" STREQUAL "x86")
+if(NOT "${KernelArch}" STREQUAL "x86")
     message(FATAL_ERROR "pit application only supported on x86")
 endif()
 

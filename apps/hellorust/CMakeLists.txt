@@ -15,15 +15,29 @@ cmake_minimum_required(VERSION 3.7.2)
 project(hellorust C)
 
 # Only support x86_64 at the moment
-if (NOT "${KernelArch}" STREQUAL "x86" OR NOT "${KernelX86Sel4Arch}" STREQUAL "x86_64")
+if(
+    NOT
+    "${KernelArch}"
+    STREQUAL
+    "x86"
+    OR
+        NOT
+        "${KernelX86Sel4Arch}"
+        STREQUAL
+        "x86_64"
+)
     message(FATAL_ERROR "hellorust application only supported on x86_64")
 endif()
 
-RustAddLibrary(main
-	SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/components/main
-	TARGET x86_64-sel4-none
-	LIB_FILENAME libmain.a
-	)
+RustAddLibrary(
+    main
+    SOURCE_DIR
+    ${CMAKE_CURRENT_LIST_DIR}/components/main
+    TARGET
+    x86_64-sel4-none
+    LIB_FILENAME
+    libmain.a
+)
 
 DeclareCAmkESComponent(main LIBS main)
 

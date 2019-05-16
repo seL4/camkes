@@ -15,7 +15,7 @@ cmake_minimum_required(VERSION 3.7.2)
 project(vgatest C)
 
 # This only works on x86
-if (NOT "${KernelArch}" STREQUAL "x86")
+if(NOT "${KernelArch}" STREQUAL "x86")
     message(FATAL_ERROR "vgatest application only supported on x86")
 endif()
 

@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(alignment C)
 
-if (NOT "${KernelArch}" STREQUAL "x86")
+if(NOT "${KernelArch}" STREQUAL "x86")
     message(FATAL_ERROR "alignment application only supported on x86")
 endif()
 

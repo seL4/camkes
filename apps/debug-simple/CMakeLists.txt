@@ -24,7 +24,17 @@ set(CAmkESCPP ON CACHE BOOL "" FORCE)
 set(HardwareDebugAPI ON CACHE BOOL "" FORCE)
 
 # Only support ia32 at the moment
-if (NOT "${KernelArch}" STREQUAL "x86" OR NOT "${KernelX86Sel4Arch}" STREQUAL "ia32")
+if(
+    NOT
+    "${KernelArch}"
+    STREQUAL
+    "x86"
+    OR
+        NOT
+        "${KernelX86Sel4Arch}"
+        STREQUAL
+        "ia32"
+)
     message(FATAL_ERROR "debug-simple application only supported on ia32")
 endif()
 
@@ -33,4 +43,6 @@ set(KernelIRQController PIC CACHE STRING "" FORCE)
 
 # Since we cannot use generator expressions in CPP_FLAGS we have to hard code the include path
 # that we want
-DeclareCAmkESRootserver(debug-simple.camkes CPP_FLAGS -I${CMAKE_SOURCE_DIR}/projects/camkes-tool/libsel4camkes/include)
+DeclareCAmkESRootserver(
+    debug-simple.camkes CPP_FLAGS -I${CMAKE_SOURCE_DIR}/projects/camkes-tool/libsel4camkes/include
+)
