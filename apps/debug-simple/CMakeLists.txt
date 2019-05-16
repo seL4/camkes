@@ -24,8 +24,10 @@ set(CAmkESCPP ON CACHE BOOL "" FORCE)
 set(HardwareDebugAPI ON CACHE BOOL "" FORCE)
 
 # Only support ia32 at the moment
-set(KernelArch x86 CACHE STRING "" FORCE)
-set(KernelX86Sel4Arch ia32 CACHE STRING "" FORCE)
+if (NOT "${KernelArch}" STREQUAL "x86" OR NOT "${KernelX86Sel4Arch}" STREQUAL "ia32")
+    message(FATAL_ERROR "debug-simple application only supported on ia32")
+endif()
+
 # The debug component relies on legacy PIC interrupts, so force that
 set(KernelIRQController PIC CACHE STRING "" FORCE)
 

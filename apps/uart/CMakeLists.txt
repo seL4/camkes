@@ -15,9 +15,9 @@ cmake_minimum_required(VERSION 3.7.2)
 project(uart C)
 
 # This only works on kzm
-set(KernelArch arm CACHE STRING "" FORCE)
-set(KernelArmSel4Arch aarch32 CACHE STRING "" FORCE)
-set(KernelARMPlatform kzm CACHE STRING "" FORCE)
+if (NOT "${KernelArch}" STREQUAL "arm" OR NOT "${KernelARMPlatform}" STREQUAL "kzm")
+    message(FATAL_ERROR "uart application only supported on Arm kzm")
+endif()
 
 DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
 DeclareCAmkESComponent(Driver SOURCES components/Driver/src/driver.c)

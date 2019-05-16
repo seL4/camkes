@@ -14,7 +14,9 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(aeroplage C)
 
-set(KernelArch x86 CACHE STRING "" FORCE)
+if (NOT "${KernelArch}" STREQUAL "x86")
+    message(FATAL_ERROR "aeroplage application only supported on x86")
+endif()
 
 DeclareCAmkESComponent(KeyboardDriver SOURCES components/KeyboardDriver/driver.c LIBS ringbuffer sel4keyboard)
 DeclareCAmkESComponent(MockLinux SOURCES components/MockLinux/mocklinux.c LIBS ringbuffer)

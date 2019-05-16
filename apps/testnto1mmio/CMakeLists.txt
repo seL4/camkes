@@ -14,10 +14,10 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(testnto1mmio C)
 
-# This only works on sabre
-set(KernelArch arm CACHE STRING "" FORCE)
-set(KernelArmSel4Arch aarch32 CACHE STRING "" FORCE)
-set(KernelARMPlatform sabre CACHE STRING "" FORCE)
+# CAmkES spec is hard coded for the sabre
+if (NOT "${KernelArch}" STREQUAL "arm" OR NOT "${KernelARMPlatform}" STREQUAL "sabre")
+    message(FATAL_ERROR "testnto1mmio application only supported on Arm sabre")
+endif()
 
 DeclareCAmkESComponent(Driver1 SOURCES driver1.c INCLUDES .)
 DeclareCAmkESComponent(Driver2 SOURCES driver2.c INCLUDES .)

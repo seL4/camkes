@@ -15,7 +15,10 @@ cmake_minimum_required(VERSION 3.7.2)
 project(pit C)
 
 # This requires an x86 kernel with a PIC interrupt controller
-set(KernelArch x86 CACHE STRING "" FORCE)
+if (NOT "${KernelArch}" STREQUAL "x86")
+    message(FATAL_ERROR "pit application only supported on x86")
+endif()
+
 set(KernelIRQController IOAPIC CACHE STRING "" FORCE)
 
 DeclareCAmkESComponent(Driver SOURCES components/Driver/src/driver.c)

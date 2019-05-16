@@ -15,7 +15,9 @@ cmake_minimum_required(VERSION 3.7.2)
 project(vgatest C)
 
 # This only works on x86
-set(KernelArch x86 CACHE STRING "" FORCE)
+if (NOT "${KernelArch}" STREQUAL "x86")
+    message(FATAL_ERROR "vgatest application only supported on x86")
+endif()
 
 DeclareCAmkESComponent(VGADriver SOURCES components/VGADriver/vgadriver.c)
 
