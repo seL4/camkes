@@ -13,6 +13,7 @@
 #define UTIL_H
 
 #include <autoconf.h>
+#include <app_dhcp/gen_config.h>
 #include <stdint.h>
 #include <stdio.h>
 
