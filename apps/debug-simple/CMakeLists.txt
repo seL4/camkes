@@ -38,9 +38,6 @@ if(
     message(FATAL_ERROR "debug-simple application only supported on ia32")
 endif()
 
-# The debug component relies on legacy PIC interrupts, so force that
-set(KernelIRQController PIC CACHE STRING "" FORCE)
-
 # Since we cannot use generator expressions in CPP_FLAGS we have to hard code the include path
 # that we want
 DeclareCAmkESRootserver(

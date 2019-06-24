@@ -75,3 +75,7 @@ if(SIMULATION)
 endif()
 
 ApplyCommonReleaseVerificationSettings(${RELEASE} FALSE)
+
+# If an application specific settings file exists then import it here.
+# This can be used for applications to configure the kernel in specific ways
+include(${CMAKE_CURRENT_LIST_DIR}/apps/${CAMKES_APP}/settings.cmake OPTIONAL)

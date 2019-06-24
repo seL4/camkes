@@ -1,5 +1,5 @@
 #
-# Copyright 2018, Data61
+# Copyright 2019, Data61
 # Commonwealth Scientific and Industrial Research Organisation (CSIRO)
 # ABN 41 687 119 230.
 #
@@ -10,10 +10,5 @@
 # @TAG(DATA61_BSD)
 #
 
-cmake_minimum_required(VERSION 3.7.2)
-
-project(testhardwareinterrupt C)
-
-DeclareCAmkESComponent(Software SOURCES C.c)
-
-DeclareCAmkESRootserver(testhardwareinterrupt.camkes)
+# The debug component relies on legacy PIC interrupts, so force that
+set(KernelIRQController PIC CACHE STRING "" FORCE)

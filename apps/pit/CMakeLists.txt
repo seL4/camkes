@@ -19,8 +19,6 @@ if(NOT "${KernelArch}" STREQUAL "x86")
     message(FATAL_ERROR "pit application only supported on x86")
 endif()
 
-set(KernelIRQController IOAPIC CACHE STRING "" FORCE)
-
 DeclareCAmkESComponent(Driver SOURCES components/Driver/src/driver.c)
 
 DeclareCAmkESRootserver(pit.camkes)

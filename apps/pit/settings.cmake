@@ -10,10 +10,6 @@
 # @TAG(DATA61_BSD)
 #
 
-cmake_minimum_required(VERSION 3.7.2)
-
-project(testhardwareinterrupt C)
-
-DeclareCAmkESComponent(Software SOURCES C.c)
-
-DeclareCAmkESRootserver(testhardwareinterrupt.camkes)
+# This sample app requires IOAPIC interrupts to be selected
+# in order for the correct interrupt handler to be created.
+set(KernelIRQController IOAPIC CACHE STRING "" FORCE)
