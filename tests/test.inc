@@ -33,6 +33,14 @@ if {[info exists arm_defconfig]} {
     eval $testscript
     cd ../
 }
+# Also test capDL static allocation for all apps (on ARM)
+if {[info exists arm_defconfig]} {
+    set cmake_props [concat -DARM=TRUE -DPLATFORM=sabre -DCAMKES_APP=$appname -DCAmkESCapDLStaticAlloc=TRUE $extra_cmake_args]
+    source [file join $::env(SCRIPT_DIR) build-cmake.inc]
+    source [file join $::env(SCRIPT_DIR) run-cmake.inc]
+    eval $testscript
+    cd ../
+}
 if {[info exists x86_defconfig]} {
     set cmake_props [concat -DPLATFORM=ia32 -DCAMKES_APP=$appname $extra_cmake_args]
     source [file join $::env(SCRIPT_DIR) build-cmake.inc]
