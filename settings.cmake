@@ -12,9 +12,16 @@
 
 cmake_minimum_required(VERSION 3.8.2)
 
-include(${CMAKE_CURRENT_LIST_DIR}/easy-settings.cmake)
+set(project_dir "${CMAKE_CURRENT_LIST_DIR}")
+get_filename_component(resolved_path ${CMAKE_CURRENT_LIST_FILE} REALPATH)
+# repo_dir is distinct from project_dir as this file is symlinked.
+# project_dir corresponds to the top level project directory, and
+# repo_dir is the absolute path after following the symlink.
+get_filename_component(repo_dir ${resolved_path} DIRECTORY)
 
-set(CMAKE_C_STANDARD 11)
+include(${project_dir}/tools/seL4/cmake-tool/helpers/application_settings.cmake)
+
+include(${repo_dir}/easy-settings.cmake)
 
 # Set some options we know we need here. Applications can override them
 if(("${CapDLLoaderMaxObjects}" STREQUAL "") OR ("${CapDLLoaderMaxObjects}" LESS 20000))
@@ -29,45 +36,24 @@ set(KernelNumDomains 1 CACHE STRING "" FORCE)
 set(valid_arm_platform "am335x;sabre;kzm;exynos5410;exynos5422;tx1;tx2;zynq7000")
 set(valid_x86_platform "ia32;x86_64")
 set(valid_riscv_platform "spike")
-set_property(
-    CACHE PLATFORM
-    PROPERTY STRINGS "${valid_x86_platform};${valid_arm_platform};${valid_riscv_platform}"
-)
+set(valid_platforms "${valid_x86_platform};${valid_arm_platform};${valid_riscv_platform}")
+set_property(CACHE PLATFORM PROPERTY STRINGS "${valid_platforms}")
+list(FIND valid_platforms "${PLATFORM}" index)
+if("${index}" STREQUAL "-1")
+    message(FATAL_ERROR "Invalid PLATFORM selected: \"${PLATFORM}\"
+Valid platforms are: \"${valid_platforms}\"")
+endif()
 
-if("${PLATFORM}" IN_LIST valid_x86_platform)
-    set(KernelArch x86 CACHE STRING "" FORCE)
-    set(KernelX86Sel4Arch ${PLATFORM} CACHE STRING "" FORCE)
-elseif("${PLATFORM}" IN_LIST valid_riscv_platform)
-    set(KernelArch riscv CACHE STRING "" FORCE)
-    set(KernelRiscVPlatform ${PLATFORM} CACHE STRING "" FORCE)
-    if(RISCV64)
-        set(KernelRiscVSel4Arch riscv64 CACHE STRING "" FORCE)
-    elseif(RISCV32)
-        set(KernelRiscVSel4Arch riscv32 CACHE STRING "" FORCE)
-    else()
-        message(FATAL_ERROR "No valid seL4_arch for PLATFORM: \"${PLATFORM}\"")
-    endif()
-elseif("${PLATFORM}" IN_LIST valid_arm_platform)
-    set(KernelArch arm CACHE STRING "" FORCE)
-    set(KernelARMPlatform ${PLATFORM} CACHE STRING "" FORCE)
-    if(ARM_HYP)
-        set(KernelArmHypervisorSupport ON CACHE BOOL "" FORCE)
-    endif()
-    if(AARCH32 OR ARM)
-        if(ARM_HYP)
-            set(KernelArmSel4Arch arm_hyp CACHE STRING "" FORCE)
-        else()
-            set(KernelArmSel4Arch aarch32 CACHE STRING "" FORCE)
-        endif()
-    elseif(AARCH64)
-        set(KernelArmSel4Arch aarch64 CACHE STRING "" FORCE)
-    endif()
-    if((NOT ARM) AND (NOT AARCH32) AND (NOT AARCH64) AND ("${CROSS_COMPILER_PREFIX}" STREQUAL ""))
-        message(WARNING "Looks like you are building for ARM without using a cross-compiler")
-    endif()
-    ApplyData61ElfLoaderSettings(${KernelARMPlatform} ${KernelArmSel4Arch})
-else()
-    message(FATAL_ERROR "Unsupported platform \"${PLATFORM}\"")
+correct_platform_strings()
+
+if(ARM_HYP)
+    set(KernelArmHypervisorSupport ON CACHE BOOL "" FORCE)
+endif()
+
+include(${project_dir}/kernel/configs/seL4Config.cmake)
+
+if(KernelArchARM)
+    ApplyData61ElfLoaderSettings(${KernelARMPlatform} ${KernelSel4Arch})
 endif()
 
 if(SIMULATION)
@@ -78,4 +64,4 @@ ApplyCommonReleaseVerificationSettings(${RELEASE} FALSE)
 
 # If an application specific settings file exists then import it here.
 # This can be used for applications to configure the kernel in specific ways
-include(${CMAKE_CURRENT_LIST_DIR}/apps/${CAMKES_APP}/settings.cmake OPTIONAL)
+include(${repo_dir}/apps/${CAMKES_APP}/settings.cmake OPTIONAL)
