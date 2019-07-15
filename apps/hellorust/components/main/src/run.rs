@@ -10,7 +10,6 @@
 // @TAG(DATA61_BSD)
 //
 #![feature(compiler_builtins_lib)]
-#![feature(panic_implementation)]
 #![no_std]
 
 use core::panic::PanicInfo;
@@ -30,7 +29,7 @@ pub extern "C" fn run() -> isize {
 }
 
 
-#[panic_implementation]
+#[panic_handler]
 #[no_mangle]
 pub extern fn panic(_info: &PanicInfo) -> ! {
 	loop{}
