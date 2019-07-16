@@ -16,10 +16,7 @@ project(dhcp C)
 
 set(configure_string "")
 
-config_option(DHCPDebug APP_DHCP_DEBUG
-    "Enable debug print outs for this application."
-    DEFAULT ON
-)
+config_option(DHCPDebug APP_DHCP_DEBUG "Enable debug print outs for this application." DEFAULT ON)
 
 add_config_library(app_dhcp "${configure_string}")
 

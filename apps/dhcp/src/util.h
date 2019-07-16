@@ -9,8 +9,7 @@
  *
  * @TAG(DATA61_BSD)
  */
-#ifndef UTIL_H
-#define UTIL_H
+#pragma once
 
 #include <autoconf.h>
 #include <app_dhcp/gen_config.h>
@@ -37,9 +36,7 @@ void mac_to_string(uint64_t input, char *output);
 void ip_to_string(uint32_t input, char *output);
 
 #ifdef CONFIG_APP_DHCP_DEBUG
-    #define dprintf(args...) printf(args)
+#define dprintf(args...) printf(args)
 #else
-    #define dprintf(args...) do { } while (0)
-#endif
-
+#define dprintf(args...) do { } while (0)
 #endif
