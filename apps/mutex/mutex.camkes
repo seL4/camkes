@@ -18,6 +18,16 @@ import "components/B/B.camkes";
 connector seL4MyConnector {
     from Procedure template "seL4MyConnector-from.c";
     to Procedure template "seL4MyConnector-to.c";
+
+    attribute string isabelle_connector_spec = "\<lparr>
+        connector_type = NativeConnector,
+        connector_interface = RPCInterface,
+        connector_access = \<lparr>
+            access_from_to   = {},
+            access_to_from   = {},
+            access_from_conn = {Reset, SyncSend, Receive},
+            access_to_conn   = {Reset, SyncSend, Notify, Receive}
+        \<rparr> \<rparr>";
 }
 
 assembly {
