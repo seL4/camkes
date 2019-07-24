@@ -55,6 +55,37 @@ if {[info exists x86_64_defconfig]} {
     eval $testscript
     cd ../
 }
+
+# Run all the same tests again with MCS configured.
+if {[info exists arm_defconfig]} {
+    set cmake_props [concat -DARM=TRUE -DPLATFORM=sabre -DCAMKES_APP=$appname -DKernelIsMCS=ON $extra_cmake_args]
+    source [file join $::env(SCRIPT_DIR) build-cmake.inc]
+    source [file join $::env(SCRIPT_DIR) run-cmake.inc]
+    eval $testscript
+    cd ../
+}
+# Also test capDL static allocation for all apps (on ARM)
+if {[info exists arm_defconfig]} {
+    set cmake_props [concat -DARM=TRUE -DPLATFORM=sabre -DCAMKES_APP=$appname -DKernelIsMCS=ON -DCAmkESCapDLStaticAlloc=TRUE $extra_cmake_args]
+    source [file join $::env(SCRIPT_DIR) build-cmake.inc]
+    source [file join $::env(SCRIPT_DIR) run-cmake.inc]
+    eval $testscript
+    cd ../
+}
+if {[info exists x86_defconfig]} {
+    set cmake_props [concat -DPLATFORM=ia32 -DCAMKES_APP=$appname -DKernelIsMCS=ON $extra_cmake_args]
+    source [file join $::env(SCRIPT_DIR) build-cmake.inc]
+    source [file join $::env(SCRIPT_DIR) run-cmake.inc]
+    eval $testscript
+    cd ../
+}
+if {[info exists x86_64_defconfig]} {
+    set cmake_props [concat -DPLATFORM=x86_64 -DCAMKES_APP=$appname -DKernelIsMCS=ON $extra_cmake_args]
+    source [file join $::env(SCRIPT_DIR) build-cmake.inc]
+    source [file join $::env(SCRIPT_DIR) run-cmake.inc]
+    eval $testscript
+    cd ../
+}
 if {[info exists riscv]} {
     set cmake_props [concat -DRISCV64=TRUE -DPLATFORM=spike -DCAMKES_APP=$appname $extra_cmake_args]
     source [file join $::env(SCRIPT_DIR) build-cmake.inc]
