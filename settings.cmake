@@ -53,7 +53,7 @@ endif()
 include(${project_dir}/kernel/configs/seL4Config.cmake)
 
 if(KernelArchARM)
-    ApplyData61ElfLoaderSettings(${KernelARMPlatform} ${KernelSel4Arch})
+    ApplyData61ElfLoaderSettings(${KernelPlatform} ${KernelSel4Arch})
 endif()
 
 if(SIMULATION)
