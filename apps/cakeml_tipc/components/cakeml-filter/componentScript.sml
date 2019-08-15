@@ -10,7 +10,7 @@
  * @TAG(DATA61_BSD)
  *)
 
-open preamble basis virtqueueTheory camkesUtils;
+open preamble basis virtqueueTheory camkesUtilsLib;
 
 val _ = new_theory "component";
 

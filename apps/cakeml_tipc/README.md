@@ -71,7 +71,7 @@ In the root camkes directory initialize with
 ```sh
 $ mkdir name_of_build_dir
 $ cd name_of_build_dir
-$ ../init-build -DPLATFORM=[x86_64|exynos5410|exynos5422] -DCAMKES_APP=cakeml_tipc -DCAKEMLDIR=CAKEML_PATH
+$ ../init-build.sh -DPLATFORM=[x86_64|exynos5410|exynos5422] -DCAMKES_APP=cakeml_tipc -DCAKEMLDIR=CAKEML_PATH
 $ ninja
 $ ./simulate
 ```

@@ -65,7 +65,7 @@ In the root camkes directory initialize with
 ```sh
 $ mkdir name_of_build_dir
 $ cd name_of_build_dir
-$ ../init-build -DPLATFORM=x86_64 -DCAMKES_APP=cakeml_hello -DCAKEMLDIR=CAKEML_PATH
+$ ../init-build.sh -DPLATFORM=x86_64 -DCAMKES_APP=cakeml_hello -DCAKEMLDIR=CAKEML_PATH
 $ ninja
 $ ./simulate
 ```
