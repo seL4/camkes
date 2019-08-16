@@ -36,5 +36,7 @@ assembly {
         uart.mem_size = 0x1000;
 
 	random.ID = 1;
+
+        uart.integrity_label = "drv";
     }
 }

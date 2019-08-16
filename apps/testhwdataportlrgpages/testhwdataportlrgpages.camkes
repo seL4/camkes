@@ -38,5 +38,7 @@ assembly {
         buffer.largebuffer_paddr = 0xc0000000;
 #endif
         buffer.largebuffer_size = 0x1000000;
+
+        buffer.integrity_label = "main";
     }
 }
