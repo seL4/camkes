@@ -25,6 +25,8 @@ connector seL4MyConnector {
         connector_access = \<lparr>
             access_from_to   = {},
             access_to_from   = {},
+            access_from_from = {},
+            access_to_to     = {},
             access_from_conn = {Reset, SyncSend, Receive},
             access_to_conn   = {Reset, SyncSend, Notify, Receive}
         \<rparr> \<rparr>";
