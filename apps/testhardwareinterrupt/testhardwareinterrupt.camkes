@@ -20,6 +20,7 @@ component Hardware {
 
 component Software {
     consumes Irq e;
+    control;
 }
 
 assembly {

@@ -34,3 +34,7 @@ void e_handle(void) {
     /* Interrupt handler. */
     e_acknowledge();
 }
+
+int run(void) {
+  for(;;);
+}
