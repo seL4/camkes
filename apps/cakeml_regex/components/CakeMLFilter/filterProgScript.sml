@@ -40,7 +40,7 @@ val stdErr_print = regexpMisc.stdErr_print;
 fun regexpc r =
  let open listSyntax regexpSyntax
      val _ = stdErr_print "Compiling regexp to DFA by deduction (can be slow) :\n"
-     val regexp_tm = regexpSyntax.mk_regexp r
+     val regexp_tm = regexpSyntax.regexp_to_term r
      val compile_thm = Count.apply regexpEval ``regexp_compiler$compile_regexp ^regexp_tm``
      val triple = rhs (concl compile_thm)
      val [t1,t2,t3] = strip_pair triple
@@ -53,7 +53,7 @@ fun regexpc r =
      val dfa_thm = MATCH_MP thm hyps_thm
      val eq_tm = snd(strip_forall (concl dfa_thm))
      val (_,[final,table,start,_]) = strip_comb(boolSyntax.lhs eq_tm)
-     val ifinal = List.map (equal boolSyntax.T)
+     val ifinal = List.map (aconv boolSyntax.T)
                   (fst(listSyntax.dest_list (dest_vector final)))
      val istart = numSyntax.int_of_term start
      val rows1 = dest_vector table
@@ -282,7 +282,7 @@ val null_index_no_null = Q.store_thm("null_index_no_null",
   >> fs[ADD1,DROP_DROP]
   >> `n < LENGTH(explode s)`
      by(fs[])
-  >> drule take1_drop
+  >> drule TAKE1_DROP
   >> Cases_on `s` >> fs[mlstringTheory.strsub_def]);
 
 val null_index_no_null2 = Q.store_thm("null_index_no_null2",
@@ -380,7 +380,7 @@ val null_index_w_no_null = Q.store_thm("null_index_w_no_null",
   >> fs[ADD1,DROP_DROP]
   >> `n < LENGTH s`
      by(fs[])
-  >> drule take1_drop >> fs[]);
+  >> drule TAKE1_DROP >> fs[]);
 
 val null_index_w_no_null2 = Q.store_thm("null_index_w_no_null2",
   `!s n. null_index_w s n = NONE ==> EVERY ($~ o $= 0w) (DROP n s)`,
