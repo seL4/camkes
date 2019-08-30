@@ -23,8 +23,10 @@ component Client {
     /* Virtqueue connection for read and write */
     uses VirtQueueDrv read;
     uses VirtQueueDrv write;
-    emits Callback self;
-    consumes Callback serial_wait;
+    emits Callback self_read;
+    emits Callback self_write;
+    consumes Callback serial_read_wait;
+    consumes Callback serial_write_wait;
 }
 
 assembly {
@@ -43,8 +45,11 @@ assembly {
 
         connection seL4VirtQueues serial_virtq_conn0(to serial_vqinit0.init, from client.write, from serial.write);
         connection seL4VirtQueues serial_virtq_conn1(to serial_vqinit1.init, from client.read, from serial.read);
-        connection seL4GlobalAsynchCallback client_global_callback(from client.self, to client.serial_wait);
-        connection seL4GlobalAsynchCallback serial_global_callback(from serial.self, to serial.serial_wait);
+        connection seL4GlobalAsynchCallback client_global_read_callback(from client.self_read, to client.serial_read_wait);
+        connection seL4GlobalAsynchCallback client_global_write_callback(from client.self_write, to client.serial_write_wait);
+        //connection seL4GlobalAsynchCallback serial_global_callback(from serial.self, to serial.serial_wait);
+        connection seL4GlobalAsynchCallback serial_read_global_callback(from serial.self_read, to serial.serial_read_wait);
+        connection seL4GlobalAsynchCallback serial_write_global_callback(from serial.self_write, to serial.serial_write_wait);
     }
 
     configuration {
@@ -60,25 +65,37 @@ assembly {
         time_server.timers_per_client = 1;
         client.read_id = 0;
         client.read_attributes = "10";
-        client.read_global_endpoint = "serial";
+        client.read_global_endpoint = "serial_read";
         client.read_badge = 10;
         client.write_id = 1;
         client.write_attributes = "10";
-        client.write_global_endpoint = "serial";
+        client.write_global_endpoint = "serial_write";
         client.write_badge = 10;
-        client.serial_wait_global_endpoint = "client";
-        client.self_global_endpoint = "client";
+        client.serial_read_wait_global_endpoint = "client_read";
+        client.serial_write_wait_global_endpoint = "client_write";
+        client.self_read_global_endpoint = "client_read";
+        client.self_write_global_endpoint = "client_write";
+        client.read_shmem_size = 32768;
+        client.write_shmem_size = 32768;
 
         serial.read_id = 0;
         serial.read_attributes = "10";
-        serial.read_global_endpoint = "client";
+        serial.read_global_endpoint = "client_read";
         serial.read_badge = 10;
         serial.write_id = 1;
         serial.write_attributes = "10";
-        serial.write_global_endpoint = "client";
+        serial.write_global_endpoint = "client_write";
         serial.write_badge = 10;
-        serial.serial_wait_global_endpoint = "serial";
-        serial.self_global_endpoint = "serial";
+
+        //serial.serial_wait_global_endpoint = "serial";
+        //serial.self_global_endpoint = "serial";
+        serial.serial_read_wait_global_endpoint = "serial_read";
+        serial.self_read_global_endpoint = "serial_read";
+        serial.serial_write_wait_global_endpoint = "serial_write";
+        serial.self_write_global_endpoint = "serial_write";
+ 
+        serial.read_shmem_size = 32768;
+        serial.write_shmem_size = 32768;
 
         serial_vqinit0.init_topology = [{ "drv" : "client.write", "dev" : "serial.write" }];
         serial_vqinit1.init_topology = [{ "drv" : "client.read", "dev" : "serial.read"}];

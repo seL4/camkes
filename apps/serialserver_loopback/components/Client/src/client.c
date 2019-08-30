@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, Data61
+ * Copyright 2019, Data61
  * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
  * ABN 41 687 119 230.
  *
@@ -18,134 +18,100 @@
 #include <utils/util.h>
 #include <string.h>
 
-virtqueue_driver_t * read_virtqueue;
-virtqueue_driver_t * write_virtqueue;
+virtqueue_driver_t read_virtqueue;
+virtqueue_driver_t write_virtqueue;
 
 void handle_read_callback(virtqueue_driver_t *vq);
 void handle_write_callback(virtqueue_driver_t *vq);
 
 void write_output(char *write_data, size_t write_data_size)
 {
-    volatile void *alloc_buffer = NULL;
-
-    /* Check if there is data still waiting in the write virtqueue */
-    int write_poll_res = virtqueue_driver_poll(write_virtqueue);
-    if (write_poll_res) {
-        handle_write_callback(write_virtqueue);
-    }
-
-    int err = camkes_virtqueue_buffer_alloc(write_virtqueue, &alloc_buffer, write_data_size);
-    if (err) {
-        return;
-    }
-
-    char *buffer_data = (char *)alloc_buffer;
-    memcpy(buffer_data, write_data, write_data_size);
-
-    err = virtqueue_driver_enqueue(write_virtqueue,
-                                   alloc_buffer, write_data_size);
-    if (err != 0) {
+    if (camkes_virtqueue_driver_scatter_send_buffer(&write_virtqueue, write_data, write_data_size)) {
         ZF_LOGE("Client write enqueue failed");
-        camkes_virtqueue_buffer_free(write_virtqueue, alloc_buffer);
         return;
     }
-
-    err = virtqueue_driver_signal(write_virtqueue);
-    if (err != 0) {
-        ZF_LOGE("Client write signal failed");
-        return;
-    }
-
+    write_virtqueue.notify();
 }
 
 void loopback_test(void)
 {
-    volatile void *alloc_buffer = NULL;
     size_t buffer_size = 4000;
 
-    /* Check if there is data still waiting in the write virtqueue */
-    int read_poll_res = virtqueue_driver_poll(read_virtqueue);
-    if (read_poll_res) {
-        handle_read_callback(read_virtqueue);
-    }
 
-    int err = camkes_virtqueue_buffer_alloc(read_virtqueue, &alloc_buffer, buffer_size);
-    if (err) {
-        ZF_LOGE("Read buffer allocation failed");
-        return;
-    }
-
-    memset(alloc_buffer, 0, buffer_size);
-
-    err = virtqueue_driver_enqueue(read_virtqueue,
-                                   alloc_buffer, buffer_size);
-    if (err != 0) {
+    if (camkes_virtqueue_driver_scatter_send_buffer(&read_virtqueue, NULL, buffer_size)) {
         ZF_LOGE("Client read enqueue failed");
-        camkes_virtqueue_buffer_free(read_virtqueue, alloc_buffer);
         return;
     }
 
-    err = virtqueue_driver_signal(read_virtqueue);
-    if (err != 0) {
-        ZF_LOGE("Client read signal failed");
-        return;
-    }
+    fflush(stdout);
+    read_virtqueue.notify();
 }
 
 void handle_read_callback(virtqueue_driver_t *vq)
 {
-    volatile void* buf = NULL;
-    size_t buf_size = 0;
-    int err = virtqueue_driver_dequeue(vq,
-                                       &buf,
-                                       &buf_size);
-    if (err) {
+    volatile void *buf = NULL;
+    size_t len = 0;
+    virtqueue_ring_object_t handle;
+    vq_flags_t flags;
+
+    if (!virtqueue_get_used_buf(vq, &handle, &len)) {
         ZF_LOGE("Client virtqueue dequeue failed");
         return;
     }
-
-    char *read_buffer = (char *)buf;
-    write_output(read_buffer, buf_size);
-
-    /* Clean up and free the buffer we allocated */
-    camkes_virtqueue_buffer_free(vq, buf);
-
-    loopback_test();
+    if (!(buf = calloc(len, sizeof(char)))) {
+        ZF_LOGE("Could not allocate memory");
+        return;
+    }
+    if (camkes_virtqueue_driver_gather_copy_buffer(vq, &handle, buf, len) != 0) {
+        free(buf);
+    }
+    write_output(buf, len);
 }
 
 void handle_write_callback(virtqueue_driver_t *vq)
 {
-    volatile void* buf = NULL;
-    size_t buf_size = 0;
-    int err = virtqueue_driver_dequeue(vq,
-                                       &buf,
-                                       &buf_size);
-    if (err) {
+    volatile void *buf = NULL;
+    size_t len = 0;
+    virtqueue_ring_object_t handle;
+    vq_flags_t flags;
+
+
+    if (!virtqueue_get_used_buf(vq, &handle, &len)) {
         ZF_LOGE("Client virtqueue dequeue failed");
         return;
     }
-    /* Clean up and free the buffer we allocated */
-    camkes_virtqueue_buffer_free(vq, buf);
+    while (camkes_virtqueue_driver_gather_buffer(vq, &handle, &buf, &len, &flags) == 0) {
+        /* Clean up and free the buffer we allocated */
+        camkes_virtqueue_buffer_free(vq, buf);
+    }
+    /* Moving the call here forces synchronicity but makes it a bit slower */
+    /* TODO: make it more asynchronous */
+    loopback_test();
 }
 
-
+/*
 void serial_wait_callback(void)
 {
-    int err;
-    int read_poll_res = virtqueue_driver_poll(read_virtqueue);
-    if (read_poll_res) {
-        handle_read_callback(read_virtqueue);
+    if (VQ_DRV_POLL(&read_virtqueue)) {
+        handle_read_callback(&read_virtqueue);
     }
-    if (read_poll_res == -1) {
-        ZF_LOGF("Client read poll failed");
+    if (VQ_DRV_POLL(&write_virtqueue)) {
+        handle_write_callback(&write_virtqueue);
     }
+}
+*/
 
-    int write_poll_res = virtqueue_driver_poll(write_virtqueue);
-    if (write_poll_res) {
-        handle_write_callback(write_virtqueue);
+void serial_read_wait_callback(void)
+{
+    if (VQ_DRV_POLL(&read_virtqueue)) {
+        handle_read_callback(&read_virtqueue);
     }
-    if (write_poll_res == -1) {
-        ZF_LOGF("Client write poll failed");
+}
+
+void serial_write_wait_callback(void)
+{
+    if (VQ_DRV_POLL(&write_virtqueue)) {
+        handle_write_callback(&write_virtqueue);
     }
 }
 
