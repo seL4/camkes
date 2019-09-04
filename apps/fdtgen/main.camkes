@@ -1,0 +1,15 @@
+/* @TAG(DATA61_BSD) */
+
+component Client {
+    control;
+}
+
+assembly {
+    composition {
+        component Client client;
+    }
+
+    configuration {
+        client.dtb = dtb({"path" : "/"});
+    }
+}
