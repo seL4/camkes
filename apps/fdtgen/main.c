@@ -28,10 +28,10 @@ int run(void)
     void *fdt = dummy.io_fdt.cookie;
 
     void *new = malloc(0x10000);
-    fdtgen_t *handle = fdtgen_new(new, 0x10000);
+    fdtgen_context_t *handle = fdtgen_new_context(new, 0x10000);
     fdtgen_keep_nodes(handle, nodes_to_keep, num_nodes_to_keep);
     fdtgen_generate(handle, fdt);
-    fdtgen_cleanup(handle);
+    fdtgen_free_context(handle);
     fdt_pack(new);
 
     dump_blob(new);
