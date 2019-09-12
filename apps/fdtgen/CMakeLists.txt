@@ -31,6 +31,6 @@ endif()
 
 set(CAmkESDTS ON CACHE BOOL "" FORCE)
 
-DeclareCAmkESComponent(Client SOURCES main.c fdt_utils.c LIBS fdtgen)
+DeclareCAmkESComponent(Client SOURCES fdtgen.c fdt_utils.c LIBS fdtgen)
 
-DeclareCAmkESRootserver(main.camkes)
+DeclareCAmkESRootserver(fdtgen.camkes)
