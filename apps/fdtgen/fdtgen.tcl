@@ -20,7 +20,12 @@ source [file join $::env(SCRIPT_DIR) procs.inc]
 set arm_defconfig blah
 
 set testscript {
-	wait_for "ethernet@2188000 {"
-	wait_for "usdhc@2190000 {"
-	wait_for "cpus {"
+	wait_for "interrupt-controller@a01000"
+	wait_for "ccm@20c4000"
+	wait_for "gpc@20dc000"
+	wait_for "ethernet@2188000"
+	wait_for "usdhc@2190000"
+	wait_for "cpus"
 }
+
+source [file join $::env(SCRIPT_DIR) test.inc]
