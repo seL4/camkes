@@ -1,13 +1,12 @@
 /*
- * Copyright 2019, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * The code contained herein is licensed under the GNU General Public
+ * License. You may obtain a copy of the GNU General Public License
+ * Version 2 or later at the following locations:
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
+ * http://www.opensource.org/licenses/gpl-license.html
+ * http://www.gnu.org/copyleft/gpl.html
  *
- * @TAG(DATA61_BSD)
+ * @TAG(OTHER_GPL)
  */
 
 #include <stdio.h>
@@ -25,10 +24,11 @@ int run(void)
 {
     ps_io_ops_t dummy;
     camkes_io_ops(&dummy);
-    void *fdt = dummy.io_fdt.cookie;
+    void *fdt = ps_io_fdt_get(&dummy.io_fdt);
+    int total_size = fdt_totalsize(fdt);
 
-    void *new = malloc(0x10000);
-    fdtgen_context_t *handle = fdtgen_new_context(new, 0x10000);
+    void *new = malloc(total_size);
+    fdtgen_context_t *handle = fdtgen_new_context(new, total_size);
     fdtgen_keep_nodes(handle, nodes_to_keep, num_nodes_to_keep);
     fdtgen_generate(handle, fdt);
     fdtgen_free_context(handle);
