@@ -32,14 +32,34 @@ set(SEL4_CONFIG_DEFAULT_ADVANCED ON)
 include(application_settings)
 include(${CMAKE_CURRENT_LIST_DIR}/easy-settings.cmake)
 
-# Set some options we know we need here. Applications can override them
-if(("${CapDLLoaderMaxObjects}" STREQUAL "") OR ("${CapDLLoaderMaxObjects}" LESS 20000))
-    set(CapDLLoaderMaxObjects 20000 CACHE STRING "" FORCE)
+# figure out the valid apps
+set(app_names "")
+file(GLOB apps ${CMAKE_CURRENT_LIST_DIR}/apps/*)
+foreach(ARG ${apps})
+    get_filename_component(filename ${ARG} NAME)
+    list(APPEND app_names "${filename}")
+endforeach()
+string(
+    REPLACE
+        ";"
+        "\n  "
+        app_names_error
+        "${app_names}"
+)
+
+if("${CAMKES_APP}" STREQUAL "")
+    message(
+        FATAL_ERROR "Missing option -DCAMKES_APP=<app> to build. Valid apps:\n  ${app_names_error}"
+    )
 endif()
-if(("${KernelRootCNodeSizeBits}" STREQUAL "") OR ("${KernelRootCNodeSizeBits}" LESS 17))
-    set(KernelRootCNodeSizeBits 17 CACHE STRING "" FORCE)
+
+list(FIND app_names "${CAMKES_APP}" app_exists)
+if(${app_exists} EQUAL -1)
+    message(
+        FATAL_ERROR
+            "Invalid value for option -DCAMKES_APP=${CAMKES_APP}. Valid options:\n  ${app_names_error}"
+    )
 endif()
-set(KernelNumDomains 1 CACHE STRING "" FORCE)
 
 # Define some meta options
 set(valid_arm_platform "am335x;sabre;kzm;exynos5410;exynos5422;tx1;tx2;zynq7000")
@@ -61,10 +81,6 @@ endif()
 
 find_package(seL4 REQUIRED)
 sel4_configure_platform_settings()
-
-if(KernelArchARM)
-    ApplyData61ElfLoaderSettings(${KernelPlatform} ${KernelSel4Arch})
-endif()
 
 if(SIMULATION)
     ApplyCommonSimulationSettings(${KernelArch})

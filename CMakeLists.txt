@@ -18,6 +18,12 @@ find_package(camkes-tool REQUIRED)
 find_package(global-components REQUIRED)
 find_package(sel4_projects_libs REQUIRED)
 
+# Set some options we know we need here. Applications can override them
+set(CapDLLoaderMaxObjects 20000 CACHE STRING "")
+set(KernelRootCNodeSizeBits 17 CACHE STRING "")
+if(KernelArchARM)
+    ApplyData61ElfLoaderSettings(${KernelPlatform} ${KernelSel4Arch})
+endif()
 camkes_tool_setup_camkes_build_environment()
 
 sel4_projects_libs_import_libraries()
@@ -25,35 +31,6 @@ sel4_projects_libs_import_libraries()
 function(includeGlobalComponents)
     global_components_import_project()
 endfunction()
-
-# figure out the valid apps
-set(app_names "")
-file(GLOB apps apps/*)
-foreach(ARG ${apps})
-    get_filename_component(filename ${ARG} NAME)
-    list(APPEND app_names "${filename}")
-endforeach()
-string(
-    REPLACE
-        ";"
-        "\n  "
-        app_names_error
-        "${app_names}"
-)
-
-if("${CAMKES_APP}" STREQUAL "")
-    message(
-        FATAL_ERROR "Missing option -DCAMKES_APP=<app> to build. Valid apps:\n  ${app_names_error}"
-    )
-endif()
-
-list(FIND app_names "${CAMKES_APP}" app_exists)
-if(${app_exists} EQUAL -1)
-    message(
-        FATAL_ERROR
-            "Invalid value for option -DCAMKES_APP=${CAMKES_APP}. Valid options:\n  ${app_names_error}"
-    )
-endif()
 
 # We only support one application being built at a time
 include(apps/${CAMKES_APP}/CMakeLists.txt)
