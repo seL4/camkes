@@ -1,5 +1,5 @@
 #
-# Copyright 2018, Data61
+# Copyright 2019, Data61
 # Commonwealth Scientific and Industrial Research Organisation (CSIRO)
 # ABN 41 687 119 230.
 #
@@ -10,18 +10,27 @@
 # @TAG(DATA61_BSD)
 #
 
-cmake_minimum_required(VERSION 3.8.2)
+cmake_minimum_required(VERSION 3.7.2)
 
-set(project_dir "${CMAKE_CURRENT_LIST_DIR}")
-get_filename_component(resolved_path ${CMAKE_CURRENT_LIST_FILE} REALPATH)
-# repo_dir is distinct from project_dir as this file is symlinked.
-# project_dir corresponds to the top level project directory, and
-# repo_dir is the absolute path after following the symlink.
-get_filename_component(repo_dir ${resolved_path} DIRECTORY)
+set(project_dir "${CMAKE_CURRENT_LIST_DIR}/../../")
+file(GLOB project_modules ${project_dir}/projects/*)
+list(
+    APPEND
+        CMAKE_MODULE_PATH
+        ${project_dir}/kernel
+        ${project_dir}/tools/seL4/cmake-tool/helpers/
+        ${project_dir}/tools/seL4/elfloader-tool/
+        ${project_modules}
+)
 
-include(${project_dir}/tools/seL4/cmake-tool/helpers/application_settings.cmake)
+set(PICOTCP_PATH "${project_dir}/projects/picotcp" CACHE INTERNAL "")
+set(BBL_PATH ${project_dir}/tools/riscv-pk CACHE STRING "BBL Folder location")
+set(COGENT_PATH ${project_dir}/tools/cogent/cogent CACHE INTERNAL "")
 
-include(${repo_dir}/easy-settings.cmake)
+set(SEL4_CONFIG_DEFAULT_ADVANCED ON)
+
+include(application_settings)
+include(${CMAKE_CURRENT_LIST_DIR}/easy-settings.cmake)
 
 # Set some options we know we need here. Applications can override them
 if(("${CapDLLoaderMaxObjects}" STREQUAL "") OR ("${CapDLLoaderMaxObjects}" LESS 20000))
@@ -50,7 +59,8 @@ if(ARM_HYP)
     set(KernelArmHypervisorSupport ON CACHE BOOL "" FORCE)
 endif()
 
-include(${project_dir}/kernel/configs/seL4Config.cmake)
+find_package(seL4 REQUIRED)
+sel4_configure_platform_settings()
 
 if(KernelArchARM)
     ApplyData61ElfLoaderSettings(${KernelPlatform} ${KernelSel4Arch})
@@ -64,14 +74,14 @@ ApplyCommonReleaseVerificationSettings(${RELEASE} FALSE)
 
 # If an application specific settings file exists then import it here.
 # This can be used for applications to configure the kernel in specific ways
-include(${repo_dir}/apps/${CAMKES_APP}/settings.cmake OPTIONAL)
+include(${CMAKE_CURRENT_LIST_DIR}/apps/${CAMKES_APP}/settings.cmake OPTIONAL)
 
 # Other project settings needed for static allocation.
 # This is done early on so that it works for projects loaded before
 # options processing in camkes-tool (notably, elfloader-tool).
-include(${project_dir}/projects/capdl/capdl-loader-app/helpers.cmake)
-include(${project_dir}/tools/seL4/elfloader-tool/helpers.cmake)
-if (CAmkESCapDLStaticAlloc)
+find_package(capdl REQUIRED)
+find_package(elfloader-tool REQUIRED)
+if(CAmkESCapDLStaticAlloc)
     # Need to compile the capDL loader for static alloc
     SetCapDLLoaderStaticAlloc()
     # Need to place the capDL loader ELF at the end of memory

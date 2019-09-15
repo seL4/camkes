@@ -14,25 +14,11 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(cakeml_tipc C)
 
-find_file(LIBCAKEML_PATH libcakeml_helpers.cmake PATHS ${CMAKE_SOURCE_DIR}/projects/cakeml_libs/ CMAKE_FIND_ROOT_PATH_BOTH)
-mark_as_advanced(FORCE LIBCAKEML_PATH)
-if("${LIBCAKEML_PATH}" STREQUAL "LIBCAKEML_PATH-NOTFOUND")
-    message(FATAL_ERROR "Failed to find libcakeml_helpers.cmake. Consider cmake -DLIBCAKEML_PATH=/path/to/libcakeml_helpers.cmake")
-endif()
+find_package(cakeml_libs REQUIRED)
 include(${LIBCAKEML_PATH})
 
-find_file(GLOBAL_COMPONENTS_PATH global-components.cmake PATHS ${CMAKE_SOURCE_DIR}/projects/global-components/ CMAKE_FIND_ROOT_PATH_BOTH)
-mark_as_advanced(FORCE GLOBAL_COMPONENTS_PATH)
-if("${GLOBAL_COMPONENTS_PATH}" STREQUAL "GLOBAL_COMPONENTS_PATH-NOTFOUND")
-    message(FATAL_ERROR "Failed to find global-components.cmake. Consider cmake -DGLOBAL_COMPONENTS_PATH=/path/to/global-components.cmake")
-endif()
-include(${GLOBAL_COMPONENTS_PATH})
+includeGlobalComponents()
 
-find_file(CAKEML_META_PATH meta_utils.cmake PATHS ${CMAKE_SOURCE_DIR}/projects/cakeml_libs/meta_utils/ CMAKE_FIND_ROOT_PATH_BOTH)
-mark_as_advanced(FORCE CAKEML_META_PATH)
-if("${LIBCAKEML_PATH}" STREQUAL "CAKEML_META_PATH-NOTFOUND")
-    message(FATAL_ERROR "Failed to find meta_utils.cmake. Consider cmake -DCAKEML_META_PATH=/path/to/meta_utils.cmake")
-endif()
 include(${CAKEML_META_PATH})
 
 DeclareCakeMLMetaUtils(

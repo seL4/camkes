@@ -31,8 +31,6 @@ endif()
 
 find_program(COGENT_TOOL NAMES "cogent")
 
-set(COGENT_PATH ${CMAKE_SOURCE_DIR}/tools/cogent/cogent)
-
 set(driver_src_dir ${CMAKE_CURRENT_LIST_DIR}/components/Driver/src/)
 set(c_flags "$CPPIN -o $CPPOUT -E -P -I${COGENT_PATH}/lib")
 
