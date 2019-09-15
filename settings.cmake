@@ -75,15 +75,3 @@ ApplyCommonReleaseVerificationSettings(${RELEASE} FALSE)
 # If an application specific settings file exists then import it here.
 # This can be used for applications to configure the kernel in specific ways
 include(${CMAKE_CURRENT_LIST_DIR}/apps/${CAMKES_APP}/settings.cmake OPTIONAL)
-
-# Other project settings needed for static allocation.
-# This is done early on so that it works for projects loaded before
-# options processing in camkes-tool (notably, elfloader-tool).
-find_package(capdl REQUIRED)
-find_package(elfloader-tool REQUIRED)
-if(CAmkESCapDLStaticAlloc)
-    # Need to compile the capDL loader for static alloc
-    SetCapDLLoaderStaticAlloc()
-    # Need to place the capDL loader ELF at the end of memory
-    SetElfloaderRootserversLast()
-endif()
