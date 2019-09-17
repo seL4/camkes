@@ -29,6 +29,8 @@ typedef struct {
 virtqueue_driver_t send_virtqueue;
 virtqueue_device_t recv_virtqueue;
 
+void handle_send_callback(void);
+
 void send_payload_message(int val)
 {
     payload_t data;
