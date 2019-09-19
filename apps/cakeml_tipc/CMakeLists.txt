@@ -14,6 +14,7 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(cakeml_tipc C)
 
+include(cakeml)
 find_package(cakeml_libs REQUIRED)
 include(${LIBCAKEML_PATH})
 

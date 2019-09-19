@@ -12,7 +12,10 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
-include(${CMAKE_SOURCE_DIR}/projects/cakeml_libs/meta_utils/meta_utils.cmake)
+include(cakeml)
+find_package(cakeml_libs REQUIRED)
+include(${LIBCAKEML_PATH})
+include(${CAKEML_META_PATH})
 
 project(cakeml_regex C)
 
