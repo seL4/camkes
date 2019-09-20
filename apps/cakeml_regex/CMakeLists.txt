@@ -20,7 +20,7 @@ include(${CAKEML_META_PATH})
 project(cakeml_regex C)
 
 DeclareCakeMLMetaUtils(
-    ${CMAKE_SOURCE_DIR}/projects/cakeml_libs/meta_utils
+    ${CAKEML_LIBS_DIR}/meta_utils
     meta_utils
     meta_utils_target
     meta_utils_target_files
