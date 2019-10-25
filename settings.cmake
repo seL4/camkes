@@ -62,7 +62,10 @@ if(${app_exists} EQUAL -1)
 endif()
 
 # Define some meta options
-set(valid_arm_platform "am335x;sabre;kzm;exynos5410;exynos5422;tx1;tx2;zynq7000;imx8mq-evk;imx8mm-evk")
+set(
+    valid_arm_platform
+    "am335x;sabre;kzm;exynos5410;exynos5422;tx1;tx2;zynq7000;imx8mq-evk;imx8mm-evk"
+)
 set(valid_x86_platform "ia32;x86_64")
 set(valid_riscv_platform "spike")
 set(valid_platforms "${valid_x86_platform};${valid_arm_platform};${valid_riscv_platform}")
