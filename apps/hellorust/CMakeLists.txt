@@ -14,19 +14,16 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(hellorust C)
 
-# Only support x86_64 at the moment
-if(
-    NOT
-    "${KernelArch}"
-    STREQUAL
-    "x86"
-    OR
-        NOT
-        "${KernelX86Sel4Arch}"
-        STREQUAL
-        "x86_64"
-)
-    message(FATAL_ERROR "hellorust application only supported on x86_64")
+include(rust)
+
+if ("${KernelSel4Arch}" STREQUAL "x86_64")
+    set(RUST_ARCH "x86_64-sel4-none")
+elseif("${KernelSel4Arch}" STREQUAL "aarch64")
+    set(RUST_ARCH "aarch64-sel4-none")
+elseif("${KernelSel4Arch}" STREQUAL "aarch32")
+    set(RUST_ARCH "aarch32-sel4-none")
+else()
+    message(FATAL_ERROR "hellorust application not supported on ${KernelSel4Arch}")
 endif()
 
 RustAddLibrary(
@@ -34,7 +31,7 @@ RustAddLibrary(
     SOURCE_DIR
     ${CMAKE_CURRENT_LIST_DIR}/components/main
     TARGET
-    x86_64-sel4-none
+    ${RUST_ARCH}
     LIB_FILENAME
     libmain.a
 )
