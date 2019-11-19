@@ -61,29 +61,21 @@ if(${app_exists} EQUAL -1)
     )
 endif()
 
-# Define some meta options
-set(
-    valid_arm_platform
-    "am335x;sabre;kzm;exynos5410;exynos5422;tx1;tx2;zynq7000;imx8mq-evk;imx8mm-evk"
-)
-set(valid_x86_platform "ia32;x86_64")
-set(valid_riscv_platform "spike")
-set(valid_platforms "${valid_x86_platform};${valid_arm_platform};${valid_riscv_platform}")
-set_property(CACHE PLATFORM PROPERTY STRINGS "${valid_platforms}")
-list(FIND valid_platforms "${PLATFORM}" index)
-if("${index}" STREQUAL "-1")
-    message(FATAL_ERROR "Invalid PLATFORM selected: \"${PLATFORM}\"
-Valid platforms are: \"${valid_platforms}\"")
-endif()
-
-correct_platform_strings()
-
 if(ARM_HYP)
     set(KernelArmHypervisorSupport ON CACHE BOOL "" FORCE)
 endif()
 
+correct_platform_strings()
+
 find_package(seL4 REQUIRED)
 sel4_configure_platform_settings()
+
+set(valid_platforms ${KernelPlatform_all_strings} ${correct_platform_strings_platform_aliases})
+set_property(CACHE PLATFORM PROPERTY STRINGS ${valid_platforms})
+if(NOT "${PLATFORM}" IN_LIST valid_platforms)
+    message(FATAL_ERROR "Invalid PLATFORM selected: \"${PLATFORM}\"
+Valid platforms are: \"${valid_platforms}\"")
+endif()
 
 if(SIMULATION)
     ApplyCommonSimulationSettings(${KernelArch})
