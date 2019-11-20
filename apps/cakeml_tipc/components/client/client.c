@@ -36,7 +36,7 @@ void send_payload_message(int val)
     payload_t data;
     data.val = val;
 
-    volatile void *alloc_buffer = NULL;
+    void *alloc_buffer = NULL;
 
     /* First check if there is data still waiting in the send virtqueue
      * We need to flush the virtqueue before sending data on it
@@ -51,7 +51,7 @@ void send_payload_message(int val)
         return;
     }
 
-    memcpy((void *)alloc_buffer, (void *)&data, sizeof(payload_t));
+    memcpy(alloc_buffer, (void *)&data, sizeof(payload_t));
 
     if (camkes_virtqueue_driver_send_buffer(&send_virtqueue, alloc_buffer, sizeof(payload_t)) != 0) {
         camkes_virtqueue_buffer_free(&send_virtqueue, alloc_buffer);
@@ -60,7 +60,7 @@ void send_payload_message(int val)
     send_virtqueue.notify();
 }
 
-void handle_virtqueue_message(volatile void *buffer)
+void handle_virtqueue_message(void *buffer)
 {
     payload_t *data = (payload_t *)buffer;
 
@@ -77,7 +77,7 @@ void handle_virtqueue_message(volatile void *buffer)
 
 void handle_recv_callback(void)
 {
-    volatile void *available_buff = NULL;
+    void *available_buff = NULL;
     size_t buf_size = 0;
     vq_flags_t flag;
     virtqueue_ring_object_t handle;
@@ -102,7 +102,7 @@ void handle_recv_callback(void)
 
 void handle_send_callback(void)
 {
-    volatile void *send_buff = NULL;
+    void *send_buff = NULL;
     size_t buf_size = 0;
     uint32_t wr_len = 0;
     vq_flags_t flag;

@@ -49,8 +49,8 @@ void loopback_test(void)
 
 void handle_read_callback(virtqueue_driver_t *vq)
 {
-    volatile void *buf = NULL;
-    size_t len = 0;
+    void *buf = NULL;
+    unsigned len = 0;
     virtqueue_ring_object_t handle;
     vq_flags_t flags;
 
@@ -70,8 +70,8 @@ void handle_read_callback(virtqueue_driver_t *vq)
 
 void handle_write_callback(virtqueue_driver_t *vq)
 {
-    volatile void *buf = NULL;
-    size_t len = 0;
+    void *buf = NULL;
+    unsigned len = 0;
     virtqueue_ring_object_t handle;
     vq_flags_t flags;
 
