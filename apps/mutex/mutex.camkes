@@ -16,8 +16,8 @@ import "components/A/A.camkes";
 import "components/B/B.camkes";
 
 connector seL4MyConnector {
-    from Procedure template "seL4MyConnector-from.c";
-    to Procedure template "seL4MyConnector-to.c";
+    from Procedure;
+    to Procedure;
 
     attribute string isabelle_connector_spec = "\<lparr>
         connector_type = NativeConnector,
