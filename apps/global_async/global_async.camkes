@@ -1,0 +1,40 @@
+/*
+ * Copyright 2019, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+import <std_connector.camkes>;
+import <global-connectors.camkes>;
+
+component Client {
+    control;
+    dataport Buf(4096) data;
+    consumes Notification notification_ready;
+    emits Notification notification_signal;
+}
+
+component Sender {
+    control;
+    dataport Buf(4096) data;
+    consumes Notification notification_ready;
+    emits Notification notification_signal;
+}
+
+assembly {
+    composition {
+        component Client client;
+        component Sender sender;
+
+        connection seL4SharedData s(from client.data, to sender.data);
+        connection seL4GlobalAsynch notify_ready0(from client.notification_signal, to sender.notification_ready);
+        connection seL4GlobalAsynch notify_ready1(from sender.notification_signal, to client.notification_ready);
+    }
+
+}
