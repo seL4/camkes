@@ -20,3 +20,4 @@ DeclareCAmkESComponent(Baz SOURCES components/Baz/src/main.c)
 DeclareCAmkESComponent(Controller SOURCES components/Controller/src/main.c)
 
 DeclareCAmkESRootserver(hierarchical-attributes.camkes)
+add_simulate_test([=[wait_for "str: world"]=])

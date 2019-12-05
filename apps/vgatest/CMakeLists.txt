@@ -22,6 +22,7 @@ endif()
 DeclareCAmkESComponent(VGADriver SOURCES components/VGADriver/vgadriver.c)
 
 # If a simulation target gets generated then it should have graphics enabled
+include(simulation)
 SetSimulationScriptProperty(GRAPHIC TRUE)
 
 DeclareCAmkESRootserver(vgatest.camkes)

@@ -40,3 +40,4 @@ DeclareCAmkESComponent(Hello
 )
 
 DeclareCAmkESRootserver(cakeml_hello.camkes)
+add_simulate_test([=[wait_for "Goodbye: bye"]=])

@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
 DeclareCAmkESComponent(Echo SOURCES components/Echo/src/echo.c)
 
 DeclareCAmkESRootserver(simple.camkes)
+add_simulate_test([=[wait_for "After the client"]=])

@@ -1,6 +1,6 @@
-#!/usr/bin/expect -f
+#!/bin/sh
 #
-# Copyright 2017, Data61
+# Copyright 2019, Data61
 # Commonwealth Scientific and Industrial Research Organisation (CSIRO)
 # ABN 41 687 119 230.
 #
@@ -11,14 +11,6 @@
 # @TAG(DATA61_BSD)
 #
 
-set appname [file tail [file dirname [info script]]]
-
-source [file join $::env(SCRIPT_DIR) procs.inc]
-
-set x86_64_defconfig x86_64_rumprun_hello_defconfig
-
-set testscript {
-	wait_for "finished sleep"
-}
-
-source [file join $::env(SCRIPT_DIR) test.inc]
+rm -rf test
+mkdir -p test
+(cd test && cmake -G Ninja $@ && ninja && ctest $VERBOSE)

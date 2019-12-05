@@ -17,3 +17,4 @@ project(testdataportmux C)
 DeclareCAmkESComponent(Counter SOURCES counter.c)
 
 DeclareCAmkESRootserver(testdataportmux.camkes)
+add_simulate_test([=[wait_for "We're done, people"]=])

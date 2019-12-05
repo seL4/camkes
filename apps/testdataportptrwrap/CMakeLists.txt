@@ -19,3 +19,4 @@ DeclareCAmkESComponent(Intermediary SOURCES intermediary.c)
 DeclareCAmkESComponent(Server SOURCES server.c)
 
 DeclareCAmkESRootserver(testdataportptrwrap.camkes)
+add_simulate_test([=[wait_for "All OK"]=])

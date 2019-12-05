@@ -32,6 +32,13 @@ function(includeGlobalComponents)
     global_components_import_project()
 endfunction()
 
+enable_testing()
+macro(add_simulate_test test_script)
+	set(TEST_SCRIPT ${test_script})
+	configure_file(${CMAKE_SOURCE_DIR}/tests/test_script.tcl.in ${CMAKE_BINARY_DIR}/test.tcl @ONLY)
+	add_test(${CMAKE_PROJECT_NAME} expect -f ${CMAKE_BINARY_DIR}/test.tcl)
+endmacro()
+
 # We only support one application being built at a time
 include(apps/${CAMKES_APP}/CMakeLists.txt)
 

@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Foo SOURCES foo.c)
 DeclareCAmkESComponent(Bar SOURCES bar.c)
 
 DeclareCAmkESRootserver(testcamkes438.camkes)
+add_simulate_test([=[wait_for "All OK"]=])

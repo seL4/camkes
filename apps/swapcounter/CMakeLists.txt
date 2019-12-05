@@ -22,3 +22,4 @@ DeclareCAmkESComponent(Client SOURCES client.c)
 DeclareCAmkESComponent(Service SOURCES service.c)
 
 DeclareCAmkESRootserver(swapcounter.camkes)
+add_simulate_test([=[wait_for "done"]=])

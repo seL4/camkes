@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Client SOURCES client.c INCLUDES .)
 DeclareCAmkESComponent(Server SOURCES server.c INCLUDES .)
 
 DeclareCAmkESRootserver(testfaulthandlers.camkes)
+add_simulate_test([=[wait_for "FAULT HANDLER"]=])

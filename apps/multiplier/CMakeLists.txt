@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Multiplier SOURCES components/Multiplier/src/main.c)
 DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
 
 DeclareCAmkESRootserver(multiplier.camkes)
+add_simulate_test([=[wait_for "client: other is {7, 8, }"]=])

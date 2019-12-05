@@ -21,3 +21,8 @@ DeclareCAmkESComponent(Server SOURCES server.c)
 set(CAmkESDMALargeFramePromotion ON CACHE BOOL "" FORCE)
 
 DeclareCAmkESRootserver(dma-example.camkes)
+add_simulate_test([=[
+    wait_for "Allocating 4MB..."
+    wait_for "Succeeded"
+    wait_for "Done."
+]=])

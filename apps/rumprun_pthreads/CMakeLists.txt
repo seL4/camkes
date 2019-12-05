@@ -29,3 +29,4 @@ DeclareRumprunCAmkESComponent(rumprun_pthreads
 )
 
 DeclareCAmkESRootserver(rumprun_pthreads.camkes CPP_INCLUDES ${CAMKES_RUMPRUN_PATH})
+add_simulate_test([=[wait_for "Waited and joined with 3 threads. Final value of count = 145. Done"]=])

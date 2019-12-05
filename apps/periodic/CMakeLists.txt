@@ -16,3 +16,4 @@ project(periodic C)
 
 DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
 DeclareCAmkESRootserver(periodic.camkes)
+add_simulate_test([=[wait_for "client2: *** DONE 100000 ***"]=])

@@ -17,3 +17,4 @@ project(dataport C)
 DeclareCAmkESComponent(DataportTest SOURCES components/DataportTest/src/client.c)
 
 DeclareCAmkESRootserver(dataport.camkes)
+add_simulate_test([=[wait_for "comp2 read hello world"]=])

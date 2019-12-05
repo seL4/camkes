@@ -34,3 +34,11 @@ set(CAmkESDTS ON CACHE BOOL "" FORCE)
 DeclareCAmkESComponent(Client SOURCES fdtgen.c fdt_utils.c LIBS fdtgen)
 
 DeclareCAmkESRootserver(fdtgen.camkes)
+add_simulate_test([=[
+    wait_for "interrupt-controller@a01000"
+    wait_for "ccm@20c4000"
+    wait_for "gpc@20dc000"
+    wait_for "ethernet@2188000"
+    wait_for "usdhc@2190000"
+    wait_for "cpus"
+]=])

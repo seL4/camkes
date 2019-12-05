@@ -19,3 +19,4 @@ DeclareCAmkESComponent(Sender SOURCES components/Sender/src/client.c)
 DeclareCAmkESComponent(Echo SOURCES components/Echo/src/echo.c)
 
 DeclareCAmkESRootserver(multiclient.camkes)
+add_simulate_test([=[wait_for "echo_int: 2"]=])

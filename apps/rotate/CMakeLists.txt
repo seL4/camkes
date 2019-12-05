@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c INCLUDES .)
 DeclareCAmkESComponent(Server SOURCES components/Server/src/server.c INCLUDES .)
 
 DeclareCAmkESRootserver(rotate.camkes)
+add_simulate_test([=[wait_for "Afterwards we have (ret)2, (in)2, (out)4, (inout)2"]=])

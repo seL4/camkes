@@ -24,3 +24,4 @@ DeclareCAmkESComponent(UpperCase SOURCES components/UpperCase/src/main.c)
 DeclareCAmkESComponent(Append SOURCES components/Append/src/main.c)
 
 DeclareCAmkESRootserver(multiassembly.camkes)
+add_simulate_test([=[wait_for "DLROW OLLEH"]=])

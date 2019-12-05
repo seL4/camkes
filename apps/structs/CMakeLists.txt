@@ -17,3 +17,4 @@ project(structs C)
 DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
 
 DeclareCAmkESRootserver(structs.camkes)
+add_simulate_test([=[wait_for "array_in_struct: array length: 4, first element 3"]=])

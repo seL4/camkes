@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Server SOURCES server.c)
 DeclareCAmkESComponent(Client SOURCES client.c)
 
 DeclareCAmkESRootserver(testsingleaddressspaceheap.camkes)
+add_simulate_test([=[wait_for "All OK"]=])

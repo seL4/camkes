@@ -24,3 +24,4 @@ DeclareCAmkESComponent(Client SOURCES src/client.c src/util.c INCLUDES src LIBS 
 DeclareCAmkESComponent(Server SOURCES src/server.c src/util.c INCLUDES src LIBS app_dhcp_Config)
 
 DeclareCAmkESRootserver(dhcp.camkes)
+add_simulate_test([=[wait_for "a: Acquired IP 192.168.1.5"]=])

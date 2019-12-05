@@ -19,3 +19,4 @@ DeclareCAmkESComponent(Filter SOURCES components/Filter/src/main.c)
 DeclareCAmkESComponent(Store SOURCES components/Store/src/main.c)
 
 DeclareCAmkESRootserver(filter.camkes)
+add_simulate_test([=[wait_for "received value \\\"\\\""]=])

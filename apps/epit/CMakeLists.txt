@@ -32,3 +32,4 @@ endif()
 DeclareCAmkESComponent(Driver SOURCES components/Driver/src/driver.c)
 
 DeclareCAmkESRootserver(epit.camkes)
+add_simulate_test([=[wait_for "EPIT time out...6"]=])

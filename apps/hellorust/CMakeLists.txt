@@ -39,3 +39,4 @@ RustAddLibrary(
 DeclareCAmkESComponent(main LIBS main)
 
 DeclareCAmkESRootserver(hellorust.camkes)
+add_simulate_test([=[wait_for "Hello, world!!"]=])

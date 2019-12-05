@@ -19,3 +19,4 @@ DeclareCAmkESComponent(Server SOURCES src/server.c)
 DeclareCAmkESComponent(Periodic SOURCES src/periodic.c)
 
 DeclareCAmkESRootserver(binary-semaphore.camkes)
+add_simulate_test([=[wait_for "Echoing: 42 == 42"]=])

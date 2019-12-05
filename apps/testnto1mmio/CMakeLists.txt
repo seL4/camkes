@@ -33,3 +33,7 @@ DeclareCAmkESComponent(Driver1 SOURCES driver1.c INCLUDES .)
 DeclareCAmkESComponent(Driver2 SOURCES driver2.c INCLUDES .)
 
 DeclareCAmkESRootserver(testnto1mmio.camkes)
+add_simulate_test([=[
+    wait_for "hello from drv1"
+    wait_for "hello from drv2"
+]=])

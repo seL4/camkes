@@ -19,3 +19,4 @@ DeclareCAmkESComponent(B SOURCES B.c)
 DeclareCAmkESComponent(C SOURCES C.c)
 
 DeclareCAmkESRootserver(testgrouping.camkes)
+add_simulate_test([=[wait_for "All OK"]=])

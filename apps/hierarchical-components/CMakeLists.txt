@@ -23,3 +23,4 @@ DeclareCAmkESComponent(Pipeline SOURCES components/Pipeline/src/main.c)
 DeclareCAmkESComponent(SubPipeline)
 
 DeclareCAmkESRootserver(hierarchical-components.camkes)
+add_simulate_test([=[wait_for "hello world!"]=])

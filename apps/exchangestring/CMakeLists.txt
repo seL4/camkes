@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Server SOURCES components/Server/src/main.c)
 DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
 
 DeclareCAmkESRootserver(exchangestring.camkes)
+add_simulate_test([=[wait_for "Client ret: This is a string from server."]=])

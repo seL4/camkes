@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Client SOURCES client.c INCLUDES .)
 DeclareCAmkESComponent(Server SOURCES server.c INCLUDES .)
 
 DeclareCAmkESRootserver(testdataportrpc.camkes)
+add_simulate_test([=[wait_for "All OK"]=])

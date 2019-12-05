@@ -65,3 +65,8 @@ DeclareCAmkESComponent(
 )
 
 DeclareCAmkESRootserver(uart.camkes)
+add_simulate_test([=[
+    wait_for "This message is sent via UART."
+    send "abcds"
+    wait_for "Input from UART: s"
+]=])

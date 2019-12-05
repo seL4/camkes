@@ -21,3 +21,8 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/global)
 DeclareCAmkESComponent(Client SOURCES components/Client/src/main.c LIBS GetterIface PrinterIface ServerInterface)
 
 DeclareCAmkESRootserver(global-imports.camkes)
+add_simulate_test([=[
+    wait_for "Hello, World!"
+    wait_for "(4.000000, 2.000000)"
+    wait_for "2"
+]=])

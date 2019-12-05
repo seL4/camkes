@@ -21,3 +21,4 @@ DeclareCAmkESComponent(Transport SOURCES components/Transport/src/transport.c IN
 DeclareCAmkESComponent(Receiver SOURCES components/Receiver/src/receiver.c INCLUDES components/Receiver/include)
 
 DeclareCAmkESRootserver(socket.camkes)
+add_simulate_test([=[wait_for "receiver: Done."]=])

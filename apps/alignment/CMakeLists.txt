@@ -22,3 +22,4 @@ DeclareCAmkESComponent(Client SOURCES client.c common/common.S INCLUDES common)
 DeclareCAmkESComponent(Server SOURCES server.c common/common.S INCLUDES common)
 
 DeclareCAmkESRootserver(alignment.camkes)
+add_simulate_test([=[wait_for "All is well in the universe!"]=])

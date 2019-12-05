@@ -20,3 +20,4 @@ DeclareCAmkESComponent(Responder SOURCES responder.c)
 DeclareCAmkESComponent(Caller SOURCES caller.c)
 
 DeclareCAmkESRootserver(testreplycapprotection.camkes)
+add_simulate_test([=[wait_for "All OK"]=])

@@ -29,3 +29,4 @@ DeclareRumprunCAmkESComponent(rumprun
 )
 
 DeclareCAmkESRootserver(rumprun_hello.camkes CPP_INCLUDES ${CAMKES_RUMPRUN_PATH})
+add_simulate_test([=[wait_for "finished sleep"]=])

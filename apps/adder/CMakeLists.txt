@@ -18,3 +18,4 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/components/Adder)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/components/Client)
 
 DeclareCAmkESRootserver(adder.camkes)
+add_simulate_test([=[wait_for "client: result was 1270"]=])

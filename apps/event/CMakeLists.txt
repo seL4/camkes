@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Collector SOURCES components/Collector/src/collector.c)
 DeclareCAmkESComponent(Emitter SOURCES components/Emitter/src/emitter.c)
 
 DeclareCAmkESRootserver(event.camkes)
+add_simulate_test([=[wait_for "event_callback: Got an event"]=])

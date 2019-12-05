@@ -20,3 +20,4 @@ set(CAmkESCPP ON CACHE BOOL "" FORCE)
 DeclareCAmkESComponent(Main SOURCES main.c)
 
 DeclareCAmkESRootserver(testhwdataportlrgpages.camkes CPP_FLAGS -DSABRE)
+add_simulate_test([=[wait_for "Hello, World!"]=])

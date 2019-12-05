@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Client SOURCES client.c)
 DeclareCAmkESComponent(Server SOURCES server.c)
 
 DeclareCAmkESRootserver(testbufvariant.camkes)
+add_simulate_test([=[wait_for "All OK"]=])

@@ -19,3 +19,4 @@ DeclareCAmkESComponent(B SOURCES B.c)
 DeclareCAmkESComponent(C SOURCES C.c INCLUDES .)
 
 DeclareCAmkESRootserver(teststringarrays.camkes)
+add_simulate_test([=[wait_for "All OK"]=])

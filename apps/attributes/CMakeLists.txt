@@ -19,3 +19,7 @@ DeclareCAmkESComponent(bar SOURCES bar.c)
 DeclareCAmkESComponent(baz)
 
 DeclareCAmkESRootserver(attributes.camkes)
+add_simulate_test([=[
+    wait_for "a = 11, b = 1"
+    wait_for "c = 5, d = 4"
+]=])

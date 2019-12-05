@@ -17,3 +17,4 @@ project(testdataportbifurcate C)
 DeclareCAmkESComponent(Foo SOURCES foo.c)
 
 DeclareCAmkESRootserver(testdataportbifurcate.camkes)
+add_simulate_test([=[wait_for "All OK"]=])

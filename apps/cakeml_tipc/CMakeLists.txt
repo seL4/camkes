@@ -50,3 +50,4 @@ DeclareCAmkESComponent(CakeMLFilter
 )
 
 DeclareCAmkESRootserver(cakeml_tipc.camkes)
+add_simulate_test([=[wait_for "Client 0 recieved payload value: 20"]=])

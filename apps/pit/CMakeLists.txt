@@ -22,3 +22,4 @@ endif()
 DeclareCAmkESComponent(Driver SOURCES components/Driver/src/driver.c)
 
 DeclareCAmkESRootserver(pit.camkes)
+add_simulate_test([=[wait_for "5 seconds elapsed"]=])

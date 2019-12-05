@@ -18,3 +18,4 @@ DeclareCAmkESComponent(Client SOURCES src/client.c)
 DeclareCAmkESComponent(Server SOURCES src/server.c)
 
 DeclareCAmkESRootserver(lockserver.camkes)
+add_simulate_test([=[wait_for "c3: released"]=])
