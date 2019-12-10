@@ -42,7 +42,7 @@ assembly {
         connection seL4RPCCall conn(from drv1.h, to drv2.h);
     }
     configuration {
-        dev.regs_paddr = 0x020D0000;
+        dev.regs_paddr = 0x021E8000;
         dev.regs_size = 0x1000;
 
         dev.integrity_label = "drv1";
