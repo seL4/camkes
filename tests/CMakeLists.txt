@@ -14,7 +14,6 @@ cmake_minimum_required(VERSION 3.8.2)
 
 project(camkes-tests NONE)
 
-
 enable_testing()
 
 set(test_platforms sabre_sim ia32_sim spike64_sim)
@@ -24,23 +23,42 @@ set(ia32_sim_cmake "-DPLATFORM=ia32 -DSIMULATION=ON")
 set(spike64_sim_cmake "-DPLATFORM=spike -DRISCV64=ON -DSIMULATION=ON")
 set(x86_64_sim_cmake "-DPLATFORM=x86_64 -DSIMULATION=ON")
 
-
 file(GLOB apps ${CMAKE_CURRENT_LIST_DIR}/../apps/*)
 
 macro(add_test_variant app_name test_platform test_variant)
-	if(NOT "${test_variant}" STREQUAL "")
-		set(test_name ${app_name}-${test_platform}-${test_variant})
-	else()
-		set(test_name ${app_name}-${test_platform})
-	endif()
-	add_test(${test_name} ${CMAKE_CURRENT_LIST_DIR}/test_launcher.sh ${${test_platform}_cmake} ${${test_variant}_cmake} -DCAMKES_APP=${app_name} -C ${CMAKE_CURRENT_LIST_DIR}/../settings.cmake ${CMAKE_CURRENT_LIST_DIR}/../)
+    if(NOT "${test_variant}" STREQUAL "")
+        set(test_name ${app_name}-${test_platform}-${test_variant})
+    else()
+        set(test_name ${app_name}-${test_platform})
+    endif()
+    add_test(
+        ${test_name}
+        ${CMAKE_CURRENT_LIST_DIR}/test_launcher.sh
+        ${${test_platform}_cmake}
+        ${${test_variant}_cmake}
+        -DCAMKES_APP=${app_name}
+        -C
+        ${CMAKE_CURRENT_LIST_DIR}/../settings.cmake
+        ${CMAKE_CURRENT_LIST_DIR}/../
+    )
 
 endmacro()
 
-
-foreach (app IN ITEMS aeroplage alignment keyboard pit serialserver testhwdataportlrgpages timeserver vgatest)
-	add_test_variant(${app} ia32_sim "")
-	list(APPEND exclude_apps ${app})
+foreach(
+    app
+    IN
+    ITEMS
+    aeroplage
+    alignment
+    keyboard
+    pit
+    serialserver
+    testhwdataportlrgpages
+    timeserver
+    vgatest
+)
+    add_test_variant(${app} ia32_sim "")
+    list(APPEND exclude_apps ${app})
 endforeach()
 
 add_test_variant(alignment x86_64_sim "")
@@ -54,25 +72,38 @@ set(cakeml_cmake "-DCAKEMLDIR=/cakeml -DCAKEML_BIN=/cake-x64-64/cake")
 add_test_variant(cakeml_hello x86_64_sim cakeml)
 add_test_variant(cakeml_tipc x86_64_sim cakeml)
 
-
-
-foreach (app IN ITEMS fdtgen epit swapcounter testhwdataportlrgpages testnto1mmio uart_cogent)
-	add_test_variant(${app} sabre_sim "")
-	list(APPEND exclude_apps ${app})
+foreach(app IN ITEMS fdtgen epit swapcounter testhwdataportlrgpages testnto1mmio uart_cogent)
+    add_test_variant(${app} sabre_sim "")
+    list(APPEND exclude_apps ${app})
 endforeach()
 
-list(APPEND exclude_apps cakeml_hello cakeml_regex cakeml_tipc debug-simple hellorust uart serialserver_loopback rumprun_rust rumprun_pthreads rumprun_hello rumprun_ethernet picoserver)
+list(
+    APPEND
+        exclude_apps
+        cakeml_hello
+        cakeml_regex
+        cakeml_tipc
+        debug-simple
+        hellorust
+        uart
+        serialserver_loopback
+        rumprun_rust
+        rumprun_pthreads
+        rumprun_hello
+        rumprun_ethernet
+        picoserver
+)
 
 foreach(app IN LISTS apps)
-	if(NOT IS_DIRECTORY ${app})
-		continue()
-	endif()
-	get_filename_component(app ${app} NAME_WE)
-	if (app IN_LIST exclude_apps)
-		continue()
-	endif()
-	foreach(test_platform IN LISTS test_platforms)
-		add_test_variant(${app} ${test_platform} "")
-	endforeach()
+    if(NOT IS_DIRECTORY ${app})
+        continue()
+    endif()
+    get_filename_component(app ${app} NAME_WE)
+    if(app IN_LIST exclude_apps)
+        continue()
+    endif()
+    foreach(test_platform IN LISTS test_platforms)
+        add_test_variant(${app} ${test_platform} "")
+    endforeach()
 
 endforeach()
