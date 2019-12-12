@@ -44,7 +44,6 @@ foreach (app IN ITEMS aeroplage alignment keyboard pit serialserver testhwdatapo
 endforeach()
 
 add_test_variant(alignment x86_64_sim "")
-add_test_variant(hellorust x86_64_sim "")
 
 set(largeframe_cmake "-DCAmkESLargeFramePromotion=ON")
 add_test_variant(dma-example ia32_sim largeframe)
