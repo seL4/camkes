@@ -24,6 +24,6 @@ assembly {
   composition {
     component Client c;
     component Service s;
-    connection seL4RPCSimple conn(from c.cs, to s.ss);
+    connection seL4RPCCall conn(from c.cs, to s.ss);
   }
 }
