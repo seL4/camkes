@@ -17,12 +17,12 @@ procedure HelloGoodbye {
 
 procedure Hello {
     void hello();
-    void input(in unsigned int i);
-    void multi_input(in unsigned int i, in unsigned int j);
-    unsigned int ret();
-    void output(out unsigned int i);
-    void in_out(inout unsigned int i);
-    unsigned int rainbow(in unsigned int i, in unsigned char j, out unsigned int k, out unsigned char l);
+    void input(in uint32_t i);
+    void multi_input(in uint32_t i, in uint32_t j);
+    uint32_t ret();
+    void output(out uint32_t i);
+    void in_out(inout uint32_t i);
+    uint32_t rainbow(in uint32_t i, in uint8_t j, out uint32_t k, out uint8_t l);
     void input_string(in string s);
     void input_strings(in string s1, in string s2);
     string reverse_string(in string s);

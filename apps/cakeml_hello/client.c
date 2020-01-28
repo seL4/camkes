@@ -14,8 +14,8 @@
 #include <stdio.h>
 
 int run() {
-    unsigned int i, j;
-    unsigned char k;
+    uint32_t i, j;
+    uint8_t k;
 
     printf("Starting the client\n");
     printf("-------------------\n");
