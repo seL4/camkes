@@ -35,15 +35,7 @@ assembly {
     }
 
     configuration {
-        client.putchar_attributes = 0;
-        client.serial_getchar_global_endpoint = "client";
-        client.serial_getchar_badge = "1";
-        client.serial_getchar_attributes = "0";
         client.serial_getchar_shmem_size = 0x1000;
-
-        serial.timeout_attributes = 1;
-        time_server.putchar_attributes = 0;
-
         time_server.timers_per_client = 1;
     }
 }

@@ -117,8 +117,6 @@ assembly {
         echo.echo_recv_shmem_size = 0x1000;
         echo.echo_send_attributes = "1";
         echo.echo_send_shmem_size = 0x1000;
-        /* This control global endpoint is bound towards the PicoServer's seL4PicoServerSignal connection */
-        echo.echo_control_global_endpoint = "echo_endpoint";
         echo.ip_addr = PICOSERVER_IP_ADDR;
 
         /*
@@ -129,27 +127,18 @@ assembly {
         listener.listener_recv_shmem_size = 0x1000;
         listener.listener_send_attributes = "2";
         listener.listener_send_shmem_size = 0x1000;
-        /* This control global endpoint is bound towards the PicoServer's seL4PicoServerSignal connection */
-        listener.listener_control_global_endpoint = "listener_endpoint";
         listener.ip_addr = PICOSERVER_IP_ADDR;
 
         /*
          * PicoServer config
          */
-        picoserver.timer_attributes = 1;
-        picoserver.timer_global_endpoint = "picoserver_timer";
-        picoserver.timer_complete_global_endpoint = "picoserver_timer";
-
         /* IP address to assign to the networking device */
         picoserver.ip_addr = PICOSERVER_IP_ADDR;
         picoserver.multicast_addr = "0.0.0.0";
         /* This should match the number of clients connected to this component */
         picoserver.num_clients = 2;
 
-        picoserver.ethdriver_attributes = "1";
         picoserver.ethdriver_shmem_size = 0x1000;
-        /* This control global endpoint is bound towards the Ethdriver component */
-        picoserver.ethdriver_global_endpoint = "picoserver_endpoint";
         /* This should match the MAC address of the ethernet device */
         picoserver.ethdriver_mac = [0x00, 0x19, 0xb8, 0x00, 0xf0, 0x72];
 

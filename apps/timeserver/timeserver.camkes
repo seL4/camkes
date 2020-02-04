@@ -17,9 +17,6 @@ import <global-connectors.camkes>;
 component Client {
      control;
      uses Timer timeout;
-
-     attribute string timeout_global_endpoint = "client";
-     attribute string timeout_badge = "1";
 }
 
 assembly {
@@ -30,7 +27,6 @@ assembly {
                                                to   time_server.the_timer);
     }
     configuration {
-        client.timeout_attributes = 1;
         time_server.timers_per_client = 1;
     }
 }

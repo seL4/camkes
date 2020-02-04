@@ -53,46 +53,21 @@ assembly {
     }
 
     configuration {
-        client.putchar_attributes = 0;
-        client.serial_getchar_global_endpoint = "client";
-        client.serial_getchar_badge = "1";
-        client.serial_getchar_attributes = "0";
         client.serial_getchar_shmem_size = 0x1000;
 
-        serial.timeout_attributes = 1;
-        time_server.putchar_attributes = 0;
 
         time_server.timers_per_client = 1;
         client.read_id = 0;
         client.read_attributes = "10";
-        client.read_global_endpoint = "serial_read";
-        client.read_badge = 10;
         client.write_id = 1;
         client.write_attributes = "10";
-        client.write_global_endpoint = "serial_write";
-        client.write_badge = 10;
-        client.serial_read_wait_global_endpoint = "client_read";
-        client.serial_write_wait_global_endpoint = "client_write";
-        client.self_read_global_endpoint = "client_read";
-        client.self_write_global_endpoint = "client_write";
         client.read_shmem_size = 32768;
         client.write_shmem_size = 32768;
 
         serial.read_id = 0;
         serial.read_attributes = "10";
-        serial.read_global_endpoint = "client_read";
-        serial.read_badge = 10;
         serial.write_id = 1;
         serial.write_attributes = "10";
-        serial.write_global_endpoint = "client_write";
-        serial.write_badge = 10;
-
-        //serial.serial_wait_global_endpoint = "serial";
-        //serial.self_global_endpoint = "serial";
-        serial.serial_read_wait_global_endpoint = "serial_read";
-        serial.self_read_global_endpoint = "serial_read";
-        serial.serial_write_wait_global_endpoint = "serial_write";
-        serial.self_write_global_endpoint = "serial_write";
  
         serial.read_shmem_size = 32768;
         serial.write_shmem_size = 32768;

@@ -25,8 +25,6 @@ component Client {
     attribute int client_id;
     /* Timer Server */
     uses Timer timeout;
-    attribute string timeout_global_endpoint = "client";
-    attribute string timeout_badge = "1";
 }
 
 /* CakeML Filter */
@@ -76,62 +74,32 @@ assembly {
     configuration {
         filter.client0_incoming_id = 0;
         filter.client0_incoming_attributes = "10";
-        filter.client0_incoming_global_endpoint = "client0";
-        filter.client0_incoming_badge = 10;
         filter.client1_outgoing_id = 1;
         filter.client1_outgoing_attributes = "10";
-        filter.client1_outgoing_global_endpoint = "client1";
-        filter.client1_outgoing_badge = 10;
-        filter.self_global_endpoint = "filter";
-        filter.virtqueue_wait_global_endpoint = "filter";
         filter.environment = "cakeml";
 
         client0.send_id = 0;
         client0.send_attributes = "10";
-        client0.send_global_endpoint = "filter";
-        client0.send_badge = 10;
         client0.recv_id = 1;
         client0.recv_attributes = "10";
-        client0.recv_global_endpoint = "client3";
-        client0.recv_badge = 10;
-        client0.virtqueue_wait_global_endpoint = "client0";
-        client0.self_global_endpoint = "client0";
         client0.client_id = 0;
 
         client1.send_id = 0;
         client1.send_attributes = "10";
-        client1.send_global_endpoint = "client2";
-        client1.send_badge = 10;
         client1.recv_id = 1;
         client1.recv_attributes = "10";
-        client1.recv_global_endpoint = "filter";
-        client1.recv_badge = 10;
-        client1.virtqueue_wait_global_endpoint = "client1";
-        client1.self_global_endpoint = "client1";
         client1.client_id = 1;
 
         client2.send_id = 0;
         client2.send_attributes = "10";
-        client2.send_global_endpoint = "client3";
-        client2.send_badge = 10;
         client2.recv_id = 1;
         client2.recv_attributes = "10";
-        client2.recv_global_endpoint = "client1";
-        client2.recv_badge = 10;
-        client2.virtqueue_wait_global_endpoint = "client2";
-        client2.self_global_endpoint = "client2";
         client2.client_id = 2;
 
         client3.send_id = 0;
         client3.send_attributes = "10";
-        client3.send_global_endpoint = "client0";
-        client3.send_badge = 10;
         client3.recv_id = 1;
         client3.recv_attributes = "10";
-        client3.recv_global_endpoint = "client1";
-        client3.recv_badge = 10;
-        client3.virtqueue_wait_global_endpoint = "client3";
-        client3.self_global_endpoint = "client3";
         client3.client_id = 3;
 
         vqinit0.init_topology = [{ "drv" : "client0.send", "dev" : "filter.client0_incoming" }];
@@ -140,10 +108,6 @@ assembly {
         vqinit3.init_topology = [{ "drv" : "client2.send", "dev" : "client3.recv" }];
         vqinit4.init_topology = [{ "drv" : "client3.send", "dev" : "client0.recv" }];
 
-        client0.timeout_attributes = 1;
-        client1.timeout_attributes = 2;
-        client2.timeout_attributes = 3;
-        client3.timeout_attributes = 4;
         time_server.timers_per_client = 1;
     }
 }
