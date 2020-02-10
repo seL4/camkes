@@ -139,9 +139,6 @@ assembly {
         picoserver.num_clients = 2;
 
         picoserver.ethdriver_shmem_size = 0x1000;
-        /* This should match the MAC address of the ethernet device */
-        picoserver.ethdriver_mac = [0x00, 0x19, 0xb8, 0x00, 0xf0, 0x72];
-
         picoserver.heap_size = 0x40000;
 
         /*
@@ -171,8 +168,6 @@ assembly {
 #ifdef KernelArchArm
         /* Ethernet driver configuration */
         ethdriver.promiscuous_mode = 0;
-        // Inherits the MAC address of the PicoServer component
-        ethdriver.mac <- picoserver.ethdriver_mac;
 #endif /* KernelArchArm */
     }
 }
