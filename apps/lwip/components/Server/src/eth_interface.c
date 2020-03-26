@@ -163,7 +163,6 @@ void netif_link_callback(struct netif *netif) {
         err = udp_bind(udp_conn, IP_ADDR_ANY, 7);
         ZF_LOGF_IF(err != ERR_OK, "Failed to bind port 7");
         udp_recv(udp_conn, udp_recv_callback, NULL);
-        netif_set_up(netif);
     }
 }
 
@@ -183,6 +182,7 @@ static struct netif *init_interface(lwip_iface_t *lwip) {
     netif_set_default(lwip->netif);
     netif_set_status_callback(lwip->netif, netif_link_callback);
     netif_set_link_up(lwip->netif);
+    netif_set_up(netif);
     // err = dhcp_start(lwip->netif);
     // ZF_LOGF_IF(err != ERR_OK, "Failed to start dhcp");
 

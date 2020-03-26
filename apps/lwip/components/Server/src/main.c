@@ -28,11 +28,11 @@ void pre_init(void)
 /* Callback that gets called when the timer fires. */
 void timer_complete_callback(void)
 {
-    mut_lock();
+    int err = mut_lock();
     counter_s +=1;
     sys_check_timeouts();
     interface_tick();
-    mut_unlock();
+    err = mut_unlock();
 }
 
 
