@@ -17,7 +17,7 @@
 
 void event_handler_reply(void)
 {
-    notification_ready_emit_underlying();
+    notification_signal_emit();
 }
 
 void event_handler(void *data)

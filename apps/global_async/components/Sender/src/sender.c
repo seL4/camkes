@@ -33,7 +33,7 @@ void sending_data_loop(void)
     for (int i = 0; i < 10; i++) {
         create_random_string(data_buffer, SEND_DATA_LENGTH);
         data_buffer[SEND_DATA_LENGTH] = '\0';
-        notification_ready_emit_underlying();
+        notification_signal_emit_underlying();
         seL4_Word badge;
         seL4_Wait(event_notification, &badge);
     }
