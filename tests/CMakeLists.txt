@@ -92,6 +92,7 @@ list(
         rumprun_hello
         rumprun_ethernet
         picoserver
+        picotcp_tcp_echo
 )
 
 foreach(app IN LISTS apps)
