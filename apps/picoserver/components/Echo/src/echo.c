@@ -13,6 +13,7 @@
 #include <camkes.h>
 #include <autoconf.h>
 #include <stdio.h>
+#include <string.h>
 #include <picoserver.h>
 #include <assert.h>
 #include <echo_listener_common.h>
