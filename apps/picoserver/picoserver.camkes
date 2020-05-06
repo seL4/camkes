@@ -15,6 +15,7 @@ import <global-connectors.camkes>;
 import <Ethdriver/Ethdriver.camkes>;
 import <PicoServer/PicoServer.camkes>;
 import <TimeServer/TimeServer.camkes>;
+#include <camkes-picotcp-base.h>
 
 component Echo {
     control;
@@ -69,10 +70,7 @@ assembly {
         connection seL4HardwareMMIO ethdrivermmio(from ethdriver.EthDriver, to hwethdriver.mmio);
         connection seL4HardwareInterrupt hwethirq(from hwethdriver.irq, to ethdriver.irq);
 #endif /* KernelArchX86 */
-
-        /* Timer to PicoServer */
-        connection seL4TimeServer picoserver_timer(from picoserver.timer, to time_server.the_timer);
-        connection seL4GlobalAsynchCallback picoserver_timer_int(from time_server.timer_notification, to picoserver.timer_complete);
+        picotcp_base_connections(picoserver, pico_base, time_server.the_timer)
 
         /* Driver to PicoServer */
         connection seL4Ethdriver eth_driver_conn(from picoserver.ethdriver, to ethdriver.client);
@@ -132,11 +130,8 @@ assembly {
         /*
          * PicoServer config
          */
-        /* IP address to assign to the networking device */
-        picoserver.ip_addr = PICOSERVER_IP_ADDR;
-        picoserver.multicast_addr = "0.0.0.0";
-        /* This should match the number of clients connected to this component */
-        picoserver.num_clients = 2;
+        /* IP and multicast address to assign to the networking device */
+        picotcp_base_configuration(picoserver, pico_base, PICOSERVER_IP_ADDR, "0.0.0.0")
 
         picoserver.ethdriver_shmem_size = 0x1000;
         picoserver.heap_size = 0x40000;
