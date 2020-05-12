@@ -1,0 +1,158 @@
+/*
+ * Copyright 2019, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the GNU General Public License version 2. Note that NO WARRANTY is provided.
+ * See "LICENSE_GPLv2.txt" for details.
+ *
+ * @TAG(DATA61_GPL)
+ */
+
+import <std_connector.camkes>;
+import <global-connectors.camkes>;
+import <TimeServer/TimeServer.camkes>;
+
+#include <plat/eth_devices.h>
+#include <camkes-picotcp-base.h>
+#include <camkes-single-threaded.h>
+#include <camkes-dynamic-untyped-allocators.h>
+#include <camkes-x86-iospace-dma.h>
+
+HARDWARE_ETHERNET_EXTRA_IMPORTS
+
+component HWEthDriver82574 {
+    hardware;
+    emits IRQ irq;
+    dataport Buf(0x20000) mmio;
+};
+
+component Ethdriver82574_1 {
+    single_threaded_component()
+    dynamic_untyped_allocators_interfaces(init_dynamic)
+    x86_iospace_dma_interfaces(init_iospaces, "0x12:0x0:0x19:0")
+    picotcp_base_interfaces(pico_base)
+    /*
+     * The promiscuous mode is set according to whatever configuration you want, 1 by default.
+     */
+     attribute int promiscuous_mode = 1;
+
+    consumes IRQ irq;
+    dataport Buf(0x20000) EthDriver;
+
+
+    /* MMIO and IRQ default values */
+    attribute int mmio_paddr = 0xf7f00000;
+    attribute int mmio_size = 0x20000;
+    attribute string irq_irq_type = "pci";
+    attribute int irq_irq_ioapic = 0;
+    attribute int irq_irq_ioapic_pin = 20;
+    attribute int irq_irq_vector = 20;
+
+    attribute int simple = 1;
+    attribute int cnode_size_bits = 14;
+    attribute int simple_untyped20_pool = 2;
+    attribute int heap_size = 0x400000;
+    attribute int dma_pool = 0x400000;
+    attribute int dma_pool_cached = 1;
+
+
+    composition {
+        component HWEthDriver82574 hwethdriver;
+        connection seL4HardwareMMIO ethdrivermmio(from EthDriver, to hwethdriver.mmio);
+        connection seL4GlobalAsynchHardwareInterrupt hwethirq(from hwethdriver.irq, to irq);
+        dynamic_untyped_allocators_connections(init_dynamic)
+        x86_iospace_dma_connections(init_iospaces)
+
+
+    }
+    configuration {
+        hwethdriver.mmio_paddr <- mmio_paddr;
+        hwethdriver.mmio_size <- mmio_size;
+        hwethdriver.irq_irq_type <- irq_irq_type;
+        hwethdriver.irq_irq_ioapic <- irq_irq_ioapic;
+        hwethdriver.irq_irq_ioapic_pin <- irq_irq_ioapic_pin;
+        hwethdriver.irq_irq_vector <- irq_irq_vector;
+        dynamic_untyped_allocators_configuration(init_dynamic)
+        x86_iospace_dma_configuration(init_iospaces)
+   }
+}
+
+
+
+/* Example hardware components that contain minimal necessary spec for different ethdrivers */
+
+
+/* This is a macro used to define the hardware CAmkES component for each ARM platform */
+HARDWARE_ETHERNET_COMPONENT
+
+component EthdriverARMPlat_1 {
+    single_threaded_component()
+
+    picotcp_base_interfaces(pico_base)
+
+    attribute int heap_size = 0x400000;
+    attribute int dma_pool = 0x4000;
+    dataport Buf dma;
+    /* 
+     * This attribute is set according to whatever configuration you want.
+     */
+    attribute int promiscuous_mode;
+
+    HARDWARE_ETHERNET_INTERFACES
+
+    composition {
+        HARDWARE_ETHERNET_COMPOSITION
+
+    }
+
+    configuration {
+        HARDWARE_ETHERNET_CONFIG
+    }
+};
+
+component Dummy {
+        dataport Buf dma;
+
+}
+
+assembly {
+    composition {
+
+#ifdef KernelArchArm
+        component EthdriverARMPlat_1 ethdriver;
+#endif /* KernelArchArm */
+#ifdef KernelArchX86
+        component Ethdriver82574_1 ethdriver;
+#endif /* KernelArchX86 */
+        component TimeServer time_server;
+
+        // connection seL4Notification asd(from ethdriver.a, to ethdriver.b);
+        picotcp_base_connections(ethdriver, pico_base, time_server.the_timer)
+#ifdef KernelArchArm
+        component Dummy d;
+        connection seL4DMASharedData dma(from ethdriver.dma, to d.dma);
+#endif
+    }
+
+    configuration {
+        /*
+         * Non-platform specific configurations
+         */
+        time_server.timers_per_client = 8;
+
+        picotcp_base_configuration(ethdriver, pico_base, "", "0.0.0.0")
+
+
+#ifdef KernelArchArm
+        /* Ethernet driver configuration */
+        ethdriver.promiscuous_mode = 0;
+        dma.size = 0x800000;
+        dma.controller = "ethdriver.dma";
+        dma.paddr = 0x90004000;
+
+#endif /* KernelArchArm */
+    }
+}
+
