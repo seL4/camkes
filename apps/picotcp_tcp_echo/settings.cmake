@@ -26,6 +26,8 @@ if("${KernelArch}" STREQUAL "x86")
     set(KernelIOMMU ON CACHE BOOL "" FORCE)
 endif()
 
+set(LibEthdriverRXDescCount 256 CACHE STRING "" FORCE)
+set(LibEthdriverTXDescCount 512 CACHE STRING "" FORCE)
 
 # Print at runtime
 set(KernelPrinting ON CACHE BOOL "" FORCE)
