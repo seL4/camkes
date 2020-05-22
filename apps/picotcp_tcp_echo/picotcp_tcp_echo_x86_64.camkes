@@ -21,6 +21,7 @@ import <TimeServer/TimeServer.camkes>;
 #include <camkes-single-threaded.h>
 #include <camkes-dynamic-untyped-allocators.h>
 #include <camkes-x86-iospace-dma.h>
+#include <camkes-BenchUtiliz.h>;
 
 component PicoServerDF {
     single_threaded_component()
@@ -99,7 +100,7 @@ component Ethdriver82574DF {
 
 component Echo {
     control;
-
+    BenchUtiliz_control_interfaces(idle)
     picotcp_socket_sync_client_interfaces(echo)
 }
 
@@ -117,6 +118,10 @@ assembly {
         /* Timer component */
         component TimeServer time_server;
 
+        component BenchUtiliz bench;
+        BenchUtiliz_trace_connections(trace, ethdriver, bench)
+        BenchUtiliz_trace_connections(trace, picoserver, bench)
+        BenchUtiliz_control_connections(idle, echo, bench)
         /*
          * Connections
          */
@@ -132,9 +137,9 @@ assembly {
         /*
          * Non-platform specific configurations
          */
-
         time_server.timers_per_client = 8;
-
+        BenchUtiliz_trace_configurations(trace, ethdriver, 200)
+        BenchUtiliz_trace_configurations(trace, picoserver, 199)
         /*
          * PicoServer config
          */

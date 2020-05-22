@@ -118,6 +118,93 @@ static int handle_sent(void)
 }
 
 
+/* Benchmark utilization TCP handler */
+int utiliz_socket;
+
+#define WHOAMI "100 IPBENCH V1.0\n"
+#define HELLO "HELLO"
+#define OK_READY "200 OK (Ready to go)\n"
+#define LOAD "LOAD cpu_target_lukem"
+#define OK "200 OK\n"
+#define SETUP "SETUP" // args::\"\""
+#define START "START"
+#define STOP "STOP"
+#define QUIT "QUIT"
+#define RESPONSE "220 VALID DATA (Data to follow)\n" \
+                 "Content-length: %d\n" \
+                 "%s\n"
+#define IDLE_FORMAT "%0.3f"
+#define msg_match(msg, match) (strncmp(msg, match, strlen(match))==0)
+
+int peer_socket = -1;
+char util_msg[10];
+void handle_tcp_utiliz_notification(uint16_t events, int socket)
+{
+    int ret = 0;
+    char ip_string[16] = {0};
+    int client_id = -1;
+
+    if (events & PICOSERVER_CONN) {
+        picoserver_peer_t peer = echo_control_accept(socket);
+        if (peer.result == -1) {
+            ZF_LOGF("Failed to accept a peer");
+        }
+        peer_socket = peer.socket;
+        inet_ntop(AF_INET, &peer.peer_addr, ip_string, 16);
+        printf("%s: Connection established with %s on socket %d\n", get_instance_name(), ip_string, socket);
+
+        memcpy(echo_send_buf, WHOAMI, strlen(WHOAMI));
+        echo_send_send(peer_socket, strlen(WHOAMI), 0);
+    }
+
+    if (events & PICOSERVER_READ) {
+        ret = echo_recv_recv(socket, 0x1000, 0);
+        if (ret == -1) {
+            printf("received -1\n");
+        } else if (ret == 0) {
+            printf("Error\n");
+        }
+        if (msg_match(echo_recv_buf, HELLO)) {
+            memcpy(echo_send_buf, OK_READY, strlen(OK_READY));
+            echo_send_send(socket, strlen(OK_READY), 0);
+        } else if (msg_match(echo_recv_buf, LOAD)) {
+            memcpy(echo_send_buf, OK, strlen(OK));
+            echo_send_send(socket, strlen(OK), 0);
+        } else if (msg_match(echo_recv_buf, SETUP)) {
+            memcpy(echo_send_buf, OK, strlen(OK));
+            echo_send_send(socket, strlen(OK), 0);
+        } else if (msg_match(echo_recv_buf, START)) {
+            idle_start();
+        } else if (msg_match(echo_recv_buf, STOP)) {
+            uint64_t total, kernel, idle;
+            idle_stop(&total, &kernel, &idle);
+
+            int len = snprintf(util_msg, sizeof(util_msg), IDLE_FORMAT, 1.f - ((double)idle / (double)total));
+            len = snprintf(echo_send_buf, 0x1000, RESPONSE, len + 1, util_msg);
+            echo_send_send(socket, len, 0);
+            echo_control_shutdown(socket, PICOSERVER_SHUT_RDWR);
+        } else if (msg_match(echo_recv_buf, QUIT)) {
+        } else {
+            printf("Couldn't match message: %s\n", echo_recv_buf);
+        }
+
+    }
+
+    if (events & PICOSERVER_CLOSE) {
+        ret = echo_control_shutdown(socket, PICOSERVER_SHUT_RDWR);
+        printf("%s: Connection closing on socket %p\n", get_instance_name(), socket);
+    }
+    if (events & PICOSERVER_FIN) {
+        printf("%s: Connection closed on socket %p\n", get_instance_name(), socket);
+        peer_socket = -1;
+    }
+    if (events & PICOSERVER_ERR) {
+        printf("%s: Error with socket %p, going to die\n", get_instance_name(), socket);
+    }
+}
+
+
+
 int handle_picoserver_notification(void)
 {
     picoserver_event_t server_event = echo_control_event_poll();
@@ -129,6 +216,11 @@ int handle_picoserver_notification(void)
     while (server_event.num_events_left > 0 || server_event.events) {
         socket = server_event.socket_fd;
         events = server_event.events;
+        if (socket == utiliz_socket || socket == peer_socket) {
+            handle_tcp_utiliz_notification(events, socket);
+            server_event = echo_control_event_poll();
+            continue;
+        }
         if (events & PICOSERVER_CONN) {
             picoserver_peer_t peer = echo_control_accept(socket);
             if (peer.result == -1) {
@@ -204,6 +296,25 @@ int handle_picoserver_notification(void)
         server_event = echo_control_event_poll();
     }
     return result;
+}
+
+void setup_utilization_socket(int port_in)
+{
+    utiliz_socket = echo_control_open(false);
+    if (utiliz_socket == -1) {
+        ZF_LOGF("Failed to open a socket for listening!");
+    }
+
+    int ret = echo_control_bind(utiliz_socket, PICOSERVER_ANY_ADDR_IPV4, port_in);
+    if (ret) {
+        ZF_LOGF("Failed to bind a socket for listening!");
+    }
+
+    ret = echo_control_listen(utiliz_socket, 1);
+    if (ret) {
+        ZF_LOGF("Failed to listen for incoming connections!");
+    }
+
 }
 
 ps_io_ops_t io_ops;
@@ -282,6 +393,7 @@ int run(void)
     }
     rx_virtqueue.notify();
 
+    setup_utilization_socket(1236);
     /* Now poll for events and handle them */
 
     while (1) {
