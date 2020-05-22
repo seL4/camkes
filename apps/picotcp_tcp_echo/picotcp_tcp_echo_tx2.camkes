@@ -167,8 +167,9 @@ component EthdriverARMPlatDF {
      * This attribute is set according to whatever configuration you want.
      */
     attribute int promiscuous_mode = 1;
-    attribute int heap_size = 0x10000;
     attribute int dma_pool = 0x4000;
+    attribute int dma_pool_cached = 0;
+    attribute int heap_size = 0x40000;
 
 
     consumes FDT EthDriver;
@@ -255,6 +256,7 @@ assembly {
 
     configuration {
         picotcp_ethernet_async_configurations(eth0, picoserver, ethdriver)
+        picotcp_ethernet_async_configurations_uncached_dma(eth0, picoserver, ethdriver)
         /* Setting buffer size of echo socket to 4096 */
         picotcp_socket_sync_client_configurations(echo, echo, 0x1000)
         BPMPServer_client_configurations(bpmp, clock_server)
@@ -281,7 +283,7 @@ assembly {
         picotcp_base_configuration(picoserver, pico_base, "", "0.0.0.0")
 
         /* Heap used by pico for tracking clients, sockets and picotcp backing queues. */
-        picoserver.heap_size = 0x40000;
+        picoserver.heap_size = 0x8000000;
 
     }
 }

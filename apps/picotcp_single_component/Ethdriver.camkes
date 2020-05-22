@@ -97,6 +97,8 @@ component EthdriverARMPlat_1 {
     BenchUtiliz_control_interfaces(idle)
     attribute int heap_size = 0x8000000;
     attribute int dma_pool = 0x4000;
+    attribute int dma_pool_cached = 0;
+
     dataport Buf dma;
     /* 
      * This attribute is set according to whatever configuration you want.
@@ -160,6 +162,7 @@ assembly {
         dma.size = 0x800000;
         dma.controller = "ethdriver.dma";
         dma.paddr = 0x90004000;
+        ethdriver.dma_cached = 0;
 
 #endif /* KernelArchArm */
     }
