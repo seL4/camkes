@@ -470,22 +470,100 @@ void handle_tcp_picoserver_notification(uint16_t events, struct pico_socket *s)
 }
 
 
+/* Event handler for ipbench utilization test */
+struct pico_socket *utiliz_socket;
+char utilz_mesg[0x1000] ALIGN(0x1000);
+#define WHOAMI "100 IPBENCH V1.0\n"
+#define HELLO "HELLO"
+#define OK_READY "200 OK (Ready to go)\n"
+#define LOAD "LOAD cpu_target_lukem"
+#define OK "200 OK\n"
+#define SETUP "SETUP" // args::\"\""
+#define START "START"
+#define STOP "STOP"
+#define QUIT "QUIT"
+#define RESPONSE "220 VALID DATA (Data to follow)\n" \
+                 "Content-length: %d\n" \
+                 "%s\n"
+#define IDLE_FORMAT "%0.3f"
+#define msg_match(msg, match) (strncmp(msg, match, strlen(match))==0)
+char response[100];
+char util_msg[10];
+void handle_tcp_utiliz_notification(uint16_t events, struct pico_socket *s)
+{
+    int ret = 0;
+    char ip_string[16] = {0};
+    int client_id = -1;
+
+    if (events & PICO_SOCK_EV_CONN) {
+        uint32_t peer_addr;
+        uint16_t remote_port;
+        struct pico_socket *util = pico_socket_accept(s, &peer_addr, &remote_port);
+        if (util == NULL) {
+            ZF_LOGE("error\n");
+        }
+        pico_ipv4_to_string(ip_string, peer_addr);
+        printf("%s: Connection established with %s on socket %p\n", get_instance_name(), ip_string, util);
+        pico_socket_send(util, WHOAMI, strlen(WHOAMI));
+    }
+
+    if (events & PICO_SOCK_EV_RD) {
+            ret = pico_socket_recv(s, utilz_mesg, 0x1000);
+            if (ret == -1) {
+                printf("received -1\n");
+            } else if (ret == 0) {
+                printf("Error\n");
+            }
+            if (msg_match(utilz_mesg, HELLO)) {
+                pico_socket_send(s, OK_READY, strlen(OK_READY));
+            } else if (msg_match(utilz_mesg, LOAD)) {
+                pico_socket_send(s, OK, strlen(OK));
+            } else if (msg_match(utilz_mesg, SETUP)) {
+                pico_socket_send(s, OK, strlen(OK));
+            } else if (msg_match(utilz_mesg, START)) {
+                idle_start();
+            } else if (msg_match(utilz_mesg, STOP)) {
+                uint64_t total, kernel, idle;
+                idle_stop(&total, &kernel, &idle);
+
+                int len = snprintf(util_msg, sizeof(util_msg), IDLE_FORMAT, 1.f - ((double)idle/(double)total));
+                printf("%s\n", util_msg);
+                len = snprintf(response, sizeof(response), RESPONSE, len+1, util_msg);
+                pico_socket_send(s, response, len);
+                pico_socket_shutdown(s, PICO_SHUT_RDWR);
+            } else if (msg_match(utilz_mesg, QUIT)) {
+            } else {
+                printf("Couldn't match message: %s\n", utilz_mesg);
+            }
+    }
+
+    if (events & PICO_SOCK_EV_CLOSE) {
+        ret = pico_socket_shutdown(s, PICO_SHUT_RDWR);
+        printf("%s: Connection closing on socket %p\n", get_instance_name(), s);
+    }
+    if (events & PICO_SOCK_EV_FIN) {
+        printf("%s: Connection closed on socket %p\n", get_instance_name(), s);
+    }
+    if (events & PICO_SOCK_EV_ERR) {
+        printf("%s: Error with socket %p, going to die\n", get_instance_name(), s);
+    }
+}
+
 static void tick_on_event(UNUSED seL4_Word badge, void *cookie)
 {
     pico_stack_tick();
 }
 
 
-int setup_echo_server(ps_io_ops_t *io_ops)
+void setup_tcp_socket(int port_in)
 {
-
     // TCP echo on port 1234
     socket_in = pico_socket_open(PICO_PROTO_IPV4, PICO_PROTO_TCP, handle_tcp_picoserver_notification);
     if (socket_in == NULL) {
-        assert(!"Failed to open a socket for listening!");
+        ZF_LOGF("Failed to open a socket for listening!");
     }
     uint32_t local_addr = PICO_IPV4_INADDR_ANY;
-    uint16_t port = short_be(1234);
+    uint16_t port = short_be(port_in);
     int ret = pico_socket_bind(socket_in, &local_addr, &port);
     if (ret) {
         ZF_LOGF("Failed to bind a socket for listening: %d!", pico_err);
@@ -495,17 +573,22 @@ int setup_echo_server(ps_io_ops_t *io_ops)
 
     ret = pico_socket_listen(socket_in, 1);
     if (ret) {
-        assert(!"Failed to listen for incoming connections!");
+        ZF_LOGF("Failed to listen for incoming connections!");
     }
 
+}
 
+
+void setup_udp_socket(int port_in)
+{
     // UDP echo on port 1235
     struct pico_socket *udp_socket = pico_socket_open(PICO_PROTO_IPV4, PICO_PROTO_UDP, handle_udp_picoserver_notification);
     if (udp_socket == NULL) {
-        assert(!"Failed to open a socket for listening!");
+        ZF_LOGF("Failed to open a socket for listening!");
     }
-    uint16_t udp_port = short_be(1235);
-    ret = pico_socket_bind(udp_socket, &local_addr, &udp_port);
+    uint32_t local_addr = PICO_IPV4_INADDR_ANY;
+    uint16_t udp_port = short_be(port_in);
+    int ret = pico_socket_bind(udp_socket, &local_addr, &udp_port);
     if (ret) {
         ZF_LOGF("Failed to bind a socket for listening: %d!", pico_err);
     } else {
@@ -513,7 +596,44 @@ int setup_echo_server(ps_io_ops_t *io_ops)
     }
 
 
-    single_threaded_component_register_handler(0, tick_on_event, NULL);
+}
+
+
+void setup_utilization_socket(int port_in)
+{
+    utiliz_socket = pico_socket_open(PICO_PROTO_IPV4, PICO_PROTO_TCP, handle_tcp_utiliz_notification);
+    if (utiliz_socket == NULL) {
+        ZF_LOGF("Failed to open a socket for listening!");
+    }
+
+    uint32_t local_addr = PICO_IPV4_INADDR_ANY;
+    uint16_t port = short_be(port_in);
+    int ret = pico_socket_bind(utiliz_socket, &local_addr, &port);
+    if (ret) {
+        ZF_LOGF("Failed to bind a socket for listening: %d!", pico_err);
+    } else {
+        printf("Bound to addr: %d, port %d\n", local_addr, port);
+    }
+
+    ret = pico_socket_listen(utiliz_socket, 1);
+    if (ret) {
+        ZF_LOGF("Failed to listen for incoming connections!");
+    }
+
+}
+
+int setup_echo_server(ps_io_ops_t *io_ops)
+{
+    /* TCP echo on 1234 */
+    setup_tcp_socket(1234);
+
+    /* UDP echo on 1235 */
+    setup_udp_socket(1235);
+
+    /* ipbench utilization client on 1236 */
+    setup_utilization_socket(1236);
+
+    single_threaded_component_register_handler(0, "pico_stack_tick", tick_on_event, NULL);
     return 0;
 
 }

@@ -19,6 +19,7 @@ import <TimeServer/TimeServer.camkes>;
 #include <camkes-single-threaded.h>
 #include <camkes-dynamic-untyped-allocators.h>
 #include <camkes-x86-iospace-dma.h>
+#include <camkes-BenchUtiliz.h>;
 
 HARDWARE_ETHERNET_EXTRA_IMPORTS
 
@@ -40,6 +41,8 @@ component Ethdriver82574_1 {
 
     consumes IRQ irq;
     dataport Buf(0x20000) EthDriver;
+
+    uses IdleThread idle;
 
 
     /* MMIO and IRQ default values */
@@ -91,6 +94,7 @@ component EthdriverARMPlat_1 {
     single_threaded_component()
 
     picotcp_base_interfaces(pico_base)
+    BenchUtiliz_control_interfaces(idle)
     attribute int heap_size = 0x8000000;
     attribute int dma_pool = 0x4000;
     dataport Buf dma;
@@ -127,7 +131,10 @@ assembly {
 #endif /* KernelArchX86 */
         component TimeServer time_server;
 
-        // connection seL4Notification asd(from ethdriver.a, to ethdriver.b);
+        component BenchUtiliz bench;
+        BenchUtiliz_trace_connections(trace, ethdriver, bench)
+        BenchUtiliz_control_connections(idle, ethdriver, bench)
+
         picotcp_base_connections(ethdriver, pico_base, time_server.the_timer)
 #ifdef KernelArchArm
         component Dummy d;
@@ -140,7 +147,10 @@ assembly {
          * Non-platform specific configurations
          */
         time_server.timers_per_client = 8;
+        bench.bench_to_priority = 1;
+        ethdriver.trace_stop_priority = 200;
 
+        ethdriver.b_priority = 1;
         picotcp_base_configuration(ethdriver, pico_base, "", "0.0.0.0")
 
 
