@@ -32,10 +32,10 @@
 #include <pico_dhcp_client.h>
 #include <pico_device.h>
 
-#define RX_BUFS 128
+#define RX_BUFS 510
 
-#define CLIENT_RX_BUFS 128
-#define CLIENT_TX_BUFS 128
+#define CLIENT_RX_BUFS 510
+#define CLIENT_TX_BUFS 510
 
 #define BUF_SIZE 2048
 

@@ -53,7 +53,7 @@ component Ethdriver82574_1 {
     attribute int simple = 1;
     attribute int cnode_size_bits = 14;
     attribute int simple_untyped20_pool = 2;
-    attribute int heap_size = 0x400000;
+    attribute int heap_size = 0x8000000;
     attribute int dma_pool = 0x400000;
     attribute int dma_pool_cached = 1;
 
@@ -91,8 +91,7 @@ component EthdriverARMPlat_1 {
     single_threaded_component()
 
     picotcp_base_interfaces(pico_base)
-
-    attribute int heap_size = 0x400000;
+    attribute int heap_size = 0x8000000;
     attribute int dma_pool = 0x4000;
     dataport Buf dma;
     /* 
