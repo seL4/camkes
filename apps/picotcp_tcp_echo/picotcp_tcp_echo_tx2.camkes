@@ -46,7 +46,7 @@ component BPMPServer {
 
     /* hardware interfaces */
     consumes FDT hsp;
-    fdt_bind_drivers_interfaces()
+    fdt_bind_drivers_interfaces(["/bpmp"]);
     dataport Buf(4096) bpmp_tx;
     dataport Buf(4096) bpmp_rx;
 
@@ -58,7 +58,7 @@ component BPMPServer {
          * location for the seL4DTBHardware connector */
         connection seL4HardwareMMIO bpmp_tx_mmio(from bpmp_tx, to bpmp.tx_channel);
         connection seL4HardwareMMIO bpmp_rx_mmio(from bpmp_rx, to bpmp.rx_channel);
-        fdt_bind_driver_connections()
+        fdt_bind_driver_connections();
         BPMPServer_server_connections(the_bpmp)
     }
 
@@ -68,7 +68,6 @@ component BPMPServer {
         bpmp.tx_channel_size = 0x1000;
         bpmp.rx_channel_paddr = 0x3004f000;
         bpmp.rx_channel_size = 0x1000;
-        fdt_bind_driver_configuration(["/bpmp"])
         BPMPServer_server_configurations(the_bpmp)
     }
 }
