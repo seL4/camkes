@@ -224,7 +224,7 @@ int handle_picoserver_notification(void)
         if (events & PICOSERVER_CONN) {
             picoserver_peer_t peer = echo_control_accept(socket);
             if (peer.result == -1) {
-                assert(!"Failed to accept a peer");
+                ZF_LOGF("Failed to accept a peer");
             }
             inet_ntop(AF_INET, &peer.peer_addr, ip_string, 16);
             printf("%s: Connection established with %s on socket %d\n", get_instance_name(), ip_string, socket);
@@ -287,11 +287,11 @@ int handle_picoserver_notification(void)
             printf("%s: Connection closing on socket %d\n", get_instance_name(), socket);
         }
         if (events & PICOSERVER_FIN) {
+            write_pending = false;
             printf("%s: Connection closed on socket %d\n", get_instance_name(), socket);
         }
         if (events & PICOSERVER_ERR) {
-            printf("%s: Error with socket %d, going to die\n", get_instance_name(), socket);
-            assert(0);
+            ZF_LOGE("%s: Error with socket %d\n", get_instance_name(), socket);
         }
         server_event = echo_control_event_poll();
     }
@@ -348,17 +348,17 @@ int run(void)
 
     int socket_in = echo_control_open(false);
     if (socket_in == -1) {
-        assert(!"Failed to open a socket for listening!");
+        ZF_LOGF("Failed to open a socket for listening!");
     }
 
     int ret = echo_control_bind(socket_in, PICOSERVER_ANY_ADDR_IPV4, ECHO_PORT);
     if (ret) {
-        assert(!"Failed to bind a socket for listening!");
+        ZF_LOGF("Failed to bind a socket for listening!");
     }
 
     ret = echo_control_listen(socket_in, 1);
     if (ret) {
-        assert(!"Failed to listen for incoming connections!");
+        ZF_LOGF("Failed to listen for incoming connections!");
     }
 
     int udp_socket = echo_control_open(true);
