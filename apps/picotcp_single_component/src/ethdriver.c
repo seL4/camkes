@@ -205,7 +205,9 @@ static int pico_eth_poll(struct pico_device *dev, int loop_score)
 static int pico_eth_send(struct pico_device *dev, void *input_buf, int len)
 {
     assert(len >= 12);
-
+    if (len > BUF_SIZE || len < 0) {
+        ZF_LOGF("Len invalid\n");
+    }
     int err = ETHIF_TX_COMPLETE;
     int id = 0;
     client_t *client = &clients[0];
@@ -227,7 +229,7 @@ static int pico_eth_send(struct pico_device *dev, void *input_buf, int len)
             client->num_tx++;
         }
     } else {
-        printf("Dropping all the packets\n");
+        return 0; // Error for PICO
     }
 
     switch (err) {
@@ -265,7 +267,7 @@ int setup_eth0(ps_io_ops_t *io_ops)
     /* preallocate buffers */
     for (int i = 0; i < RX_BUFS; i++) {
         void *buf = ps_dma_alloc(&io_ops->dma_manager, BUF_SIZE, 4, 1, PS_MEM_NORMAL);
-        assert(buf);
+        ZF_LOGF_IF(buf == NULL, "Could not alloc");
         memset(buf, 0, BUF_SIZE);
         uintptr_t phys = ps_dma_pin(&io_ops->dma_manager, buf, BUF_SIZE);
         rx_bufs[num_rx_bufs] = (eth_buf_t) {
@@ -279,7 +281,7 @@ int setup_eth0(ps_io_ops_t *io_ops)
     for (int client = 0; client < num_clients; client++) {
         for (int i = 0; i < CLIENT_TX_BUFS; i++) {
             void *buf = ps_dma_alloc(&io_ops->dma_manager, BUF_SIZE, 4, 1, PS_MEM_NORMAL);
-            assert(buf);
+            ZF_LOGF_IF(buf == NULL, "Could not alloc");
             memset(buf, 0, BUF_SIZE);
             uintptr_t phys = ps_dma_pin(&io_ops->dma_manager, buf, BUF_SIZE);
             tx_frame_t *tx_buf = &clients[client].tx_mem[clients[client].num_tx];
@@ -339,7 +341,6 @@ void handle_udp_picoserver_notification(uint16_t events, struct pico_socket *s)
 
     if (events & PICO_SOCK_EV_ERR) {
         printf("%s: Error with socket %p, going to die\n", get_instance_name(), s);
-        assert(0);
     }
 }
 
