@@ -310,7 +310,7 @@ int setup_eth0(ps_io_ops_t *io_ops)
 }
 
 CAMKES_POST_INIT_MODULE_DEFINE(install_eth_device, setup_eth0);
-char *udp_data_packet[0x1000] ALIGN(0x1000);
+char udp_data_packet[0x1000] ALIGN(0x1000);
 
 void handle_udp_picoserver_notification(uint16_t events, struct pico_socket *s)
 {
@@ -350,7 +350,7 @@ void handle_udp_picoserver_notification(uint16_t events, struct pico_socket *s)
 struct pico_socket *socket_in;
 struct pico_socket *connected[MAX_CLIENTS];
 
-char *data_packet[MAX_CLIENTS][0x1000] ALIGN(0x1000);
+char data_packet[MAX_CLIENTS][0x1000] ALIGN(0x1000);
 
 bool write_pending[MAX_CLIENTS];
 int ret_save[MAX_CLIENTS];
