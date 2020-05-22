@@ -25,3 +25,8 @@ if("${KernelArch}" STREQUAL "x86")
     # The IOMMU is required for the Ethdriver component on x86
     set(KernelIOMMU ON CACHE BOOL "" FORCE)
 endif()
+
+
+# Print at runtime
+set(KernelPrinting ON CACHE BOOL "" FORCE)
+set(KernelDebugBuild ON CACHE BOOL "" FORCE)

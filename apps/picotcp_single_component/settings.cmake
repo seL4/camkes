@@ -27,3 +27,7 @@ endif()
 
 set(LibEthdriverRXDescCount 256)
 set(LibEthdriverTXDescCount 512)
+
+# Print at runtime
+set(KernelPrinting ON CACHE BOOL "" FORCE)
+set(KernelDebugBuild ON CACHE BOOL "" FORCE)
