@@ -68,9 +68,9 @@ component Ethdriver82574DF {
     attribute int irq_irq_vector = 20;
 
     attribute int simple = 1;
-    attribute int cnode_size_bits = 12;
+    attribute int cnode_size_bits = 14;
     attribute int simple_untyped20_pool = 2;
-    attribute int heap_size = 0x10000;
+    attribute int heap_size = 0x40000;
     attribute int dma_pool = 0x4000;
     attribute int dma_pool_cached = 1;
 
@@ -140,7 +140,7 @@ assembly {
          */
         /* IP address to assign to the networking device */
         picotcp_base_configuration(picoserver, pico_base, "", "0.0.0.0")
-        picoserver.heap_size = 0x40000;
+        picoserver.heap_size = 0x8000000;
 
     }
 }

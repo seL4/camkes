@@ -19,17 +19,104 @@
 #include <string.h>
 #include <camkes/virtqueue.h>
 #include <camkes/dataport.h>
-
+#include <virtqueue.h>
+#include <camkes/io.h>
 extern void *echo_send_buf;
 extern void *echo_recv_buf;
 #define ECHO_PORT 1234
 
-
+#define NUM_BUFS 510
+#define BUF_SIZE 2048
+#define RECEIVE_LEN 1400
 seL4_CPtr echo_control_notification();
 
 bool write_pending = false;
 int ret_save;
 int done_save;
+virtqueue_driver_t tx_virtqueue;
+virtqueue_driver_t rx_virtqueue;
+int num_tx;
+/*
+ * this represents the pool of buffers that can be used for TX,
+ * this array is a sliding array in that num_tx acts a pointer to
+ * separate between buffers that are in use and buffers that are
+ * not in use. E.g. 'o' = free, 'x' = in use
+ *  -------------------------------------
+ *  | o | o | o | o | o | o | x | x | x |
+ *  -------------------------------------
+ *                          ^
+ *                        num_tx
+ */
+tx_msg_t *pending_tx[NUM_BUFS];
+
+static int handle_received(void)
+{
+    while (true) {
+
+        virtqueue_ring_object_t handle;
+        uint32_t sent_len;
+        void *buf;
+        if (virtqueue_get_used_buf(&rx_virtqueue, &handle, &sent_len) == 0) {
+            break;
+        } else {
+            vq_flags_t flag;
+            int more = virtqueue_gather_used(&rx_virtqueue, &handle, &buf, &sent_len, &flag);
+            if (more == 0) {
+                ZF_LOGF("pico_eth_send: Invalid virtqueue ring entry");
+            }
+            buf = DECODE_DMA_ADDRESS(buf);
+
+        }
+        tx_msg_t *msg = buf;
+        if (msg->done_len == -1 || msg->done_len == 0) {
+            msg->total_len = RECEIVE_LEN;
+            msg->done_len = 0;
+            virtqueue_init_ring_object(&handle);
+            if (!virtqueue_add_available_buf(&rx_virtqueue, &handle, ENCODE_DMA_ADDRESS(msg), BUF_SIZE, VQ_RW)) {
+                ZF_LOGF("handle_sent: Error while enqueuing available buffer, queue full");
+            }
+
+        } else {
+            msg->total_len = msg->done_len;
+            msg->done_len = 0;
+            /* copy the packet over */
+
+            virtqueue_init_ring_object(&handle);
+            if (!virtqueue_add_available_buf(&tx_virtqueue, &handle, ENCODE_DMA_ADDRESS(msg), sizeof(*msg), VQ_RW)) {
+                ZF_LOGF("pico_eth_send: Error while enqueuing available buffer, queue full");
+            }
+
+        }
+    }
+}
+
+static int handle_sent(void)
+{
+    while (true) {
+        virtqueue_ring_object_t handle;
+
+        uint32_t len;
+        if (virtqueue_get_used_buf(&tx_virtqueue, &handle, &len) == 0) {
+            break;
+        }
+        void *buf;
+        vq_flags_t flag;
+        int more = virtqueue_gather_used(&tx_virtqueue, &handle, &buf, &len, &flag);
+        if (more == 0) {
+            ZF_LOGF("handle_sent: Invalid virtqueue ring entry");
+        }
+        tx_msg_t *msg = DECODE_DMA_ADDRESS(buf);
+        msg->total_len = RECEIVE_LEN;
+        msg->done_len = 0;
+        virtqueue_init_ring_object(&handle);
+        if (!virtqueue_add_available_buf(&rx_virtqueue, &handle, (void *)buf, BUF_SIZE, VQ_RW)) {
+            ZF_LOGF("handle_sent: Error while enqueuing available buffer, queue full");
+        }
+
+    }
+
+}
+
 
 int handle_picoserver_notification(void)
 {
@@ -119,16 +206,34 @@ int handle_picoserver_notification(void)
     return result;
 }
 
-
+ps_io_ops_t io_ops;
 int run(void)
 {
     seL4_Word badge;
-
+    camkes_io_ops(&io_ops);
     char ip_string[16] = {0};
     uint32_t ip_raw = PICOSERVER_ANY_ADDR_IPV4;
     inet_ntop(AF_INET, &ip_raw, ip_string, 16);
     printf("%s instance starting up, going to be listening on %s:%d\n",
            get_instance_name(), ip_string, ECHO_PORT);
+
+    seL4_Word tx_badge;
+    seL4_Word rx_badge;
+    /* Initialise read virtqueue */
+    int error = camkes_virtqueue_driver_init_with_recv(&tx_virtqueue, camkes_virtqueue_get_id_from_name("echo_tx"),
+                                                       NULL, &tx_badge);
+    if (error) {
+        ZF_LOGE("Unable to initialise serial server read virtqueue");
+    }
+
+    /* Initialise write virtqueue */
+    error = camkes_virtqueue_driver_init_with_recv(&rx_virtqueue, camkes_virtqueue_get_id_from_name("echo_rx"),
+                                                   NULL, &rx_badge);
+    if (error) {
+        ZF_LOGE("Unable to initialise serial server write virtqueue");
+    }
+
+
 
     int socket_in = echo_control_open(false);
     if (socket_in == -1) {
@@ -145,13 +250,50 @@ int run(void)
         assert(!"Failed to listen for incoming connections!");
     }
 
+    int udp_socket = echo_control_open(true);
+    if (udp_socket == -1) {
+        ZF_LOGF("Failed to open a socket for listening!");
+    }
+    ret = echo_control_set_async(udp_socket, true);
+    if (ret) {
+        ZF_LOGF("Failed to set a socket to async: %d!", ret);
+    }
+
+    ret = echo_control_bind(udp_socket, PICOSERVER_ANY_ADDR_IPV4, 1235);
+    if (ret) {
+        ZF_LOGF("Failed to bind a socket for listening: %d!", ret);
+    }
+
+    for (int i = 0; i < NUM_BUFS - 1; i++) {
+        tx_msg_t *msg;
+        tx_msg_t *buf = ps_dma_alloc(&io_ops.dma_manager, BUF_SIZE, 4, 1, PS_MEM_NORMAL);
+        ZF_LOGF_IF(buf == NULL, "Failed to alloc");
+        memset(buf, 0, BUF_SIZE);
+        buf->total_len = RECEIVE_LEN;
+        buf->socket_fd = udp_socket;
+
+        virtqueue_ring_object_t handle;
+
+        virtqueue_init_ring_object(&handle);
+
+        if (!virtqueue_add_available_buf(&rx_virtqueue, &handle, ENCODE_DMA_ADDRESS(buf), sizeof(*buf), VQ_RW)) {
+            ZF_LOGF("Error while enqueuing available buffer, queue full");
+        }
+    }
+    rx_virtqueue.notify();
+
     /* Now poll for events and handle them */
 
     while (1) {
         seL4_Wait(echo_control_notification(), &badge);
-        int processed;
-        do {
-            processed = handle_picoserver_notification();
-        } while (processed);
+        if ((badge & tx_badge) == tx_badge) {
+            handle_sent();
+            handle_received();
+            tx_virtqueue.notify();
+
+        }
+        if ((badge & echo_control_notification_badge()) == echo_control_notification_badge()) {
+            handle_picoserver_notification();
+        }
     }
 }
