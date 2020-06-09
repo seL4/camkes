@@ -1,5 +1,5 @@
 #
-# Copyright 2018, Data61
+# Copyright 2018, 2020, Data61
 # Commonwealth Scientific and Industrial Research Organisation (CSIRO)
 # ABN 41 687 119 230.
 #
@@ -16,6 +16,6 @@ project(serialserver C)
 
 set(CAmkESCPP ON CACHE BOOL "" FORCE)
 includeGlobalComponents()
-DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
+DeclareCAmkESComponent(Client SOURCES components/Client/src/interrupt-client.c)
 DeclareCAmkESRootserver(serialserver.camkes)
 add_simulate_test([=[wait_for "Hello Serial Server!"]=])

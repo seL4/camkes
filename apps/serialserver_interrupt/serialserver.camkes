@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, Data61
+ * Copyright 2018, 2020, Data61
  * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
  * ABN 41 687 119 230.
  *
@@ -17,25 +17,26 @@ import <global-connectors.camkes>;
 
 component Client {
     control;
-    uses PutChar serial_putchar;
-    uses GetChar serial_getchar;
+    uses PutChar interrupt_putchar;
+    uses GetChar interrupt_getchar;
 }
 
 assembly {
     composition {
-        component Client client;
+        component Client interruptcli;
         component SerialServer serial;
         component TimeServer time_server;
 
         connection seL4RPCCall serial_time_server(from time_server.putchar, to serial.processed_putchar);
-        connection seL4RPCCall serial_client(from client.serial_putchar, to serial.processed_putchar);
-
-        connection seL4SerialServer serial_input(from client.serial_getchar, to serial.getchar);
         connection seL4TimeServer serialserver_timer(from serial.timeout, to time_server.the_timer);
+
+        /* interrupt based client to Serial */
+        connection seL4RPCCall interrupt_output(from interruptcli.interrupt_putchar, to serial.processed_putchar);
+        connection seL4SerialServer interrupt_input(from interruptcli.interrupt_getchar, to serial.getchar);
     }
 
     configuration {
-        client.serial_getchar_shmem_size = 0x1000;
+        interruptcli.interrupt_getchar_shmem_size = 0x1000;
         time_server.timers_per_client = 1;
     }
 }
