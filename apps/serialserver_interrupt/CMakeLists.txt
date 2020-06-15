@@ -12,10 +12,10 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
-project(serialserver C)
+project(serialserver_interrupt C)
 
 set(CAmkESCPP ON CACHE BOOL "" FORCE)
 includeGlobalComponents()
 DeclareCAmkESComponent(Client SOURCES components/Client/src/interrupt-client.c)
-DeclareCAmkESRootserver(serialserver.camkes)
+DeclareCAmkESRootserver(serialserver_interrupt.camkes)
 add_simulate_test([=[wait_for "Hello Serial Server!"]=])

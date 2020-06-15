@@ -52,7 +52,8 @@ foreach(
     alignment
     keyboard
     pit
-    serialserver
+    serialserver_polling
+    serialserver_interrupt
     testhwdataportlrgpages
     timeserver
     vgatest
