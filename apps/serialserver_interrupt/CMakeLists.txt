@@ -18,4 +18,8 @@ set(CAmkESCPP ON CACHE BOOL "" FORCE)
 includeGlobalComponents()
 DeclareCAmkESComponent(Client SOURCES components/Client/src/interrupt-client.c)
 DeclareCAmkESRootserver(serialserver_interrupt.camkes)
-add_simulate_test([=[wait_for "Hello Serial Server!"]=])
+add_simulate_test([=[
+    wait_for "interruptcli: Hello Serial Server!"
+    send "Hello world!\\r"
+    wait_for "interruptcli: Hello world!"
+    ]=])
