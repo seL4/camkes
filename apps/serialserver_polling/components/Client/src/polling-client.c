@@ -36,9 +36,11 @@ int run(void)
     while (1) {
         int i = 0;
         do {
-            seL4_Word badge = 0;
-            while (!badge) {
-                seL4_Poll(poll_getchar_notification(), &badge);
+            if (poll_getchar_buf->head == poll_getchar_buf->tail) {
+                seL4_Word badge = 0;
+                while (!badge) {
+                    seL4_Poll(poll_getchar_notification(), &badge);
+                }
             }
             buf[i] = poll_getchar_buf->buf[poll_getchar_buf->head];
             poll_getchar_buf->head = (poll_getchar_buf->head + 1) % sizeof(poll_getchar_buf->buf);
