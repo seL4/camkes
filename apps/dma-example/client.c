@@ -24,7 +24,7 @@ int run(void) {
     void *buffers[100];
     int i;
     for (i = 0; i < sizeof(buffers) / sizeof(void*); i++) {
-        buffers[i] = camkes_dma_alloc(4096, 4096);
+        buffers[i] = camkes_dma_alloc(4096, 4096, true);
         if (buffers[i] == NULL) {
             printf("Ran out of memory after %d of them\n", i);
             break;
@@ -43,7 +43,7 @@ int run(void) {
 
     /* Test the newer API. */
     printf("Attempting to allocate 0x2000...");
-    void *p = camkes_dma_alloc(0x2000, 0);
+    void *p = camkes_dma_alloc(0x2000, 0, true);
     /* This is not guaranteed to work, but does so coincidentally. Assert on
      * this for now to catch accidental regressions in this behaviour.
      */
@@ -65,7 +65,7 @@ int run(void) {
     printf("Allocating with different alignment requirements...\n");
     for (int j = 0; j < 14; j++) {
         printf(" Allocating 0x1000 with alignment %d...", 1<<j);
-        void *p = camkes_dma_alloc(0x1000, 1<<j);
+        void *p = camkes_dma_alloc(0x1000, 1<<j, true);
         if (p == NULL) {
             printf("Failed\n");
         } else {
@@ -75,7 +75,7 @@ int run(void) {
     }
 
     printf("Allocating 4MB...\n");
-    p = camkes_dma_alloc(4 * 1024 * 1024, 0);
+    p = camkes_dma_alloc(4 * 1024 * 1024, 0, true);
     if (p == NULL) {
         printf("Failed\n");
     } else {
