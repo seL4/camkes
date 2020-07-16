@@ -1,0 +1,162 @@
+/*
+ * Copyright 2020, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+import <std_connector.camkes>;
+import <global-connectors.camkes>;
+import <TimeServer/TimeServer.camkes>;
+
+#include <plat/eth_devices.h>
+#include <camkes-picotcp-base.h>
+#include <camkes-single-threaded.h>
+#include <camkes-dynamic-untyped-allocators.h>
+#include <camkes-x86-iospace-dma.h>
+#include <camkes-BenchUtiliz.h>
+#include <camkes-SerialServer-camkes-putchar-client.h>
+
+#include <tuning_params.h>
+
+
+HARDWARE_ETHERNET_EXTRA_IMPORTS
+
+component HWEthDriver82574 {
+    hardware;
+    emits IRQ irq;
+    dataport Buf(0x20000) mmio;
+};
+
+component Ethdriver82574_1 {
+    single_threaded_component()
+    dynamic_untyped_allocators_interfaces(init_dynamic)
+    x86_iospace_dma_interfaces(init_iospaces, "0x12:0x0:0x19:0")
+    picotcp_base_interfaces(pico_base)
+    SerialServer_putchar_printf_client(putchar)
+    /*
+     * The promiscuous mode is set according to whatever configuration you want, 1 by default.
+     */
+     attribute int promiscuous_mode = 1;
+
+    consumes IRQ irq;
+    dataport Buf(0x20000) EthDriver;
+
+    uses IdleThread idle;
+
+
+    /* MMIO and IRQ default values */
+    attribute int mmio_paddr = 0xf7f00000;
+    attribute int mmio_size = 0x20000;
+    attribute string irq_irq_type = "pci";
+    attribute int irq_irq_ioapic = 0;
+    attribute int irq_irq_ioapic_pin = 20;
+    attribute int irq_irq_vector = 20;
+
+    attribute int simple = 1;
+    attribute int cnode_size_bits = 14;
+    attribute int simple_untyped20_pool = 2;
+    attribute int heap_size = HEAP_SIZE;
+
+    attribute int dma_pool = DMA_ALLOC_SIZE;
+    attribute int dma_pool_cached = 1;
+
+
+    composition {
+        component HWEthDriver82574 hwethdriver;
+        connection seL4HardwareMMIO ethdrivermmio(from EthDriver, to hwethdriver.mmio);
+        connection seL4GlobalAsynchHardwareInterrupt hwethirq(from hwethdriver.irq, to irq);
+        dynamic_untyped_allocators_connections(init_dynamic)
+        x86_iospace_dma_connections(init_iospaces)
+
+
+    }
+    configuration {
+        hwethdriver.mmio_paddr <- mmio_paddr;
+        hwethdriver.mmio_size <- mmio_size;
+        hwethdriver.irq_irq_type <- irq_irq_type;
+        hwethdriver.irq_irq_ioapic <- irq_irq_ioapic;
+        hwethdriver.irq_irq_ioapic_pin <- irq_irq_ioapic_pin;
+        hwethdriver.irq_irq_vector <- irq_irq_vector;
+        dynamic_untyped_allocators_configuration(init_dynamic)
+        x86_iospace_dma_configuration(init_iospaces)
+   }
+}
+
+
+
+/* Example hardware components that contain minimal necessary spec for different ethdrivers */
+
+
+/* This is a macro used to define the hardware CAmkES component for each ARM platform */
+HARDWARE_ETHERNET_COMPONENT
+
+component EthdriverARMPlat_1 {
+    single_threaded_component()
+
+    picotcp_base_interfaces(pico_base)
+    BenchUtiliz_control_interfaces(idle)
+    SerialServer_putchar_printf_client(putchar)
+    attribute int heap_size = HEAP_SIZE;
+    attribute int dma_pool = DMA_ALLOC_SIZE;
+    attribute int dma_pool_cached = 0;
+    attribute int promiscuous_mode = 0;
+
+    HARDWARE_ETHERNET_INTERFACES
+
+    composition {
+        HARDWARE_ETHERNET_COMPOSITION
+
+    }
+
+    configuration {
+        HARDWARE_ETHERNET_CONFIG
+    }
+};
+
+component Dummy {
+        dataport Buf dma;
+
+}
+
+assembly {
+    composition {
+
+#ifdef KernelArchArm
+        component EthdriverARMPlat_1 ethdriver;
+#endif /* KernelArchArm */
+#ifdef KernelArchX86
+        component Ethdriver82574_1 ethdriver;
+#endif /* KernelArchX86 */
+        component TimeServer time_server;
+        component SerialServer serial_server;
+
+        connection seL4TimeServer serialserver_timer(from serial_server.timeout, to time_server.the_timer);
+        SerialServer_processed_putchar_printf_connection(putchar, ethdriver, serial_server)
+
+        component BenchUtiliz bench;
+        BenchUtiliz_trace_connections(trace, ethdriver, bench)
+        BenchUtiliz_control_connections(idle, ethdriver, bench)
+
+        picotcp_base_connections(ethdriver, pico_base, time_server.the_timer)
+    }
+
+    configuration {
+        /*
+         * Non-platform specific configurations
+         */
+        time_server.timers_per_client = 8;
+
+        ethdriver.trace_stop_priority = 255;
+        ethdriver.enable_tracing = 1;
+
+        picotcp_base_configuration(ethdriver, pico_base, "", "0.0.0.0")
+
+    }
+}
+
