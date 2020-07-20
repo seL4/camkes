@@ -27,6 +27,7 @@ import <TimeServer/TimeServer.camkes>;
 #include <camkes-GPIOServer.h>
 #include <camkes-MUXServer.h>
 #include <camkes-fdt-bind-driver.h>
+#include <camkes-SerialServer-camkes-putchar-client.h>
 
 component FDT_device {
     hardware;
@@ -151,6 +152,7 @@ component PicoTCPServer {
     picotcp_ethernet_async_client_interfaces(eth0)
     picotcp_socket_sync_server_interfaces(pico)
     picotcp_base_interfaces(pico_base)
+    SerialServer_putchar_printf_client(putchar)
     composition {
         picotcp_socket_sync_server_connections(pico)
     }
@@ -170,6 +172,7 @@ component EthdriverARMPlatDF {
     attribute int heap_size = 0x10000;
     attribute int dma_pool_cached = 0;
     attribute int dma_pool = 0x4000;
+    SerialServer_putchar_printf_client(putchar)
 
 
     consumes FDT EthDriver;
@@ -197,6 +200,7 @@ component Echo {
     single_threaded_component()
 
     picotcp_socket_sync_client_interfaces(echo)
+    SerialServer_putchar_printf_client(putchar)
 }
 
 assembly {
@@ -212,6 +216,9 @@ assembly {
 
         /* Timer component */
         component TimeServer time_server;
+
+        /* Serial server component */
+        component SerialServer serial_server;
 
         /* BPMP Processor driver */
         component BPMPServer bpmp_server;
@@ -233,6 +240,13 @@ assembly {
         ClockServer_client_connections(clock, ethdriver, the_clock, clock_server)
         ResetServer_client_connections(reset, ethdriver, the_reset, reset_server)
         GPIOServer_client_connections(gpio, ethdriver, the_gpio, gpiomux_server)
+
+        /* Serial connections */
+        connection seL4TimeServer serialserver_timer(from serial_server.timeout, to time_server.the_timer);
+        SerialServer_processed_putchar_printf_connection(putchar, echo, serial_server)
+        SerialServer_processed_putchar_printf_connection(putchar, picoserver, serial_server)
+        SerialServer_processed_putchar_printf_connection(putchar, ethdriver, serial_server)
+
 
         /* Clock and reset drivers need to talk to BPMP */
         BPMPServer_client_connections(bpmp, clock_server, the_bpmp, bpmp_server)

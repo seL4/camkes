@@ -22,12 +22,15 @@ import <TimeServer/TimeServer.camkes>;
 #include <camkes-single-threaded.h>
 #include <camkes-dynamic-untyped-allocators.h>
 #include <camkes-x86-iospace-dma.h>
+#include <camkes-SerialServer-camkes-putchar-client.h>
 
 component PicoServerDF {
     single_threaded_component()
     picotcp_ethernet_async_client_interfaces(eth0)
     picotcp_socket_sync_server_interfaces(pico)
     picotcp_base_interfaces(pico_base)
+    SerialServer_putchar_printf_client(putchar)
+
     composition {
         picotcp_socket_sync_server_connections(pico)
     }
@@ -57,7 +60,7 @@ component Ethdriver82574DF {
 
     consumes IRQ irq;
     dataport Buf(0x20000) EthDriver;
-
+    SerialServer_putchar_printf_client(putchar)
 
 
     /* MMIO and IRQ default values */
@@ -101,6 +104,7 @@ component Ethdriver82574DF {
 component Echo {
     single_threaded_component()
     picotcp_socket_sync_client_interfaces(echo)
+    SerialServer_putchar_printf_client(putchar)
 }
 
 assembly {
@@ -117,12 +121,21 @@ assembly {
         /* Timer component */
         component TimeServer time_server;
 
+        /* Serial server component */
+        component SerialServer serial_server;
+
         /*
          * Connections
          */
         picotcp_ethernet_async_connections(eth0, picoserver, ethdriver)
         picotcp_socket_sync_client_connections(echo, echo, picoserver, pico)
         picotcp_base_connections(picoserver, pico_base, time_server.the_timer)
+
+        connection seL4TimeServer serialserver_timer(from serial_server.timeout, to time_server.the_timer);
+        SerialServer_processed_putchar_printf_connection(putchar, echo, serial_server)
+        SerialServer_processed_putchar_printf_connection(putchar, picoserver, serial_server)
+        SerialServer_processed_putchar_printf_connection(putchar, ethdriver, serial_server)
+
     }
 
     configuration {
