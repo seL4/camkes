@@ -30,7 +30,10 @@ static void handle_picoserver_notification(UNUSED seL4_Word badge, UNUSED void *
     while (server_event.num_events_left > 0 || server_event.events) {
         socket = server_event.socket_fd;
         events = server_event.events;
-        if (socket == socket_in || socket == tcp_echo_client) {
+        if (socket == utiliz_socket || socket == peer_socket) {
+            handle_tcp_utiliz_notification(events, socket);
+            server_event = echo_control_event_poll();
+        } else if (socket == socket_in || socket == tcp_echo_client) {
             handle_tcp_echo_notification(events, socket);
             server_event = echo_control_event_poll();
 

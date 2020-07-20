@@ -24,6 +24,7 @@
 
 
 /* TCP connection socket handler callbacks */
+void handle_tcp_utiliz_notification(uint16_t events, int socket);
 void handle_tcp_echo_notification(uint16_t events, int socket);
 
 /* Async socket completion callbacks */
@@ -36,6 +37,10 @@ static_assert(BUF_SIZE >= (sizeof(tx_msg_t) + UDP_READ_SIZE),
               "BUF_SIZE is too small to hold UDP_READ_SIZE and metadata");
 static_assert(BUF_SIZE >= (sizeof(tx_msg_t) + TCP_READ_SIZE),
               "BUF_SIZE is too small to hold TCP_READ_SIZE and metadata");
+
+/* Utilization sockets */
+extern int utiliz_socket;
+extern int peer_socket;
 
 /* TCP Echo sockets */
 extern int socket_in;

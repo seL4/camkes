@@ -28,6 +28,7 @@ import <TimeServer/TimeServer.camkes>;
 #include <camkes-MUXServer.h>
 #include <camkes-fdt-bind-driver.h>
 #include <camkes-SerialServer-camkes-putchar-client.h>
+#include <camkes-BenchUtiliz.h>
 
 component FDT_device {
     hardware;
@@ -201,6 +202,7 @@ component Echo {
 
     picotcp_socket_sync_client_interfaces(echo)
     SerialServer_putchar_printf_client(putchar)
+    BenchUtiliz_control_interfaces(idle)
 }
 
 assembly {
@@ -232,6 +234,9 @@ assembly {
         /* GPIO/MUX driver */
         component GPIOMUXServer gpiomux_server;
 
+        /* Utilization and tracing component */
+        component BenchUtiliz bench;
+
         /*
          * Connections
          */
@@ -260,6 +265,13 @@ assembly {
 
         /* picotcp connection to time server */
         picotcp_base_connections(picoserver, pico_base, time_server.the_timer)
+
+        /* Trace connections */
+        BenchUtiliz_trace_connections(trace, ethdriver, bench)
+        BenchUtiliz_trace_connections(trace, picoserver, bench)
+        BenchUtiliz_control_connections(idle, echo, bench)
+        BenchUtiliz_trace_connections(trace, echo, bench)
+
     }
 
     configuration {
@@ -283,7 +295,14 @@ assembly {
         /* timeserver requires some value for this setting. Currently only picotcp
            uses 1 timer */
         time_server.timers_per_client = 8;
+        BenchUtiliz_trace_configurations(trace, ethdriver, 103)
+        BenchUtiliz_trace_configurations(trace, picoserver, 102)
+        BenchUtiliz_trace_configurations(trace, echo, 101)
 
+        /* Set to 1 for enabling tracing */
+        echo.enable_tracing = 1;
+        picoserver.enable_tracing = 1;
+        ethdriver.enable_tracing = 1;
 
         /*
          * PicoServer config

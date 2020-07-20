@@ -15,3 +15,6 @@
 
 /* UDP echo on port 1235 */
 #define UDP_ECHO_PORT 1235
+
+/* ipbench utilization client on 1236 */
+#define UTILIZATION_PORT 1236

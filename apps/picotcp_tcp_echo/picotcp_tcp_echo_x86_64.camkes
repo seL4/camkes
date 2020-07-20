@@ -23,6 +23,7 @@ import <TimeServer/TimeServer.camkes>;
 #include <camkes-dynamic-untyped-allocators.h>
 #include <camkes-x86-iospace-dma.h>
 #include <camkes-SerialServer-camkes-putchar-client.h>
+#include <camkes-BenchUtiliz.h>
 
 component PicoServerDF {
     single_threaded_component()
@@ -104,6 +105,7 @@ component Ethdriver82574DF {
 component Echo {
     single_threaded_component()
     picotcp_socket_sync_client_interfaces(echo)
+    BenchUtiliz_control_interfaces(idle)
     SerialServer_putchar_printf_client(putchar)
 }
 
@@ -124,6 +126,8 @@ assembly {
         /* Serial server component */
         component SerialServer serial_server;
 
+        /* Utilization and tracing component */
+        component BenchUtiliz bench;
         /*
          * Connections
          */
@@ -135,6 +139,12 @@ assembly {
         SerialServer_processed_putchar_printf_connection(putchar, echo, serial_server)
         SerialServer_processed_putchar_printf_connection(putchar, picoserver, serial_server)
         SerialServer_processed_putchar_printf_connection(putchar, ethdriver, serial_server)
+
+        BenchUtiliz_trace_connections(trace, ethdriver, bench)
+        BenchUtiliz_trace_connections(trace, picoserver, bench)
+        BenchUtiliz_trace_connections(trace, echo, bench)
+        BenchUtiliz_control_connections(idle, echo, bench)
+
 
     }
 
@@ -150,6 +160,16 @@ assembly {
          */
 
         time_server.timers_per_client = 8;
+
+        /* Tracing configuration */
+        BenchUtiliz_trace_configurations(trace, ethdriver, 103)
+        BenchUtiliz_trace_configurations(trace, picoserver, 102)
+        BenchUtiliz_trace_configurations(trace, echo, 101)
+        /* Set to 1 for enabling tracing */
+        echo.enable_tracing = 1;
+        picoserver.enable_tracing = 1;
+        ethdriver.enable_tracing = 1;
+
 
         /*
          * PicoServer config
