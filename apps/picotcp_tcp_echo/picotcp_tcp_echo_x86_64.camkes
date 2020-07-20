@@ -14,6 +14,7 @@ import <std_connector.camkes>;
 import <global-connectors.camkes>;
 import <TimeServer/TimeServer.camkes>;
 
+#include <tuning_params.h>
 #include <camkes-picotcp-ethernet-async.h>
 #include <camkes-picotcp-socket-sync.h>
 #include <camkes-picotcp-base.h>
@@ -68,9 +69,9 @@ component Ethdriver82574DF {
     attribute int irq_irq_vector = 20;
 
     attribute int simple = 1;
-    attribute int cnode_size_bits = 12;
+    attribute int cnode_size_bits = 14;
     attribute int simple_untyped20_pool = 2;
-    attribute int heap_size = 0x10000;
+    attribute int heap_size = 0x40000;
     attribute int dma_pool = 0x4000;
     attribute int dma_pool_cached = 1;
 
@@ -98,8 +99,7 @@ component Ethdriver82574DF {
 
 
 component Echo {
-    control;
-
+    single_threaded_component()
     picotcp_socket_sync_client_interfaces(echo)
 }
 
@@ -126,9 +126,12 @@ assembly {
     }
 
     configuration {
-        picotcp_ethernet_async_configurations(eth0, picoserver, ethdriver)
-        picotcp_socket_sync_client_configurations(echo, echo, 0x1000)
+        echo._priority = 100;
+        picoserver._priority = 99;
+        ethdriver._priority = 98;
 
+        picotcp_ethernet_async_configurations(eth0, picoserver, ethdriver)
+        picotcp_socket_sync_client_configurations(echo, echo, 0x1000, PICOTCP_SOCKET_ASYNC_QUEUE_LEN, PICOTCP_SOCKET_ASYNC_POOL_SIZE)
         /*
          * Non-platform specific configurations
          */
@@ -140,7 +143,7 @@ assembly {
          */
         /* IP address to assign to the networking device */
         picotcp_base_configuration(picoserver, pico_base, "", "0.0.0.0")
-        picoserver.heap_size = 0x40000;
+        picoserver.heap_size = PICOSERVER_HEAP_SIZE;
 
     }
 }

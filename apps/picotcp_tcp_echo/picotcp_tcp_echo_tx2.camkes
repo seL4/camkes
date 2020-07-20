@@ -14,6 +14,7 @@ import <std_connector.camkes>;
 import <global-connectors.camkes>;
 import <TimeServer/TimeServer.camkes>;
 
+#include <tuning_params.h>
 /* Import newer driver framework interfaces */
 #include <camkes-picotcp-ethernet-async.h>
 #include <camkes-picotcp-socket-sync.h>
@@ -193,7 +194,7 @@ component EthdriverARMPlatDF {
 
 
 component Echo {
-    control;
+    single_threaded_component()
 
     picotcp_socket_sync_client_interfaces(echo)
 }
@@ -248,10 +249,13 @@ assembly {
     }
 
     configuration {
+        echo._priority = 100;
+        picoserver._priority = 99;
+        ethdriver._priority = 98;
         picotcp_ethernet_async_configurations(eth0, picoserver, ethdriver)
         picotcp_ethernet_async_configurations_uncached_dma(eth0, picoserver, ethdriver)
         /* Setting buffer size of echo socket to 4096 */
-        picotcp_socket_sync_client_configurations(echo, echo, 0x1000)
+        picotcp_socket_sync_client_configurations(echo, echo, 0x1000, PICOTCP_SOCKET_ASYNC_QUEUE_LEN, PICOTCP_SOCKET_ASYNC_POOL_SIZE)
         BPMPServer_client_configurations(bpmp, clock_server)
         BPMPServer_client_configurations(bpmp, reset_server)
         ClockServer_client_configurations(clock, ethdriver)
@@ -274,7 +278,7 @@ assembly {
         picotcp_base_configuration(picoserver, pico_base, "", "0.0.0.0")
 
         /* Heap used by pico for tracking clients, sockets and picotcp backing queues. */
-        picoserver.heap_size = 0x40000;
+        picoserver.heap_size = PICOSERVER_HEAP_SIZE;
 
     }
 }

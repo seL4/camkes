@@ -24,8 +24,10 @@ elseif("${KernelArch}" STREQUAL "arm")
 endif()
 
 set(PICOSERVER_IP_ADDR "" CACHE STRING "IP address for the Picoserver component")
+file(GLOB sources ${CMAKE_CURRENT_LIST_DIR}/components/Echo/src/*)
 
-DeclareCAmkESComponent(Echo SOURCES components/Echo/src/echo.c INCLUDES components/include/)
+DeclareCAmkESComponent(Echo SOURCES ${sources} INCLUDES components/include/)
+CAmkESAddCPPInclude("${CMAKE_CURRENT_LIST_DIR}/components/Echo/src/")
 
 if(KernelSel4ArchX86_64)
 

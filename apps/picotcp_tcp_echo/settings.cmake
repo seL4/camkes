@@ -29,7 +29,3 @@ endif()
 set(LibEthdriverRXDescCount 256 CACHE STRING "" FORCE)
 set(LibEthdriverTXDescCount 512 CACHE STRING "" FORCE)
 set(CAmkESNoFPUByDefault ON CACHE BOOL "" FORCE)
-
-# Print at runtime
-# set(KernelPrinting ON CACHE BOOL "" FORCE)
-# set(KernelDebugBuild ON CACHE BOOL "" FORCE)
