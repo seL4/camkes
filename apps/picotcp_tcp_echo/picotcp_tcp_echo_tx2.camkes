@@ -45,7 +45,7 @@ component BPMPServer {
 
     /* hardware interfaces */
     consumes FDT hsp;
-    fdt_bind_drivers_interfaces()
+    fdt_bind_drivers_interfaces(["/bpmp"]);
     dataport Buf(4096) bpmp_tx;
     dataport Buf(4096) bpmp_rx;
 
@@ -57,7 +57,7 @@ component BPMPServer {
          * location for the seL4DTBHardware connector */
         connection seL4HardwareMMIO bpmp_tx_mmio(from bpmp_tx, to bpmp.tx_channel);
         connection seL4HardwareMMIO bpmp_rx_mmio(from bpmp_rx, to bpmp.rx_channel);
-        fdt_bind_driver_connections()
+        fdt_bind_driver_connections();
         BPMPServer_server_connections(the_bpmp)
     }
 
@@ -67,7 +67,6 @@ component BPMPServer {
         bpmp.tx_channel_size = 0x1000;
         bpmp.rx_channel_paddr = 0x3004f000;
         bpmp.rx_channel_size = 0x1000;
-        fdt_bind_driver_configuration(["/bpmp"])
         BPMPServer_server_configurations(the_bpmp)
     }
 }
@@ -175,20 +174,19 @@ component EthdriverARMPlatDF {
     ClockServer_client_interfaces(clock)
     ResetServer_client_interfaces(reset)
     GPIOServer_client_interfaces(gpio)
-    fdt_bind_drivers_interfaces()
+    fdt_bind_drivers_interfaces(["/ether_qos@2490000"]);
     // TX2 requires DMA at address < 2^32
     attribute int dma_pool_paddr = 0x90000000;
 
     composition {
         component FDT_device ether_qos;
         connection seL4DTBHWThreadless ethdriver_conn(from ether_qos.resource, to EthDriver);
-        fdt_bind_driver_connections()
+        fdt_bind_driver_connections();
     }
 
     configuration {
         EthDriver.dtb = dtb({ "path" : "/ether_qos@2490000" });
         EthDriver.generate_interrupts = 1;
-        fdt_bind_driver_configuration(["/ether_qos@2490000"])
     }
 };
 
