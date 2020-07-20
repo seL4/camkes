@@ -167,6 +167,7 @@ component EthdriverARMPlatDF {
      */
     attribute int promiscuous_mode = 1;
     attribute int heap_size = 0x10000;
+    attribute int dma_pool_cached = 0;
     attribute int dma_pool = 0x4000;
 
 
@@ -248,6 +249,7 @@ assembly {
 
     configuration {
         picotcp_ethernet_async_configurations(eth0, picoserver, ethdriver)
+        picotcp_ethernet_async_configurations_uncached_dma(eth0, picoserver, ethdriver)
         /* Setting buffer size of echo socket to 4096 */
         picotcp_socket_sync_client_configurations(echo, echo, 0x1000)
         BPMPServer_client_configurations(bpmp, clock_server)
