@@ -18,13 +18,6 @@
 
 int ethif_init(struct eth_driver *eth_driver, ps_io_ops_t *io_ops)
 {
-    ps_irq_t irq_info = (ps_irq_t) {
-        .type = PS_IOAPIC, .ioapic = { .ioapic = 0, .pin = 20,
-                                       .level = 1, .polarity = 1,
-                                       .vector = 20
-                                     }
-    };
-
     ethif_intel_config_t *eth_config = calloc(1, sizeof(ethif_intel_config_t) + sizeof(ps_irq_t));
     *eth_config = (ethif_intel_config_t) {
         /* Ethdriver component dataport */
