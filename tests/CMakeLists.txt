@@ -94,6 +94,7 @@ list(
         rumprun_ethernet
         picoserver
         picotcp_tcp_echo
+        picotcp_single_component
 )
 
 foreach(app IN LISTS apps)
