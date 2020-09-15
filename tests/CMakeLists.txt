@@ -95,6 +95,7 @@ list(
         picoserver
         picotcp_tcp_echo
         picotcp_single_component
+        mcs-scheduling
 )
 
 foreach(app IN LISTS apps)
