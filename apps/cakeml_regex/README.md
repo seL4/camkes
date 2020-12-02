@@ -80,7 +80,7 @@ _connections_. In our example system, we have three components called Producer, 
 
 For general information on CAmkES, please see the documentation:
 
-* https://sel4.systems/Info/CAmkES/About.pml
+* https://docs.sel4.systems/projects/camkes/
 * https://github.com/seL4/camkes-tool/blob/master/docs/index.md
 
 ### Filter Implementation
