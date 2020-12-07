@@ -18,20 +18,24 @@ static sync_mutex_t mutex;
 /* We implement the 'to' side of this interface, removing the need for the user
  * to implement it.
  */
-int /*? me.interface.name ?*/_lock(void) {
+int /*? me.interface.name ?*/_lock(void)
+{
     return sync_mutex_lock(&mutex);
 }
 
-int /*? me.interface.name ?*/_unlock(void) {
+int /*? me.interface.name ?*/_unlock(void)
+{
     return sync_mutex_unlock(&mutex);
 }
 
-void /*? me.interface.name ?*/__init(void) {
+void /*? me.interface.name ?*/__init(void)
+{
     int result = sync_mutex_init(&mutex, /*? notification ?*/);
     assert(result == 0);
 }
 
-int /*? me.interface.name ?*/__run(void) {
+int /*? me.interface.name ?*/__run(void)
+{
     while (1) {
         /*- if options.realtime -*/
         seL4_MessageInfo_t info = seL4_Wait(/*? ep ?*/, NULL);

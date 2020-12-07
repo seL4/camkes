@@ -16,7 +16,8 @@
 
 uint64_t acc = 0;
 
-int run() {
+int run()
+{
 
     IPRINT("--- Starting ---\n");
 

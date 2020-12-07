@@ -9,9 +9,10 @@
 #include <string.h>
 #include <stdio.h>
 
-int run(void) {
+int run(void)
+{
 
-    char *buffer_str = (char*)buffer;
+    char *buffer_str = (char *)buffer;
 
     snprintf(buffer_str, REVERSE_STRING_MAX_LEN, "Hello, World!");
 

@@ -14,7 +14,8 @@
 seL4_CPtr virtqueue_wait_notification(void);
 
 // Return the global endpoint for our CakeML filter component
-void ffiget_global_endpoint(char * c, unsigned long clen, char * a, unsigned long alen) {
+void ffiget_global_endpoint(char *c, unsigned long clen, char *a, unsigned long alen)
+{
     assert(alen >= 1 + sizeof(seL4_CPtr));
     seL4_CPtr src = virtqueue_wait_notification();
     memcpy(a + 1, &src, sizeof(seL4_CPtr));

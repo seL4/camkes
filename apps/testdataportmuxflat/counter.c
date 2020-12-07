@@ -8,12 +8,13 @@
 #include <camkes.h>
 #include <stdio.h>
 
-int run(void) {
+int run(void)
+{
 #ifdef NDEBUG
     printf("WARNING: assertions are disabled!\n");
 #endif
 
-    volatile int *value = (volatile int*)port;
+    volatile int *value = (volatile int *)port;
 
     while (*value < 20) {
         /* Wait for our turn. */
@@ -25,7 +26,7 @@ int run(void) {
 
         /* Pause a while to try to expose any race conditions. */
         for (unsigned int i = 0; i < 100000; i++) {
-            asm volatile ("");
+            asm volatile("");
         }
 
         /* Now we should be able to atomic increment with no error. */

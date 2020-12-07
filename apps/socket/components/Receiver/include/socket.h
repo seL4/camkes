@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-#ifndef _SOCKET_
-#define _SOCKET_
+#pragma once
 
 #include <platsupport/sync/spinlock.h>
 
@@ -14,5 +13,3 @@ typedef struct {
     int full;
     char data[100];
 } socket_t;
-
-#endif

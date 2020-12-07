@@ -6,7 +6,8 @@
 
 #include <camkes.h>
 
-void client_transfer_string(const char * s) {
+void client_transfer_string(const char *s)
+{
     printf("%s", s);
     fflush(stdout);
 }

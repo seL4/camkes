@@ -8,7 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int run() {
+int run()
+{
     const char *shello = "hello world";
     const char *smore = "a longer string that will overflow the message registers on ARM";
     char *s;
@@ -21,16 +22,16 @@ int run() {
     printf("-------------------\n");
 
     j = a_echo_int(i);
-    printf("echo_int: %d -> %d\n",i, j);
+    printf("echo_int: %d -> %d\n", i, j);
 
     g = a_echo_float(f);
-    printf("echo_float: %f -> %f\n",f, g);
+    printf("echo_float: %f -> %f\n", f, g);
 
     e = a_echo_double(d);
-    printf("echo_double: %f -> %f\n",d, e);
+    printf("echo_double: %f -> %f\n", d, e);
 
     j = a_echo_mix(d);
-    printf("echo_mix: %f -> %d\n",d, j);
+    printf("echo_mix: %f -> %d\n", d, j);
 
     s = a_echo_string(shello);
     printf("echo_string: \"%s\" -> \"%s\"\n", shello, s);

@@ -8,7 +8,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-void a_switch_to(void) {
+void a_switch_to(void)
+{
     static bool not_first;
 
     while (not_first);
@@ -58,11 +59,14 @@ void a_switch_to(void) {
     }
 }
 
-void b2_switch_to(void) {
+void b2_switch_to(void)
+{
 }
 
-void c2_switch_to(void) {
+void c2_switch_to(void)
+{
 }
 
-void d2_switch_to(void) {
+void d2_switch_to(void)
+{
 }

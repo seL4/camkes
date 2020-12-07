@@ -8,7 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int run(void) {
+int run(void)
+{
     printf("Looking up key \"foo\"...");
     char *value = l_get_value("foo");
     printf("received value \"%s\"\n", value);

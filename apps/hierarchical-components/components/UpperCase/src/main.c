@@ -10,9 +10,10 @@
 
 #define TO_UPPER_DIST ('A' - 'a')
 
-void i_process(const char *arg) {
+void i_process(const char *arg)
+{
     char *str = strdup(arg);
-    for (char *cptr = str;*cptr != '\0';cptr++) {
+    for (char *cptr = str; *cptr != '\0'; cptr++) {
         if (*cptr >= 'a' && *cptr <= 'z') {
             *cptr += TO_UPPER_DIST;
         }

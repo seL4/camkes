@@ -10,7 +10,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-int run(void) {
+int run(void)
+{
     int operands[] = { 342, 74, 283, };
     int *inplace;
     int *other;
@@ -19,7 +20,7 @@ int run(void) {
     size_t inplace_sz = 2;
     const char *name = get_instance_name();
 
-    inplace = (int*)malloc(sizeof(int) * inplace_sz);
+    inplace = (int *)malloc(sizeof(int) * inplace_sz);
     assert(inplace != NULL);
     inplace[0] = 7;
     inplace[1] = 8;

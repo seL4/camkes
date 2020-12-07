@@ -10,6 +10,7 @@
 
 #include <camkes.h>
 
-void n_notify_me(void) {
+void n_notify_me(void)
+{
     e_emit();
 }

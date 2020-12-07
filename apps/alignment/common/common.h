@@ -19,7 +19,8 @@ typedef struct foo {
 /* Hopefully the compiler will attempt to optimize this
  * function with sse instructions on x86.
  */
-static inline void memcpy_test(foo_t *a, foo_t *b) {
+static inline void memcpy_test(foo_t *a, foo_t *b)
+{
     foo_t intermediate = *a;
     intermediate.arr[1] += 0.5;
     memcpy(b, &intermediate, sizeof(foo_t));
@@ -32,7 +33,8 @@ void movaps_test(void);
  * to unaligned operands of sse instructions with alignment
  * requirements, unless the stack is correctly aligned.
  */
-static inline void test_alignment(void) {
+static inline void test_alignment(void)
+{
     foo_t a, b;
     a.arr[0] = 0.1;
     a.arr[1] = 0.2;

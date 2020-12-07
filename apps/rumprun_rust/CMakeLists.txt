@@ -20,26 +20,26 @@ set(tool_location $<TARGET_PROPERTY:rumprun_toplevel_support,RUMPRUN_TOOLCHAIN_P
 set(bin_file ${CMAKE_CURRENT_BINARY_DIR}/output/rustest)
 add_custom_command(
     OUTPUT ${bin_file}
-    COMMAND  cd ${CMAKE_CURRENT_LIST_DIR}/components/hellorust/rustest &&
-       ${CMAKE_COMMAND} -E env
-        PATH=$ENV{PATH}:${tool_location}
-        cargo build --target ${tuple} --target-dir ${CMAKE_CURRENT_BINARY_DIR} -Z unstable-options --out-dir ${CMAKE_CURRENT_BINARY_DIR}/output
+    COMMAND
+        cd ${CMAKE_CURRENT_LIST_DIR}/components/hellorust/rustest && ${CMAKE_COMMAND} -E env
+        PATH=$ENV{PATH}:${tool_location} cargo build
+        --target ${tuple}
+        --target-dir ${CMAKE_CURRENT_BINARY_DIR} -Z unstable-options
+        --out-dir ${CMAKE_CURRENT_BINARY_DIR}/output
     DEPENDS a_rumptools_target
-    COMMENT "[Invoking cargo]")
-
-DeclareRumprunCAmkESComponent(rumprun_rust
-    POSIX_BIN ${bin_file}
-    BAKE_CONFIG sel4_generic
+    COMMENT "[Invoking cargo]"
 )
 
-DeclareExternalRumprunProject(
-    hello_external
-    ${CMAKE_CURRENT_LIST_DIR}/components/hello
-    bin/hello)
+DeclareRumprunCAmkESComponent(rumprun_rust POSIX_BIN ${bin_file} BAKE_CONFIG sel4_generic)
 
-DeclareRumprunCAmkESComponent(rumprun
-    POSIX_BIN ${CMAKE_CURRENT_BINARY_DIR}/bin/hello
-    BAKE_CONFIG sel4_generic
+DeclareExternalRumprunProject(hello_external ${CMAKE_CURRENT_LIST_DIR}/components/hello bin/hello)
+
+DeclareRumprunCAmkESComponent(
+    rumprun
+    POSIX_BIN
+    ${CMAKE_CURRENT_BINARY_DIR}/bin/hello
+    BAKE_CONFIG
+    sel4_generic
 )
 
 DeclareCAmkESRootserver(rumprun_rust.camkes CPP_INCLUDES ${CAMKES_RUMPRUN_PATH} include)

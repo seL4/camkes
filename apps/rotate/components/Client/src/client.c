@@ -7,7 +7,8 @@
 #include <camkes.h>
 #include <stdio.h>
 
-int run(void) {
+int run(void)
+{
     MyType_t a, b, c, d;
 
     a.i = 1;

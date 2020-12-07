@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-int p_increment(int x) {
+int p_increment(int x)
+{
     return x + 1;
 }

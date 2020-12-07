@@ -6,5 +6,6 @@
 
 #include <camkes.h>
 
-void e_switch_to(void) {
+void e_switch_to(void)
+{
 }

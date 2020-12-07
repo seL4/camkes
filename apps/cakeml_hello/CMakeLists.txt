@@ -13,9 +13,7 @@ include(${CAKEML_META_PATH})
 
 project(cakeml_hello C)
 
-DeclareCAmkESComponent(Client
-    SOURCES client.c
-)
+DeclareCAmkESComponent(Client SOURCES client.c)
 
 DeclareCakeMLMetaUtils(
     ${CAKEML_LIBS_DIR}/meta_utils
@@ -25,12 +23,16 @@ DeclareCakeMLMetaUtils(
     meta_utils_path
 )
 
-DeclareCAmkESComponent(Hello
-    CAKEML_SOURCES componentScript.sml
+DeclareCAmkESComponent(
+    Hello CAKEML_SOURCES componentScript.sml
     # Demonstrate that we can override the heap size
-    CAKEML_HEAP_SIZE 51
-    CAKEML_INCLUDES ${meta_utils_path}
-    CAKEML_DEPENDS meta_utils_target ${meta_utils_target_files}
+    CAKEML_HEAP_SIZE
+    51
+    CAKEML_INCLUDES
+    ${meta_utils_path}
+    CAKEML_DEPENDS
+    meta_utils_target
+    ${meta_utils_target_files}
 )
 
 DeclareCAmkESRootserver(cakeml_hello.camkes)

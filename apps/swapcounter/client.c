@@ -6,7 +6,8 @@
 
 #include <camkes.h>
 
-int run(void) {
+int run(void)
+{
     int x = 3;
     int y = 5;
     unsigned int i;

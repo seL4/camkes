@@ -9,10 +9,11 @@
 #include <string.h>
 #include <stdio.h>
 
-int run(void) {
+int run(void)
+{
 
-    char *buffer_str = (char*)buffer;
-    while(true) {
+    char *buffer_str = (char *)buffer;
+    while (true) {
         /* Wait for event */
         ev_wait();
         printf("Got string: %s\n", buffer_str);

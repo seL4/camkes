@@ -10,7 +10,8 @@
 #define MAX_COUNT 100
 static int count = 0;
 
-static void event_callback(void *_ UNUSED) {
+static void event_callback(void *_ UNUSED)
+{
 
     count++;
 
@@ -21,7 +22,8 @@ static void event_callback(void *_ UNUSED) {
     }
 }
 
-int run(void) {
+int run(void)
+{
     ev_reg_callback(event_callback, NULL);
     return 0;
 }

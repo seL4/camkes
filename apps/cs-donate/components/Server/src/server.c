@@ -7,30 +7,37 @@
 #include <camkes.h>
 #include <string.h>
 
-void i__init(void) {
+void i__init(void)
+{
 }
 
-char * i_echo_string(const char *s) {
+char *i_echo_string(const char *s)
+{
     return strdup(s);
 }
 
-int i_echo_int(int i) {
+int i_echo_int(int i)
+{
     return i;
 }
 
-float i_echo_float(float f) {
+float i_echo_float(float f)
+{
     return f;
 }
 
-double i_echo_double(double d) {
+double i_echo_double(double d)
+{
     return d;
 }
 
-int i_echo_mix(double d) {
+int i_echo_mix(double d)
+{
     return d;
 }
 
-int i_echo_parameter(int pin, int *pout) {
+int i_echo_parameter(int pin, int *pout)
+{
     *pout = pin;
     return pin;
 }

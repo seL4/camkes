@@ -8,7 +8,8 @@
 #include <stdio.h>
 #include <sel4/sel4.h>
 
-int run(void) {
+int run(void)
+{
 
     while (1) {
         ev_emit();

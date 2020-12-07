@@ -15,14 +15,19 @@ includeGlobalComponents()
 include(${CMAKE_CURRENT_LIST_DIR}/../rumprun_common.cmake)
 
 DeclareExternalRumprunProject(
-    rump_ether_external
-    ${CMAKE_CURRENT_LIST_DIR}/components/rump_ether
-    bin/reverse)
+    rump_ether_external ${CMAKE_CURRENT_LIST_DIR}/components/rump_ether bin/reverse
+)
 
-DeclareRumprunCAmkESComponent(rumprun_ether
-    POSIX_BIN ${CMAKE_CURRENT_BINARY_DIR}/bin/reverse
-    BAKE_CONFIG sel4_ethernet
-    PUBLIC_SYMBOLS camkes_buffer* camkes_ev* camkes_ev1*
+DeclareRumprunCAmkESComponent(
+    rumprun_ether
+    POSIX_BIN
+    ${CMAKE_CURRENT_BINARY_DIR}/bin/reverse
+    BAKE_CONFIG
+    sel4_ethernet
+    PUBLIC_SYMBOLS
+    camkes_buffer*
+    camkes_ev*
+    camkes_ev1*
 )
 
 DeclareCAmkESRootserver(rumprun_ethernet.camkes CPP_INCLUDES ${CAMKES_RUMPRUN_PATH} include)

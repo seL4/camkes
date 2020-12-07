@@ -6,7 +6,8 @@
 
 #include <camkes.h>
 
-int run(void) {
+int run(void)
+{
 
     while (1) {
         ready_emit();

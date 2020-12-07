@@ -23,18 +23,19 @@ static enum {
 } selected = LOW;
 
 /* This function is invoked by the main CAmkES thread in this component. */
-int run(void) {
-    ringbuffer_t *low = rb_new((void*)low_output, sizeof(*low_output));
+int run(void)
+{
+    ringbuffer_t *low = rb_new((void *)low_output, sizeof(*low_output));
     if (low == NULL) {
         abort();
     }
 
-    ringbuffer_t *high = rb_new((void*)high_output, sizeof(*high_output));
+    ringbuffer_t *high = rb_new((void *)high_output, sizeof(*high_output));
     if (high == NULL) {
         abort();
     }
 
-    ringbuffer_t *input = rb_new((void*)char_in, sizeof(*char_in));
+    ringbuffer_t *input = rb_new((void *)char_in, sizeof(*char_in));
     if (input == NULL) {
         abort();
     }

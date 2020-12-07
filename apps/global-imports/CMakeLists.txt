@@ -12,7 +12,15 @@ project(global-imports C)
 # and only this import needs to be updated
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/global)
 
-DeclareCAmkESComponent(Client SOURCES components/Client/src/main.c LIBS GetterIface PrinterIface ServerInterface)
+DeclareCAmkESComponent(
+    Client
+    SOURCES
+    components/Client/src/main.c
+    LIBS
+    GetterIface
+    PrinterIface
+    ServerInterface
+)
 
 DeclareCAmkESRootserver(global-imports.camkes)
 add_simulate_test([=[

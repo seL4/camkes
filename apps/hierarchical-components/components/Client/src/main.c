@@ -6,7 +6,8 @@
 
 #include <camkes.h>
 
-int run(void) {
+int run(void)
+{
 
     o1_process("hello ");
     o2_process("hello ");

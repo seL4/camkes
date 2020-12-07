@@ -14,13 +14,14 @@
 #include <stdlib.h>
 
 /* This function is invoked by the main CAmkES thread in this component. */
-int run(void) {
-    ringbuffer_t *input = rb_new((void*)keyboard_input, sizeof(*keyboard_input));
+int run(void)
+{
+    ringbuffer_t *input = rb_new((void *)keyboard_input, sizeof(*keyboard_input));
     if (input == NULL) {
         abort();
     }
 
-    ringbuffer_t *output = rb_new((void*)framebuffer, sizeof(*framebuffer));
+    ringbuffer_t *output = rb_new((void *)framebuffer, sizeof(*framebuffer));
     if (output == NULL) {
         abort();
     }

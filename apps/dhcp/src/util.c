@@ -10,7 +10,8 @@
 /* Number of bytes in a MAC address. */
 #define SIZEOF_MAC (48 / 8)
 
-uint64_t make_mac(const char *data) {
+uint64_t make_mac(const char *data)
+{
     uint64_t x = 0;
 
     /* Consume bytes from the input string until we've exhausted it and then
@@ -31,16 +32,18 @@ uint64_t make_mac(const char *data) {
  * little endian. Only chosen this way to make construction simpler.
  */
 
-void mac_to_string(uint64_t input, char *output) {
+void mac_to_string(uint64_t input, char *output)
+{
     sprintf(output, "%02x:%02x:%02x:%02x:%02x:%02x",
-        (unsigned int)(input & 0xff), (unsigned int)((input >> 8) & 0xff),
-        (unsigned int)((input >> 16) & 0xff),
-        (unsigned int)((input >> 24) & 0xff),
-        (unsigned int)((input >> 32) & 0xff),
-        (unsigned int)((input >> 40) & 0xff));
+            (unsigned int)(input & 0xff), (unsigned int)((input >> 8) & 0xff),
+            (unsigned int)((input >> 16) & 0xff),
+            (unsigned int)((input >> 24) & 0xff),
+            (unsigned int)((input >> 32) & 0xff),
+            (unsigned int)((input >> 40) & 0xff));
 }
 
-void ip_to_string(uint32_t input, char *output) {
+void ip_to_string(uint32_t input, char *output)
+{
     sprintf(output, "%u.%u.%u.%u", input >> 24, (input >> 16) & 0xff,
-        (input >> 8) & 0xff, input & 0xff);
+            (input >> 8) & 0xff, input & 0xff);
 }

@@ -9,7 +9,8 @@
 
 void external__init(void) {}
 
-char *external_get_value(const char *key) {
+char *external_get_value(const char *key)
+{
     if (!strcmp(key, "secret")) {
         /* Block reading the value of "secret" */
         return strdup("");

@@ -8,7 +8,4 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(ComponentAdder C)
 
-DeclareCAmkESComponent(Adder
-    SOURCES src/adder.c
-    INCLUDES include
-)
+DeclareCAmkESComponent(Adder SOURCES src/adder.c INCLUDES include)

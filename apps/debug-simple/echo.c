@@ -8,31 +8,38 @@
 #include <string.h>
 
 
-char * b_echo_string(const char *s) {
+char *b_echo_string(const char *s)
+{
     return strdup(s);
 }
 
-int b_echo_int(int i) {
+int b_echo_int(int i)
+{
     return i;
 }
 
-float b_echo_float(float f) {
+float b_echo_float(float f)
+{
     return f;
 }
 
-double b_echo_double(double d) {
+double b_echo_double(double d)
+{
     return d;
 }
 
-int b_echo_mix(double d) {
+int b_echo_mix(double d)
+{
     return d;
 }
 
-int b_echo_parameter(int pin, int *pout) {
+int b_echo_parameter(int pin, int *pout)
+{
     *pout = pin;
     return pin;
 }
 
-void b_increment_parameter(int *x) {
+void b_increment_parameter(int *x)
+{
     *x = *x + 1;
 }

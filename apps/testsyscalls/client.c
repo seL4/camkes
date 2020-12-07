@@ -25,7 +25,8 @@
 
 extern char __executable_start[1]; /* start of our address space provided by the linker. */
 
-static void test_madvise(void) {
+static void test_madvise(void)
+{
 
     static char page[2 * PAGE_SIZE_4K] ALIGN(PAGE_SIZE_4K);
 
@@ -49,33 +50,34 @@ static void test_madvise(void) {
      */
     if (0) {
 
-    /* Confirm that invalid advice is rejected. */
-    #define BAD_ADVICE -1
-    static_assert(BAD_ADVICE != MADV_NORMAL &&
-                  BAD_ADVICE != MADV_RANDOM &&
-                  BAD_ADVICE != MADV_SEQUENTIAL &&
-                  BAD_ADVICE != MADV_WILLNEED &&
-                  BAD_ADVICE != MADV_DONTNEED,
-        "bad value chosen for BAD_ADVICE that collides with valid advice");
-    r = madvise(page, sizeof page, BAD_ADVICE);
-    assert(r == -1);
-    assert(errno == EINVAL);
+        /* Confirm that invalid advice is rejected. */
+#define BAD_ADVICE -1
+        static_assert(BAD_ADVICE != MADV_NORMAL &&
+                      BAD_ADVICE != MADV_RANDOM &&
+                      BAD_ADVICE != MADV_SEQUENTIAL &&
+                      BAD_ADVICE != MADV_WILLNEED &&
+                      BAD_ADVICE != MADV_DONTNEED,
+                      "bad value chosen for BAD_ADVICE that collides with valid advice");
+        r = madvise(page, sizeof page, BAD_ADVICE);
+        assert(r == -1);
+        assert(errno == EINVAL);
 
-    /* Confirm that misaligned addresses are rejected. */
-    r = madvise((void*)page + 42, PAGE_SIZE_4K, MADV_NORMAL);
-    assert(r == -1);
-    assert(errno == EINVAL);
+        /* Confirm that misaligned addresses are rejected. */
+        r = madvise((void *)page + 42, PAGE_SIZE_4K, MADV_NORMAL);
+        assert(r == -1);
+        assert(errno == EINVAL);
 
-    /* Confirm that regions outside our address space are rejected. */
-    void *BAD_ADDR = (void*)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
-    r = madvise(BAD_ADDR, PAGE_SIZE_4K, MADV_NORMAL);
-    assert(r == -1);
-    assert(errno == ENOMEM);
+        /* Confirm that regions outside our address space are rejected. */
+        void *BAD_ADDR = (void *)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
+        r = madvise(BAD_ADDR, PAGE_SIZE_4K, MADV_NORMAL);
+        assert(r == -1);
+        assert(errno == ENOMEM);
 
     }
 }
 
-static void test_mincore(void) {
+static void test_mincore(void)
+{
 
     static char page[2 * PAGE_SIZE_4K] ALIGN(PAGE_SIZE_4K);
 
@@ -96,35 +98,36 @@ static void test_mincore(void) {
     /* XXX: As with the madvise tests, we need to disable these to avoid touching TLS. */
     if (0) {
 
-    /* Confirm an invalid vec is detected. */
-    r = mincore(page, sizeof page, NULL);
-    assert(r == -1);
-    assert(errno == EFAULT);
+        /* Confirm an invalid vec is detected. */
+        r = mincore(page, sizeof page, NULL);
+        assert(r == -1);
+        assert(errno == EFAULT);
 
-    r = mincore(page, sizeof page, (unsigned char*)UINTPTR_MAX);
-    assert(r == -1);
-    assert(errno == EFAULT);
+        r = mincore(page, sizeof page, (unsigned char *)UINTPTR_MAX);
+        assert(r == -1);
+        assert(errno == EFAULT);
 
-    /* Confirm an invalid addr is detected. */
-    r = mincore((void*)page + 42, sizeof page - 42, vec);
-    assert(r == -1);
-    assert(errno == EINVAL);
+        /* Confirm an invalid addr is detected. */
+        r = mincore((void *)page + 42, sizeof page - 42, vec);
+        assert(r == -1);
+        assert(errno == EINVAL);
 
-    /* Confirm an invalid length is detected. */
-    r = mincore(page, SIZE_MAX, vec);
-    assert(r == -1);
-    assert(errno == ENOMEM);
+        /* Confirm an invalid length is detected. */
+        r = mincore(page, SIZE_MAX, vec);
+        assert(r == -1);
+        assert(errno == ENOMEM);
 
-    /* Confirm an unmapped region is detected. */
-    void *BAD_ADDR = (void*)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
-    r = mincore(BAD_ADDR, PAGE_SIZE_4K, vec);
-    assert(r == -1);
-    assert(errno == ENOMEM);
+        /* Confirm an unmapped region is detected. */
+        void *BAD_ADDR = (void *)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
+        r = mincore(BAD_ADDR, PAGE_SIZE_4K, vec);
+        assert(r == -1);
+        assert(errno == ENOMEM);
 
     }
 }
 
-static void test_mlock(void) {
+static void test_mlock(void)
+{
 
     static char page[2 * PAGE_SIZE_4K] ALIGN(PAGE_SIZE_4K);
 
@@ -139,26 +142,27 @@ static void test_mlock(void) {
     /* XXX: As with the madvise tests, we need to disable these to avoid touching TLS. */
     if (0) {
 
-    /* Confirm an invalid addr is detected. */
-    r = mlock((void*)page + 42, sizeof page - 42);
-    assert(r == -1);
-    assert(errno == EINVAL);
+        /* Confirm an invalid addr is detected. */
+        r = mlock((void *)page + 42, sizeof page - 42);
+        assert(r == -1);
+        assert(errno == EINVAL);
 
-    /* Confirm an invalid length is detected. */
-    r = mlock(page, SIZE_MAX);
-    assert(r == -1);
-    assert(errno == ENOMEM);
+        /* Confirm an invalid length is detected. */
+        r = mlock(page, SIZE_MAX);
+        assert(r == -1);
+        assert(errno == ENOMEM);
 
-    /* Confirm an unmapped region is detected. */
-    void *BAD_ADDR = (void*)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
-    r = mlock(BAD_ADDR, PAGE_SIZE_4K);
-    assert(r == -1);
-    assert(errno == ENOMEM);
+        /* Confirm an unmapped region is detected. */
+        void *BAD_ADDR = (void *)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
+        r = mlock(BAD_ADDR, PAGE_SIZE_4K);
+        assert(r == -1);
+        assert(errno == ENOMEM);
 
     }
 }
 
-static void test_munlock(void) {
+static void test_munlock(void)
+{
 
     static char page[2 * PAGE_SIZE_4K] ALIGN(PAGE_SIZE_4K);
 
@@ -173,26 +177,27 @@ static void test_munlock(void) {
     /* XXX: As with the madvise tests, we need to disable these to avoid touching TLS. */
     if (0) {
 
-    /* Confirm an invalid addr is detected. */
-    r = munlock((void*)page + 42, sizeof page - 42);
-    assert(r == -1);
-    assert(errno == EINVAL);
+        /* Confirm an invalid addr is detected. */
+        r = munlock((void *)page + 42, sizeof page - 42);
+        assert(r == -1);
+        assert(errno == EINVAL);
 
-    /* Confirm an invalid length is detected. */
-    r = munlock(page, SIZE_MAX);
-    assert(r == -1);
-    assert(errno == ENOMEM);
+        /* Confirm an invalid length is detected. */
+        r = munlock(page, SIZE_MAX);
+        assert(r == -1);
+        assert(errno == ENOMEM);
 
-    /* Confirm an unmapped region is detected. */
-    void *BAD_ADDR = (void*)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
-    r = munlock(BAD_ADDR, PAGE_SIZE_4K);
-    assert(r == -1);
-    assert(errno == ENOMEM);
+        /* Confirm an unmapped region is detected. */
+        void *BAD_ADDR = (void *)(PAGE_ALIGN_4K((uintptr_t)__executable_start) - PAGE_SIZE_4K);
+        r = munlock(BAD_ADDR, PAGE_SIZE_4K);
+        assert(r == -1);
+        assert(errno == ENOMEM);
 
     }
 }
 
-static void test_mlockall(void) {
+static void test_mlockall(void)
+{
 
     /* Standard mlockall. */
     int r = mlockall(MCL_CURRENT);
@@ -201,43 +206,47 @@ static void test_mlockall(void) {
     r = mlockall(MCL_FUTURE);
     assert(r == 0);
 
-    r = mlockall(MCL_CURRENT|MCL_FUTURE);
+    r = mlockall(MCL_CURRENT | MCL_FUTURE);
     assert(r == 0);
 
     /* XXX: As with the madvise tests, we need to disable these to avoid touching TLS. */
     if (0) {
 
-    /* Confirm invalid flags are rejected. */
-    #define BAD_FLAGS -1
-    static_assert((BAD_FLAGS & ~(MCL_CURRENT|MCL_FUTURE)) != 0,
-        "bad value chosen for BAD_FLAGS that collides with valid flags");
-    r = mlockall(BAD_FLAGS);
-    assert(r == -1);
-    assert(errno == EINVAL);
+        /* Confirm invalid flags are rejected. */
+#define BAD_FLAGS -1
+        static_assert((BAD_FLAGS & ~(MCL_CURRENT | MCL_FUTURE)) != 0,
+                      "bad value chosen for BAD_FLAGS that collides with valid flags");
+        r = mlockall(BAD_FLAGS);
+        assert(r == -1);
+        assert(errno == EINVAL);
 
     }
 }
 
-static void test_munlockall(void) {
+static void test_munlockall(void)
+{
 
     /* Standard munlockall. */
     int r = munlockall();
     assert(r == 0);
 }
 
-static void test_getpid(void) {
+static void test_getpid(void)
+{
     /* Check that our PID is what we expect. */
     pid_t pid = getpid();
     assert(pid == 2);
 }
 
-static void test_getppid(void) {
+static void test_getppid(void)
+{
     /* Check that our parent is the CapDL initialiser. */
     pid_t pid = getppid();
     assert(pid == 1);
 }
 
-int run(void) {
+int run(void)
+{
     test_madvise();
 
     test_mincore();

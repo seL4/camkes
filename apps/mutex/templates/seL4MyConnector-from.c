@@ -10,12 +10,14 @@
 
 /*- set ep = alloc('ep', seL4_EndpointObject, read=True, write=True) -*/
 
-int /*? me.interface.name ?*/__run(void) {
+int /*? me.interface.name ?*/__run(void)
+{
     /* No setup required */
     return 0;
 }
 
-int /*? me.interface.name ?*/_lock(void) {
+int /*? me.interface.name ?*/_lock(void)
+{
     seL4_SetMR(0, 0);
     seL4_MessageInfo_t info = seL4_MessageInfo_new(0, 0, 0, 1);
     seL4_Send(/*? ep ?*/, info);
@@ -23,7 +25,8 @@ int /*? me.interface.name ?*/_lock(void) {
     return 0;
 }
 
-int /*? me.interface.name ?*/_unlock(void) {
+int /*? me.interface.name ?*/_unlock(void)
+{
     seL4_SetMR(0, 1);
     seL4_MessageInfo_t info = seL4_MessageInfo_new(0, 0, 0, 1);
     seL4_Send(/*? ep ?*/, info);

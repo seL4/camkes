@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-#ifndef _MANAGER_CONFIGURATION_H_
-#define _MANAGER_CONFIGURATION_H_
+#pragma once
 
 /* Location and dimension of each domain (in characters). */
 #define DOMAIN1_X 3
@@ -20,5 +19,3 @@
 
 #define DOMAIN1_COLOUR "\033[35m" /* magenta */
 #define DOMAIN2_COLOUR "\033[33m" /* yellow */
-
-#endif /* !_MANAGER_CONFIGURATION_H_ */

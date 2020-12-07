@@ -9,7 +9,8 @@
 
 #include "common.h"
 
-int run() {
+int run()
+{
     printf("Calling server...\n");
     a_f();
     printf("Back from server!\n");

@@ -9,7 +9,4 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(ComponentClient C)
 
-DeclareCAmkESComponent(Client
-    SOURCES src/client.c
-    INCLUDES include
-)
+DeclareCAmkESComponent(Client SOURCES src/client.c INCLUDES include)

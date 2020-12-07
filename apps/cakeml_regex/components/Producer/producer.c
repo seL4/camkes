@@ -6,7 +6,8 @@
 
 #include <camkes.h>
 
-int run() {
+int run()
+{
     while (true) {
         server_transfer_string("This will get through 1\n");
         server_transfer_string("Won't get through 1\n");

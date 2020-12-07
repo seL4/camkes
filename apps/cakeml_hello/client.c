@@ -7,7 +7,8 @@
 #include <camkes.h>
 #include <stdio.h>
 
-int run() {
+int run()
+{
     uint32_t i, j;
     uint8_t k;
 
@@ -40,8 +41,8 @@ int run() {
 
     h_input_strings("Foo!", "Bar!");
 
-    char * input_str = "Hello world";
-    char * reversed = h_reverse_string(input_str);
+    char *input_str = "Hello world";
+    char *reversed = h_reverse_string(input_str);
     printf("Hello_reverse_string: \"%s\" -> \"%s\"\n", input_str, reversed);
 
     g_bye();

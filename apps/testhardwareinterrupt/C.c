@@ -11,24 +11,29 @@
  * these unimplemented functions.
  */
 #if 0
-void foo(void) {
+void foo(void)
+{
     e_wait();
 }
 
-void bar(void) {
+void bar(void)
+{
     e_poll();
 }
 
-void baz(void) {
+void baz(void)
+{
     e_reg_callback(NULL, NULL);
 }
 #endif
 
-void e_handle(void) {
+void e_handle(void)
+{
     /* Interrupt handler. */
     e_acknowledge();
 }
 
-int run(void) {
-  for(;;);
+int run(void)
+{
+    for (;;);
 }

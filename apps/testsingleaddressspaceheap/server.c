@@ -13,16 +13,17 @@
 extern char *morecore_area;
 extern size_t morecore_size;
 
-void m_morecore_range(uintptr_t base, size_t size) {
+void m_morecore_range(uintptr_t base, size_t size)
+{
     printf("Server's range is %p - %p\n"
-           "Client's range is %p - %p\n", (void*)morecore_area,
-           (void*)((uintptr_t)morecore_area + morecore_size), (void*)base,
-           (void*)(base + size));
+           "Client's range is %p - %p\n", (void *)morecore_area,
+           (void *)((uintptr_t)morecore_area + morecore_size), (void *)base,
+           (void *)(base + size));
 #ifdef NDEBUG
     printf("WARNING: ASSERTIONS DISABLED; NOTHING WILL BE TESTED\n");
 #endif
     assert(((uintptr_t)morecore_area + morecore_size <= base ||
             base + size <= (uintptr_t)morecore_area) &&
-        "morecore regions overlap");
+           "morecore regions overlap");
     printf("All OK\n");
 }

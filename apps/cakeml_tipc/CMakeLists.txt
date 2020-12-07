@@ -24,23 +24,29 @@ DeclareCakeMLMetaUtils(
     meta_utils_path
 )
 
-DeclareCAmkESComponent(Client
-    SOURCES components/client/client.c
-    LIBS virtqueue vswitch
+DeclareCAmkESComponent(Client SOURCES components/client/client.c LIBS virtqueue vswitch)
+
+CakeMLPP(
+    components/cakeml-filter ${CAKEML_LIBS_DIR}/cakeml_libraries/libvirtqueue/virtqueueScript.sml
 )
 
-CakeMLPP(components/cakeml-filter
-        ${CAKEML_LIBS_DIR}/cakeml_libraries/libvirtqueue/virtqueueScript.sml
-)
-
-DeclareCAmkESComponent(CakeMLFilter
-    CAKEML_SOURCES components/cakeml-filter/componentScript.sml
-                   ${CMAKE_CURRENT_BINARY_DIR}/components/cakeml-filter/virtqueueScript.sml
-    CAKEML_INCLUDES ${CAKEML_INCLUDES} ${meta_utils_path}
-    SOURCES components/cakeml-filter/global_endpoint.c
-    LIBS vswitch
-    CAKEML_HEAP_SIZE 50
-    CAKEML_DEPENDS meta_utils_target ${meta_utils_target_files}
+DeclareCAmkESComponent(
+    CakeMLFilter
+    CAKEML_SOURCES
+    components/cakeml-filter/componentScript.sml
+    ${CMAKE_CURRENT_BINARY_DIR}/components/cakeml-filter/virtqueueScript.sml
+    CAKEML_INCLUDES
+    ${CAKEML_INCLUDES}
+    ${meta_utils_path}
+    SOURCES
+    components/cakeml-filter/global_endpoint.c
+    LIBS
+    vswitch
+    CAKEML_HEAP_SIZE
+    50
+    CAKEML_DEPENDS
+    meta_utils_target
+    ${meta_utils_target_files}
 )
 
 DeclareCAmkESRootserver(cakeml_tipc.camkes)

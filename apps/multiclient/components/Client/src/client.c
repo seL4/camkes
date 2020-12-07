@@ -13,7 +13,8 @@ void event_reg_callback(void *_ UNUSED)
     e_reg_callback(&event_reg_callback, NULL);
 }
 
-int run() {
+int run()
+{
     int j;
 
     printf("Starting the client\n");
@@ -24,7 +25,7 @@ int run() {
     j = s_echo_int();
     printf("echo_int: %d\n", j);
 
-    printf("%s\n", (char*)d);
+    printf("%s\n", (char *)d);
 
     printf("After the client\n");
     return 0;

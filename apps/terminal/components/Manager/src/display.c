@@ -13,7 +13,8 @@
 
 #define RESET_ATTRIBUTES "\033[0m"
 
-static void write_char(int x, int y, char c) {
+static void write_char(int x, int y, char c)
+{
     /* Control sequence to jump to a terminal position and write. Note, the
      * first character in a row is at index 1, not 0.
      */
@@ -21,7 +22,8 @@ static void write_char(int x, int y, char c) {
 }
 
 /* Draw a border around a region. */
-static void borderise(int x, int y, int width, int height, const char *colour) {
+static void borderise(int x, int y, int width, int height, const char *colour)
+{
     int i, j;
     printf("%s", colour);
 
@@ -79,7 +81,8 @@ static void borderise(int x, int y, int width, int height, const char *colour) {
     printf("%s", RESET_ATTRIBUTES);
 }
 
-void domain1__init(void) {
+void domain1__init(void)
+{
     /* Blank the terminal. */
     for (int i = 0; i < TERMINAL_WIDTH; ++i) {
         for (int j = 0; j < TERMINAL_HEIGHT; ++j) {
@@ -88,7 +91,8 @@ void domain1__init(void) {
     }
 }
 
-int domain1_put_char(int x, int y, char data) {
+int domain1_put_char(int x, int y, char data)
+{
     static int border = 0;
     if (!border) {
         borderise(DOMAIN1_X, DOMAIN1_Y, DOMAIN1_WIDTH, DOMAIN1_HEIGHT, DOMAIN1_COLOUR);
@@ -110,11 +114,13 @@ int domain1_put_char(int x, int y, char data) {
     return 0;
 }
 
-void domain2__init(void) {
+void domain2__init(void)
+{
     /* No need to blank the terminal here, as it is done in the other init. */
 }
 
-int domain2_put_char(int x, int y, char data) {
+int domain2_put_char(int x, int y, char data)
+{
     static int border = 0;
     if (!border) {
         borderise(DOMAIN2_X, DOMAIN2_Y, DOMAIN2_WIDTH, DOMAIN2_HEIGHT, DOMAIN2_COLOUR);

@@ -10,7 +10,7 @@ project(hellorust C)
 
 include(rust)
 
-if ("${KernelSel4Arch}" STREQUAL "x86_64")
+if("${KernelSel4Arch}" STREQUAL "x86_64")
     set(RUST_ARCH "x86_64-sel4-none")
 elseif("${KernelSel4Arch}" STREQUAL "aarch64")
     set(RUST_ARCH "aarch64-sel4-none")

@@ -8,7 +8,8 @@
 #include <stdio.h>
 #include "util.h"
 
-int run(void) {
+int run(void)
+{
     /* Our IP address, once we're assigned one from the server. */
     uint32_t ip = 0;
 

@@ -10,7 +10,5 @@ project(serialserver_loopback C)
 
 set(CAmkESCPP ON CACHE BOOL "" FORCE)
 includeGlobalComponents()
-DeclareCAmkESComponent(Client 
-    SOURCES components/Client/src/client.c
-    LIBS virtqueue vswitch)
+DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c LIBS virtqueue vswitch)
 DeclareCAmkESRootserver(serialserver_loopback.camkes)

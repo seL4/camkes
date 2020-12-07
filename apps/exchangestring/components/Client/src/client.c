@@ -13,21 +13,21 @@
 
 int run(void)
 {
-	char *ret;
-	const char *input = "This is a client string.";
-	char *output = NULL;
-	char *joint = malloc(25);
-	strncpy(joint, input, 25);
-	joint[24] = '\0';
-	
-	ret = a_exchange(input, &output, &joint);
+    char *ret;
+    const char *input = "This is a client string.";
+    char *output = NULL;
+    char *joint = malloc(25);
+    strncpy(joint, input, 25);
+    joint[24] = '\0';
 
-	printf("Client output: %s\n", output);
-	printf("Client joint: %s\n", joint);
-	printf("Client ret: %s\n", ret);
+    ret = a_exchange(input, &output, &joint);
 
-	free(output);
-	free(joint);
-	free(ret);
-	return 0;
+    printf("Client output: %s\n", output);
+    printf("Client joint: %s\n", joint);
+    printf("Client ret: %s\n", ret);
+
+    free(output);
+    free(joint);
+    free(ret);
+    return 0;
 }

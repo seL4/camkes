@@ -9,7 +9,8 @@
 #include <vec.h>
 #include <shared_int.h>
 
-int run(void) {
+int run(void)
+{
     char *str = g_get_string();
     p_print_string(str);
     vec_t vec = g_get_vec();

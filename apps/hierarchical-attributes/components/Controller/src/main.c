@@ -7,7 +7,8 @@
 #include <camkes.h>
 #include <stdio.h>
 
-int run(void) {
+int run(void)
+{
 
     printf("Foo\n");
     foo_pa_print_attributes();
@@ -17,7 +18,7 @@ int run(void) {
 
     printf("Foo Bar Baz\n");
     foo_nested_pa1_print_attributes();
-    
+
     printf("Foo Baz\n");
     foo_nested_pa2_print_attributes();
 

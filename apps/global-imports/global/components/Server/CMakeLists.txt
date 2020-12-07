@@ -10,6 +10,9 @@ project(Server C)
 
 # Interface library for our dataport
 add_library(ServerInterface INTERFACE)
-target_include_directories(ServerInterface INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/../common_port_types")
+target_include_directories(
+    ServerInterface
+    INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/../common_port_types"
+)
 
 DeclareCAmkESComponent(Server SOURCES src/main.c LIBS GetterIface ServerInterface)

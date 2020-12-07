@@ -10,7 +10,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-void f_foo(void) {
+void f_foo(void)
+{
     static seL4_Word badge;
     static bool not_first;
     if (!not_first) {

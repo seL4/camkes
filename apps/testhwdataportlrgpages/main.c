@@ -8,7 +8,8 @@
 #include <camkes.h>
 #include <stdio.h>
 
-int run(void) {
+int run(void)
+{
     printf("Hello, World!\n");
 
     return 0;

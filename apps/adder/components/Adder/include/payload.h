@@ -4,13 +4,10 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-#ifndef _PAYLOAD_
-#define _PAYLOAD_
+#pragma once
 
 struct payload {
     int sz;
     int operands[100];
     int result;
 };
-
-#endif

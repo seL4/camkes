@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-#ifndef _SHARED_INT_H_
-#define _SHARED_INT_H_
+#pragma once
 typedef struct {
     int value;
 } shared_int_t;
-#endif

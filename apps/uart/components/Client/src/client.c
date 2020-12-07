@@ -10,16 +10,17 @@
 
 static size_t uart_write(void *buf, size_t count)
 {
-	char *data = buf;
+    char *data = buf;
 
-	for (size_t i = 0; i < count; ++i) {
-		uart_put_char(data[i]);
-	}
+    for (size_t i = 0; i < count; ++i) {
+        uart_put_char(data[i]);
+    }
 
-	return count;
+    return count;
 }
 
-int run(void) {
+int run(void)
+{
     char c;
     char *str = "This message is sent via UART.\n";
 
@@ -27,13 +28,13 @@ int run(void) {
     uart_write(str, strlen(str));
 
     while (1) {
-	c = uart_get_char();
-	printf("Input from UART: %c\n", c);
+        c = uart_get_char();
+        printf("Input from UART: %c\n", c);
 
-	if (c == 'q') {
-		break;
-	}
-	
+        if (c == 'q') {
+            break;
+        }
+
     }
 
     printf("UART client exit...\n");

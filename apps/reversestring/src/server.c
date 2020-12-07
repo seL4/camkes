@@ -9,9 +9,10 @@
 #include <string.h>
 #include <stdio.h>
 
-int run(void) {
+int run(void)
+{
 
-    char *buffer_str = (char*)buffer;
+    char *buffer_str = (char *)buffer;
 
     while (buffer_str[REVERSE_STRING_END_IDX] == 0) {
         /* Poll the last byte of the buffer until the client is

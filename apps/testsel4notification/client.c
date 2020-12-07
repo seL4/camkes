@@ -9,7 +9,8 @@
 #include <stdio.h>
 #include <utils/util.h>
 
-int run(void) {
+int run(void)
+{
 #ifdef NDEBUG
     printf("WARNING: assertions disabled! Nothing will be tested.\n");
 #endif
@@ -20,7 +21,7 @@ int run(void) {
 
     /* Spin for a while to let various glue code reach a quiescent state. */
     for (unsigned int i = 0; i < 100000; i++) {
-        asm volatile ("");
+        asm volatile("");
     }
 
     /* There should still be no pending event, even if we check repeatedly. */

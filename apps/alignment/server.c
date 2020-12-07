@@ -9,7 +9,8 @@
 
 #include "common.h"
 
-void b_f(void) {
+void b_f(void)
+{
     printf("Server is testing alignment...\n");
     test_alignment();
 }
