@@ -1,0 +1,68 @@
+/*
+ * Copyright 2020, Data61, CSIRO (ABN 41 687 119 230)
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+import <std_connector.camkes>;
+import <global-connectors.camkes>;
+import <TimeServer/TimeServer.camkes>;
+
+#include <plat/eth_devices.h>
+#include <camkes-picotcp-base.h>
+#include <camkes-single-threaded.h>
+#include <camkes-dynamic-untyped-allocators.h>
+#include <camkes-SerialServer-camkes-putchar-client.h>
+
+#include <tuning_params.h>
+
+HARDWARE_ETHERNET_EXTRA_IMPORTS
+
+/* This is a macro used to define the hardware CAmkES component for each ARM platform */
+HARDWARE_ETHERNET_COMPONENT
+
+component EthdriverARMPlat_1 {
+    single_threaded_component()
+
+    picotcp_base_interfaces(pico_base)
+    SerialServer_putchar_printf_client(putchar)
+    attribute int heap_size = HEAP_SIZE;
+    attribute int dma_pool = DMA_ALLOC_SIZE;
+    attribute int dma_pool_cached = 0;
+    attribute int dma_pool_paddr = 0x4081a000;
+    attribute int promiscuous_mode = 0;
+
+    HARDWARE_ETHERNET_INTERFACES
+
+    composition {
+        HARDWARE_ETHERNET_COMPOSITION
+    }
+
+    configuration {
+        HARDWARE_ETHERNET_CONFIG
+    }
+};
+
+assembly {
+    composition {
+
+        component EthdriverARMPlat_1 ethdriver;
+        component TimeServer time_server;
+        component SerialServer serial_server;
+
+        connection seL4TimeServer serialserver_timer(from serial_server.timeout, to time_server.the_timer);
+        SerialServer_processed_putchar_printf_connection(putchar, ethdriver, serial_server)
+
+        picotcp_base_connections(ethdriver, pico_base, time_server.the_timer)
+    }
+
+    configuration {
+        /*
+         * Non-platform specific configurations
+         */
+        time_server.timers_per_client = 8;
+
+        picotcp_base_configuration(ethdriver, pico_base, "", "0.0.0.0")
+    }
+}
+
