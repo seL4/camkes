@@ -19,7 +19,7 @@ endif()
 set(KernelDangerousCodeInjection ON CACHE BOOL "" FORCE)
 
 if(SIMULATION)
-    ApplyCommonSimulationSettings(${KernelArch})
+    ApplyCommonSimulationSettings(${KernelSel4Arch})
 endif()
 
 DeclareCAmkESComponent(Task SOURCES components/Task/src/task.c LIBS sel4bench)
