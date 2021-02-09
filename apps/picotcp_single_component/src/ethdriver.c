@@ -214,7 +214,7 @@ int setup_eth0(ps_io_ops_t *io_ops)
     /* preallocate buffers */
     for (int i = 0; i < RX_BUFS; i++) {
         eth_buf_t *buf = &rx_bufs[i];
-        buf->buf = ps_dma_alloc(&io_ops->dma_manager, BUF_SIZE, 64, 1, PS_MEM_NORMAL);
+        buf->buf = ps_dma_alloc(&io_ops->dma_manager, BUF_SIZE, 64, 0, PS_MEM_NORMAL);
         if (!buf) {
             ZF_LOGE("Failed to allocate RX buffer.");
             return -1;
@@ -231,7 +231,7 @@ int setup_eth0(ps_io_ops_t *io_ops)
 
     for (int i = 0; i < TX_BUFS; i++) {
         eth_buf_t *buf = &tx_bufs[i];
-        buf->buf = ps_dma_alloc(&io_ops->dma_manager, BUF_SIZE, 64, 1, PS_MEM_NORMAL);
+        buf->buf = ps_dma_alloc(&io_ops->dma_manager, BUF_SIZE, 64, 0, PS_MEM_NORMAL);
         if (!buf) {
             ZF_LOGE("Failed to allocate TX buffer: %d.", i);
             return -1;
