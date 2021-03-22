@@ -18,7 +18,7 @@ list(
 )
 
 set(PICOTCP_PATH "${project_dir}/projects/picotcp" CACHE INTERNAL "")
-set(BBL_PATH ${project_dir}/tools/riscv-pk CACHE STRING "BBL Folder location")
+set(OPENSBI_PATH "${project_dir}/tools/opensbi" CACHE STRING "OpenSBI Folder location")
 set(COGENT_PATH ${project_dir}/tools/cogent/cogent CACHE INTERNAL "")
 set(RUMPRUN_PATH ${project_dir}/tools/rumprun CACHE INTERNAL "")
 
