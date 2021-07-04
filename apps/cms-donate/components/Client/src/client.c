@@ -1,20 +1,15 @@
 /*
- * Copyright 2018, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2018, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <camkes.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-int run() {
+int run()
+{
     char *shello = "hello world";
     char *s;
     int i = 42, j;
@@ -26,16 +21,16 @@ int run() {
     printf("-------------------\n");
 
     j = i_echo_int(i);
-    printf("echo_int: %d -> %d\n",i, j);
+    printf("echo_int: %d -> %d\n", i, j);
 
     g = i_echo_float(f);
-    printf("echo_float: %f -> %f\n",f, g);
+    printf("echo_float: %f -> %f\n", f, g);
 
     e = i_echo_double(d);
-    printf("echo_double: %f -> %f\n",d, e);
+    printf("echo_double: %f -> %f\n", d, e);
 
     j = i_echo_mix(d);
-    printf("echo_mix: %f -> %d\n",d, j);
+    printf("echo_mix: %f -> %d\n", d, j);
 
     s = i_echo_string(shello);
     printf("echo_string: \"%s\" -> \"%s\"\n", shello, s);

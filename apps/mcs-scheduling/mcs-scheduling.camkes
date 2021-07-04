@@ -1,0 +1,35 @@
+/*
+ * Copyright 2020, Data61, CSIRO (ABN 41 687 119 230)
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+import <std_connector.camkes>;
+
+import "components/Task/Task.camkes";
+import "components/Init/Init.camkes";
+
+assembly {
+	composition {
+		component Task task_1;
+		component Task task_2;
+		component Task task_3;
+		component Init init;
+	}
+	configuration {
+		task_1._priority = 42;
+		task_2._priority = 41;
+		task_3._priority = 40;
+
+		/* The period and budget parameters are only
+		 * meaningful when MCS is configured */
+		task_1._period = 200000;
+		task_1._budget = 90000;
+
+		task_2._period = 250000;
+		task_2._budget = 60000;
+
+		task_3._period = 300000;
+		task_3._budget = 10000;
+	}
+}

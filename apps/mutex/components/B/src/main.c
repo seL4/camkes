@@ -1,13 +1,7 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <camkes.h>
@@ -17,7 +11,8 @@ int lock_lock(void);
 int lock_unlock(void);
 
 
-static unsigned long long factorial(unsigned long long n) {
+static unsigned long long factorial(unsigned long long n)
+{
     if (n == 0) {
         return 1;
     } else {
@@ -25,7 +20,8 @@ static unsigned long long factorial(unsigned long long n) {
     }
 }
 
-int run() {
+int run()
+{
     const char *name = get_instance_name();
 
     printf("%s: started.\n", name);
@@ -39,8 +35,9 @@ int run() {
     unsigned long long  result = factorial(n);
     printf("%s: So, it turns out factorial %llu is %llu\n", name, n, result);
     printf("%s: Let's take a breather...\n", name);
-    for (int i = 0; i < 100000; i++)
-        asm volatile ("");
+    for (int i = 0; i < 100000; i++) {
+        asm volatile("");
+    }
 
     printf("%s: Unlocking...\n", name);
     lock_unlock();

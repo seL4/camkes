@@ -1,13 +1,7 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <assert.h>
@@ -17,14 +11,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *p_foo(void) {
+char *p_foo(void)
+{
     char *s = strdup("witaj");
     assert(s != NULL);
     printf("%s: Sending %s\n", get_instance_name(), s);
     return s;
 }
 
-void p_bar(size_t x_sz, char **x) {
+void p_bar(size_t x_sz, char **x)
+{
     assert(x != NULL);
     printf("%s: Received x_sz = %u, x = {", get_instance_name(), x_sz);
     for (unsigned int i = 0; i < x_sz; i++) {
@@ -33,11 +29,12 @@ void p_bar(size_t x_sz, char **x) {
     printf("}\n");
 }
 
-void p_baz(size_t *x_sz, char ***x) {
+void p_baz(size_t *x_sz, char ***x)
+{
     assert(x_sz != NULL);
     assert(x != NULL);
     *x_sz = 2;
-    *x = calloc(*x_sz, sizeof(char*));
+    *x = calloc(*x_sz, sizeof(char *));
     assert(*x != NULL);
     (*x)[0] = strdup("alo");
     assert((*x)[0] != NULL);
@@ -50,7 +47,8 @@ void p_baz(size_t *x_sz, char ***x) {
     printf("}\n");
 }
 
-void p_qux(size_t *x_sz, char ***x) {
+void p_qux(size_t *x_sz, char ***x)
+{
     assert(x_sz != NULL);
     assert(x != NULL);
     printf("%s: Received *x_sz = %u, *x = {", get_instance_name(), *x_sz);
@@ -61,7 +59,7 @@ void p_qux(size_t *x_sz, char ***x) {
     printf("}\n");
     safe_free(*x);
     *x_sz = 2;
-    *x = calloc(*x_sz, sizeof(char*));
+    *x = calloc(*x_sz, sizeof(char *));
     assert(*x != NULL);
     (*x)[0] = strdup("hola");
     assert((*x)[0] != NULL);
@@ -75,7 +73,8 @@ void p_qux(size_t *x_sz, char ***x) {
 }
 
 void p_quux(size_t x_sz, char **x, size_t *y_sz, char ***y, size_t *z_sz,
-        char ***z) {
+            char ***z)
+{
     assert(x != NULL);
     assert(y_sz != NULL);
     assert(y != NULL);
@@ -93,14 +92,14 @@ void p_quux(size_t x_sz, char **x, size_t *y_sz, char ***y, size_t *z_sz,
     printf("}\n");
     safe_free(*z);
     *y_sz = 2;
-    *y = calloc(*y_sz, sizeof(char*));
+    *y = calloc(*y_sz, sizeof(char *));
     assert(*y != NULL);
     (*y)[0] = strdup("ola");
     assert((*y)[0] != NULL);
     (*y)[1] = strdup("mundo");
     assert((*y)[1] != NULL);
     *z_sz = 2;
-    *z = calloc(*z_sz, sizeof(char*));
+    *z = calloc(*z_sz, sizeof(char *));
     (*z)[0] = strdup("hallo");
     assert((*z)[0] != NULL);
     (*z)[1] = strdup("welt");
@@ -116,7 +115,8 @@ void p_quux(size_t x_sz, char **x, size_t *y_sz, char ***y, size_t *z_sz,
     printf("}\n");
 }
 
-void p_corge(const size_t *x_sz, char ***x) {
+void p_corge(const size_t *x_sz, char ***x)
+{
     assert(x_sz != NULL);
     assert(x != NULL);
     printf("%s: Received *x_sz = %u, *x = {", get_instance_name(), *x_sz);

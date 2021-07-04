@@ -1,13 +1,7 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 /* CAmkES provides a generated header that prototypes all the relevant
@@ -29,18 +23,19 @@ static enum {
 } selected = LOW;
 
 /* This function is invoked by the main CAmkES thread in this component. */
-int run(void) {
-    ringbuffer_t *low = rb_new((void*)low_output, sizeof(*low_output));
+int run(void)
+{
+    ringbuffer_t *low = rb_new((void *)low_output, sizeof(*low_output));
     if (low == NULL) {
         abort();
     }
 
-    ringbuffer_t *high = rb_new((void*)high_output, sizeof(*high_output));
+    ringbuffer_t *high = rb_new((void *)high_output, sizeof(*high_output));
     if (high == NULL) {
         abort();
     }
 
-    ringbuffer_t *input = rb_new((void*)char_in, sizeof(*char_in));
+    ringbuffer_t *input = rb_new((void *)char_in, sizeof(*char_in));
     if (input == NULL) {
         abort();
     }

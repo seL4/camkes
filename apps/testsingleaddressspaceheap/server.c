@@ -1,13 +1,7 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <assert.h>
@@ -19,16 +13,17 @@
 extern char *morecore_area;
 extern size_t morecore_size;
 
-void m_morecore_range(uintptr_t base, size_t size) {
+void m_morecore_range(uintptr_t base, size_t size)
+{
     printf("Server's range is %p - %p\n"
-           "Client's range is %p - %p\n", (void*)morecore_area,
-           (void*)((uintptr_t)morecore_area + morecore_size), (void*)base,
-           (void*)(base + size));
+           "Client's range is %p - %p\n", (void *)morecore_area,
+           (void *)((uintptr_t)morecore_area + morecore_size), (void *)base,
+           (void *)(base + size));
 #ifdef NDEBUG
     printf("WARNING: ASSERTIONS DISABLED; NOTHING WILL BE TESTED\n");
 #endif
     assert(((uintptr_t)morecore_area + morecore_size <= base ||
             base + size <= (uintptr_t)morecore_area) &&
-        "morecore regions overlap");
+           "morecore regions overlap");
     printf("All OK\n");
 }

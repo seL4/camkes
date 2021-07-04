@@ -1,20 +1,15 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <camkes.h>
 #include <stdio.h>
 
 /* Print a string starting at (0,0) in our region. */
-static void print(const char *msg) {
+static void print(const char *msg)
+{
     int i = 0;
     while (*msg != '\0') {
         if (d_put_char(i++, 0, *msg++) != 0) {
@@ -24,14 +19,15 @@ static void print(const char *msg) {
     }
 }
 
-int run(void) {
+int run(void)
+{
     /* XXX: This is a hack to make sure client 1 executes after client 2. If
      * they execute in parallel there is a race condition and, with no lock on
      * d_put_char, the escape characters corrupt the terminal.
      */
     if (ID == 1) {
         for (int i = 0; i < 10000; ++i) {
-            asm volatile ("");
+            asm volatile("");
         }
     }
 

@@ -1,42 +1,43 @@
 /*
- * Copyright 2018, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2018, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <camkes.h>
 #include <string.h>
 
-void i__init(void) {
+void i__init(void)
+{
 }
 
-char * i_echo_string(const char *s) {
+char *i_echo_string(const char *s)
+{
     return strdup(s);
 }
 
-int i_echo_int(int i) {
+int i_echo_int(int i)
+{
     return i;
 }
 
-float i_echo_float(float f) {
+float i_echo_float(float f)
+{
     return f;
 }
 
-double i_echo_double(double d) {
+double i_echo_double(double d)
+{
     return d;
 }
 
-int i_echo_mix(double d) {
+int i_echo_mix(double d)
+{
     return d;
 }
 
-int i_echo_parameter(int pin, int *pout) {
+int i_echo_parameter(int pin, int *pout)
+{
     *pout = pin;
     return pin;
 }

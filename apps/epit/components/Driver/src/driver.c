@@ -1,13 +1,7 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <autoconf.h>
@@ -40,55 +34,55 @@
 
 void epit_init()
 {
-	printf("EPIT init\n");
-	
-	REG_VAL(KZM_EPIT_CTRL_ADDR) = 0;
+    printf("EPIT init\n");
 
-	/* Disable EPIT and reset. */
-	REG_VAL(KZM_EPIT_CTRL_ADDR) = CTRL_SWR;
+    REG_VAL(KZM_EPIT_CTRL_ADDR) = 0;
 
-	/* Select Clock source */
-	REG_VAL(KZM_EPIT_CTRL_ADDR) = (CLKSRC_IPG << CTRL_CLKSRC_SHIFT);
+    /* Disable EPIT and reset. */
+    REG_VAL(KZM_EPIT_CTRL_ADDR) = CTRL_SWR;
 
-	/* Reload from load register */
-	REG_VAL(KZM_EPIT_CTRL_ADDR) |= (CTRL_RLD | CTRL_ENMOD);
+    /* Select Clock source */
+    REG_VAL(KZM_EPIT_CTRL_ADDR) = (CLKSRC_IPG << CTRL_CLKSRC_SHIFT);
 
-	/* Enable interrupt */
-	REG_VAL(KZM_EPIT_CTRL_ADDR) |= CTRL_OCIEN;
+    /* Reload from load register */
+    REG_VAL(KZM_EPIT_CTRL_ADDR) |= (CTRL_RLD | CTRL_ENMOD);
+
+    /* Enable interrupt */
+    REG_VAL(KZM_EPIT_CTRL_ADDR) |= CTRL_OCIEN;
 
 }
 
 /* Set interrupt interval, in milliseconds. */
 void epit_set_interval(int interval)
 {
-	REG_VAL(KZM_EPIT_LOAD_ADDR) = (IPG_CLK_KHZ * interval) ;
-	REG_VAL(KZM_EPIT_COMP_ADDR) = 0;
+    REG_VAL(KZM_EPIT_LOAD_ADDR) = (IPG_CLK_KHZ * interval) ;
+    REG_VAL(KZM_EPIT_COMP_ADDR) = 0;
 }
 
 void epit_start_timer(void)
 {
-	REG_VAL(KZM_EPIT_STAT_ADDR) = 0x1;
+    REG_VAL(KZM_EPIT_STAT_ADDR) = 0x1;
 
-	/* Enable timer */
-	REG_VAL(KZM_EPIT_CTRL_ADDR) |= CTRL_EN;
+    /* Enable timer */
+    REG_VAL(KZM_EPIT_CTRL_ADDR) |= CTRL_EN;
 }
 
 static int count = 0;
 void irq_handle(void)
 {
-	/* Clear status bit. */
-	REG_VAL(KZM_EPIT_STAT_ADDR) = 0x1;
-	irq_acknowledge();
+    /* Clear status bit. */
+    REG_VAL(KZM_EPIT_STAT_ADDR) = 0x1;
+    irq_acknowledge();
 
-	printf("EPIT time out...%d\n", count++);
+    printf("EPIT time out...%d\n", count++);
 }
 
 int run(void)
 {
-	epit_init();
-	epit_set_interval(1000);
+    epit_init();
+    epit_set_interval(1000);
 
-	epit_start_timer();
+    epit_start_timer();
 
-	return 0;
+    return 0;
 }

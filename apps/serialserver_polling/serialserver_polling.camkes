@@ -1,0 +1,36 @@
+/*
+ * Copyright 2018, Data61, CSIRO (ABN 41 687 119 230)
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+import <std_connector.camkes>;
+import <SerialServer/SerialServer.camkes>;
+import <TimeServer/TimeServer.camkes>;
+import <global-connectors.camkes>;
+
+component Client {
+    control;
+    uses PutChar poll_putchar;
+    uses GetChar poll_getchar;
+}
+
+assembly {
+    composition {
+        component Client pollcli;
+        component SerialServer serial;
+        component TimeServer time_server;
+
+        connection seL4RPCCall serial_time_server(from time_server.putchar, to serial.processed_putchar);
+        connection seL4TimeServer serialserver_timer(from serial.timeout, to time_server.the_timer);
+
+        /* polling based client to Serial */
+        connection seL4RPCCall poll_client(from pollcli.poll_putchar, to serial.processed_putchar);
+        connection seL4SerialServer poll_input(from pollcli.poll_getchar, to serial.getchar);
+    }
+
+    configuration {
+        pollcli.poll_getchar_shmem_size = 0x1000;
+        time_server.timers_per_client = 1;
+    }
+}

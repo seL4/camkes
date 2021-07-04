@@ -1,13 +1,7 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <assert.h>
@@ -15,7 +9,8 @@
 #include <stdio.h>
 #include <utils/util.h>
 
-int run(void) {
+int run(void)
+{
 #ifdef NDEBUG
     printf("WARNING: assertions disabled! Nothing will be tested.\n");
 #endif
@@ -26,7 +21,7 @@ int run(void) {
 
     /* Spin for a while to let various glue code reach a quiescent state. */
     for (unsigned int i = 0; i < 100000; i++) {
-        asm volatile ("");
+        asm volatile("");
     }
 
     /* There should still be no pending event, even if we check repeatedly. */

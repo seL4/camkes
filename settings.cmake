@@ -1,13 +1,7 @@
 #
-# Copyright 2019, Data61
-# Commonwealth Scientific and Industrial Research Organisation (CSIRO)
-# ABN 41 687 119 230.
+# Copyright 2019, Data61, CSIRO (ABN 41 687 119 230)
 #
-# This software may be distributed and modified according to the terms of
-# the BSD 2-Clause license. Note that NO WARRANTY is provided.
-# See "LICENSE_BSD2.txt" for details.
-#
-# @TAG(DATA61_BSD)
+# SPDX-License-Identifier: BSD-2-Clause
 #
 
 cmake_minimum_required(VERSION 3.7.2)
@@ -24,8 +18,9 @@ list(
 )
 
 set(PICOTCP_PATH "${project_dir}/projects/picotcp" CACHE INTERNAL "")
-set(BBL_PATH ${project_dir}/tools/riscv-pk CACHE STRING "BBL Folder location")
+set(OPENSBI_PATH "${project_dir}/tools/opensbi" CACHE STRING "OpenSBI Folder location")
 set(COGENT_PATH ${project_dir}/tools/cogent/cogent CACHE INTERNAL "")
+set(RUMPRUN_PATH ${project_dir}/tools/rumprun CACHE INTERNAL "")
 
 set(SEL4_CONFIG_DEFAULT_ADVANCED ON)
 
@@ -78,7 +73,7 @@ Valid platforms are: \"${valid_platforms}\"")
 endif()
 
 if(SIMULATION)
-    ApplyCommonSimulationSettings(${KernelArch})
+    ApplyCommonSimulationSettings(${KernelSel4Arch})
 endif()
 
 ApplyCommonReleaseVerificationSettings(${RELEASE} FALSE)

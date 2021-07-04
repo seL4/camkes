@@ -1,0 +1,311 @@
+/*
+ * Copyright 2019, Data61, CSIRO (ABN 41 687 119 230)
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+import <std_connector.camkes>;
+import <global-connectors.camkes>;
+import <TimeServer/TimeServer.camkes>;
+
+#include <tuning_params.h>
+/* Import newer driver framework interfaces */
+#include <camkes-picotcp-ethernet-async.h>
+#include <camkes-picotcp-socket-sync.h>
+#include <camkes-picotcp-base.h>
+#include <camkes-fdt-bind-driver.h>
+#include <camkes-single-threaded.h>
+#include <camkes-BPMPServer.h>
+#include <camkes-ClockServer.h>
+#include <camkes-ResetServer.h>
+#include <camkes-GPIOServer.h>
+#include <camkes-MUXServer.h>
+#include <camkes-fdt-bind-driver.h>
+#include <camkes-SerialServer-camkes-putchar-client.h>
+#include <camkes-BenchUtiliz.h>
+
+component FDT_device {
+    hardware;
+    emits FDT resource;
+}
+
+component BPMP {
+    hardware;
+    dataport Buf(4096) tx_channel;
+    dataport Buf(4096) rx_channel;
+}
+
+
+component BPMPServer {
+    single_threaded_component()
+    BPMPServer_server_interfaces(the_bpmp)
+
+    /* hardware interfaces */
+    consumes FDT hsp;
+    fdt_bind_drivers_interfaces(["/bpmp"]);
+    dataport Buf(4096) bpmp_tx;
+    dataport Buf(4096) bpmp_rx;
+
+    composition {
+        component BPMP bpmp;
+        component FDT_device hsp;
+        connection seL4DTBHW hsp_conn(from hsp.resource, to hsp);
+        /* The BPMP shared memory regions aren't located in a particularly nice
+         * location for the seL4DTBHardware connector */
+        connection seL4HardwareMMIO bpmp_tx_mmio(from bpmp_tx, to bpmp.tx_channel);
+        connection seL4HardwareMMIO bpmp_rx_mmio(from bpmp_rx, to bpmp.rx_channel);
+        fdt_bind_driver_connections();
+        BPMPServer_server_connections(the_bpmp)
+    }
+
+    configuration {
+        hsp.dtb = dtb({ "path" : "/tegra-hsp@3c00000" });
+        bpmp.tx_channel_paddr = 0x3004e000;
+        bpmp.tx_channel_size = 0x1000;
+        bpmp.rx_channel_paddr = 0x3004f000;
+        bpmp.rx_channel_size = 0x1000;
+        BPMPServer_server_configurations(the_bpmp)
+    }
+}
+
+
+
+component ClockServer {
+    /* Component uses single threaded environment */
+    single_threaded_component()
+
+    /* Interface for clients to access clock server */
+    ClockServer_server_interfaces(the_clock)
+
+    /* Component requires connection to BPMP processor component. */
+    BPMPServer_client_interfaces(bpmp)
+
+    /* Uses clock hardware from device tree. */
+    consumes FDT car;
+
+    composition {
+        component FDT_device clock;
+        connection seL4DTBHW car_conn(from clock.resource, to car);
+        ClockServer_server_connections(the_clock)
+    }
+
+    configuration {
+        /* Use hardware resources for this node */
+        car.dtb = dtb({ "path" : "/clock@5000000" });
+        ClockServer_server_configurations(the_clock)
+    }
+}
+
+
+component ResetServer {
+    single_threaded_component()
+    ResetServer_server_interfaces(the_reset)
+
+    BPMPServer_client_interfaces(bpmp)
+
+    composition {
+        ResetServer_server_connections(the_reset)
+    }
+
+    configuration {
+        ResetServer_server_configurations(the_reset)
+    }
+}
+
+
+component GPIOMUXServer {
+    single_threaded_component()
+    GPIOServer_server_interfaces(the_gpio)
+    MUXServer_server_interfaces(the_mux)
+
+    consumes FDT gpio;
+    consumes FDT mux;
+
+    composition {
+        component FDT_device gpio;
+        component FDT_device mux;
+        connection seL4DTBHW gpio_conn(from gpio.resource, to gpio);
+        connection seL4DTBHW mux_conn(from mux.resource, to mux);
+        MUXServer_server_connections(the_mux)
+        GPIOServer_server_connections(the_gpio)
+    }
+
+    configuration {
+        gpio.dtb = dtb({"path" : "/gpio@2200000"});
+        mux.dtb = dtb({"path" : "/pinmux@2430000"});
+        MUXServer_server_configurations(the_mux)
+        GPIOServer_server_configurations(the_gpio)
+    }
+}
+
+
+
+
+
+component PicoTCPServer {
+    single_threaded_component()
+    picotcp_ethernet_async_client_interfaces(eth0)
+    picotcp_socket_sync_server_interfaces(pico)
+    picotcp_base_interfaces(pico_base)
+    SerialServer_putchar_printf_client(putchar)
+    composition {
+        picotcp_socket_sync_server_connections(pico)
+    }
+    configuration {
+        picotcp_socket_sync_server_configurations(pico)
+    }
+}
+
+component EthdriverARMPlatDF {
+    single_threaded_component()
+    picotcp_ethernet_async_server_interfaces(eth0)
+
+    /*
+     * This attribute is set according to whatever configuration you want.
+     */
+    attribute int promiscuous_mode = 1;
+    attribute int heap_size = 0x10000;
+    attribute int dma_pool_cached = 0;
+    attribute int dma_pool = 0x4000;
+    SerialServer_putchar_printf_client(putchar)
+
+
+    consumes FDT EthDriver;
+    ClockServer_client_interfaces(clock)
+    ResetServer_client_interfaces(reset)
+    GPIOServer_client_interfaces(gpio)
+    fdt_bind_drivers_interfaces(["/ether_qos@2490000"]);
+    // TX2 requires DMA at address < 2^32
+    attribute int dma_pool_paddr = 0x90000000;
+
+    composition {
+        component FDT_device ether_qos;
+        connection seL4DTBHWThreadless ethdriver_conn(from ether_qos.resource, to EthDriver);
+        fdt_bind_driver_connections();
+    }
+
+    configuration {
+        EthDriver.dtb = dtb({ "path" : "/ether_qos@2490000" });
+        EthDriver.generate_interrupts = 1;
+    }
+};
+
+
+component Echo {
+    single_threaded_component()
+
+    picotcp_socket_sync_client_interfaces(echo)
+    SerialServer_putchar_printf_client(putchar)
+    BenchUtiliz_control_interfaces(idle)
+}
+
+assembly {
+    composition {
+        /* Echo component */
+        component Echo echo;
+
+        /* PicoServer component */
+        component PicoTCPServer picoserver;
+
+        /* Ethdriver component */
+        component EthdriverARMPlatDF ethdriver;
+
+        /* Timer component */
+        component TimeServer time_server;
+
+        /* Serial server component */
+        component SerialServer serial_server;
+
+        /* BPMP Processor driver */
+        component BPMPServer bpmp_server;
+
+        /* Clock driver */
+        component ClockServer clock_server;
+
+        /* Reset driver */
+        component ResetServer reset_server;
+
+        /* GPIO/MUX driver */
+        component GPIOMUXServer gpiomux_server;
+
+        /* Utilization and tracing component */
+        component BenchUtiliz bench;
+
+        /*
+         * Connections
+         */
+
+        /* Drivers that the ethernet driver needs access to. */
+        ClockServer_client_connections(clock, ethdriver, the_clock, clock_server)
+        ResetServer_client_connections(reset, ethdriver, the_reset, reset_server)
+        GPIOServer_client_connections(gpio, ethdriver, the_gpio, gpiomux_server)
+
+        /* Serial connections */
+        connection seL4TimeServer serialserver_timer(from serial_server.timeout, to time_server.the_timer);
+        SerialServer_processed_putchar_printf_connection(putchar, echo, serial_server)
+        SerialServer_processed_putchar_printf_connection(putchar, picoserver, serial_server)
+        SerialServer_processed_putchar_printf_connection(putchar, ethdriver, serial_server)
+
+
+        /* Clock and reset drivers need to talk to BPMP */
+        BPMPServer_client_connections(bpmp, clock_server, the_bpmp, bpmp_server)
+        BPMPServer_client_connections(bpmp, reset_server, the_bpmp, bpmp_server)
+
+        /* Async 1:1 connection between ethernet and picotcp components */
+        picotcp_ethernet_async_connections(eth0, picoserver, ethdriver)
+
+        /* echo client socket connection to picotcp component */
+        picotcp_socket_sync_client_connections(echo, echo, picoserver, pico)
+
+        /* picotcp connection to time server */
+        picotcp_base_connections(picoserver, pico_base, time_server.the_timer)
+
+        /* Trace connections */
+        BenchUtiliz_trace_connections(trace, ethdriver, bench)
+        BenchUtiliz_trace_connections(trace, picoserver, bench)
+        BenchUtiliz_control_connections(idle, echo, bench)
+        BenchUtiliz_trace_connections(trace, echo, bench)
+
+    }
+
+    configuration {
+        echo._priority = 100;
+        picoserver._priority = 99;
+        ethdriver._priority = 98;
+        picotcp_ethernet_async_configurations(eth0, picoserver, ethdriver)
+        picotcp_ethernet_async_configurations_uncached_dma(eth0, picoserver, ethdriver)
+        /* Setting buffer size of echo socket to 4096 */
+        picotcp_socket_sync_client_configurations(echo, echo, 0x1000, PICOTCP_SOCKET_ASYNC_QUEUE_LEN, PICOTCP_SOCKET_ASYNC_POOL_SIZE)
+        BPMPServer_client_configurations(bpmp, clock_server)
+        BPMPServer_client_configurations(bpmp, reset_server)
+        ClockServer_client_configurations(clock, ethdriver)
+        ResetServer_client_configurations(reset, ethdriver)
+        GPIOServer_client_configurations(gpio, ethdriver)
+
+        /* Pin DMA address range due to tx2 ethernet requirement that DMA addresses
+           are 32bit */
+        eth0_dma.paddr = 0x90004000;
+
+        /* timeserver requires some value for this setting. Currently only picotcp
+           uses 1 timer */
+        time_server.timers_per_client = 8;
+        BenchUtiliz_trace_configurations(trace, ethdriver, 103)
+        BenchUtiliz_trace_configurations(trace, picoserver, 102)
+        BenchUtiliz_trace_configurations(trace, echo, 101)
+
+        /* Set to 1 for enabling tracing */
+        echo.enable_tracing = 1;
+        picoserver.enable_tracing = 1;
+        ethdriver.enable_tracing = 1;
+
+        /*
+         * PicoServer config
+         */
+        /* IP address to assign to the networking device */
+        picotcp_base_configuration(picoserver, pico_base, "", "0.0.0.0")
+
+        /* Heap used by pico for tracking clients, sockets and picotcp backing queues. */
+        picoserver.heap_size = PICOSERVER_HEAP_SIZE;
+
+    }
+}

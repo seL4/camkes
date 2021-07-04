@@ -1,13 +1,7 @@
 <!--
-     Copyright 2018, Data61
-     Commonwealth Scientific and Industrial Research Organisation (CSIRO)
-     ABN 41 687 119 230.
+     Copyright 2018, Data61, CSIRO (ABN 41 687 119 230)
 
-     This software may be distributed and modified according to the terms of
-     the BSD 2-Clause license. Note that NO WARRANTY is provided.
-     See "LICENSE_BSD2.txt" for details.
-
-     @TAG(DATA61_BSD)
+     SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
 # CAmkES CakeML Filter
@@ -86,7 +80,7 @@ _connections_. In our example system, we have three components called Producer, 
 
 For general information on CAmkES, please see the documentation:
 
-* https://sel4.systems/Info/CAmkES/About.pml
+* https://docs.sel4.systems/projects/camkes/
 * https://github.com/seL4/camkes-tool/blob/master/docs/index.md
 
 ### Filter Implementation

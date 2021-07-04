@@ -1,13 +1,7 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <assert.h>
@@ -16,7 +10,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-int run(void) {
+int run(void)
+{
     int operands[] = { 342, 74, 283, };
     int *inplace;
     int *other;
@@ -25,7 +20,7 @@ int run(void) {
     size_t inplace_sz = 2;
     const char *name = get_instance_name();
 
-    inplace = (int*)malloc(sizeof(int) * inplace_sz);
+    inplace = (int *)malloc(sizeof(int) * inplace_sz);
     assert(inplace != NULL);
     inplace[0] = 7;
     inplace[1] = 8;

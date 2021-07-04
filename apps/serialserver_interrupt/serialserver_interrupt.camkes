@@ -1,0 +1,36 @@
+/*
+ * Copyright 2018, Data61, CSIRO (ABN 41 687 119 230)
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+import <std_connector.camkes>;
+import <SerialServer/SerialServer.camkes>;
+import <TimeServer/TimeServer.camkes>;
+import <global-connectors.camkes>;
+
+component Client {
+    control;
+    uses PutChar interrupt_putchar;
+    uses GetChar interrupt_getchar;
+}
+
+assembly {
+    composition {
+        component Client interruptcli;
+        component SerialServer serial;
+        component TimeServer time_server;
+
+        connection seL4RPCCall serial_time_server(from time_server.putchar, to serial.processed_putchar);
+        connection seL4TimeServer serialserver_timer(from serial.timeout, to time_server.the_timer);
+
+        /* interrupt based client to Serial */
+        connection seL4RPCCall interrupt_output(from interruptcli.interrupt_putchar, to serial.processed_putchar);
+        connection seL4SerialServer interrupt_input(from interruptcli.interrupt_getchar, to serial.getchar);
+    }
+
+    configuration {
+        interruptcli.interrupt_getchar_shmem_size = 0x1000;
+        time_server.timers_per_client = 1;
+    }
+}

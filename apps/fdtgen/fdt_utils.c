@@ -1,12 +1,8 @@
 /*
- * The code contained herein is licensed under the GNU General Public
- * License. You may obtain a copy of the GNU General Public License
- * Version 2 or later at the following locations:
+ * SPDX-License-Identifier: GPL-2.0-only
+ * Copyright Linux
  *
- * http://www.opensource.org/licenses/gpl-license.html
- * http://www.gnu.org/copyleft/gpl.html
- *
- * @TAG(OTHER_GPL)
+ * In part derived from linux/scripts/dtc/fdtdump.c
  */
 
 #include <stdio.h>

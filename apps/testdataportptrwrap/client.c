@@ -1,13 +1,7 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <assert.h>
@@ -15,14 +9,15 @@
 #include <stdint.h>
 #include <stdio.h>
 
-int run(void) {
+int run(void)
+{
 #ifdef NDEBUG
     printf("WARNING: assertions are disabled!\n");
 #endif
 
-    volatile int *x = (volatile int*)((uintptr_t)d + 16);
+    volatile int *x = (volatile int *)((uintptr_t)d + 16);
     *x = 42;
-    dataport_ptr_t ptr = dataport_wrap_ptr((void*)x);
+    dataport_ptr_t ptr = dataport_wrap_ptr((void *)x);
     assert(ptr.id != -1);
     p_post(ptr);
 

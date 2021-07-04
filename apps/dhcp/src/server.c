@@ -1,13 +1,7 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 #include <assert.h>
 #include <camkes.h>
@@ -34,7 +28,8 @@ static uint32_t routing_table[4] = { 0 };
 #define routing_table_sz (sizeof(routing_table) / sizeof(routing_table[0]))
 
 /* Handle a DHCPDISCOVER message. */
-static uint32_t discover(uint64_t hwaddr, uint32_t *siaddr) {
+static uint32_t discover(uint64_t hwaddr, uint32_t *siaddr)
+{
     lock_lock();
 
     /* Figure out a suitable IP address to offer them */
@@ -42,7 +37,7 @@ static uint32_t discover(uint64_t hwaddr, uint32_t *siaddr) {
     do {
         offer = (my_ip & ~0xff) | (uint32_t)next_offer_octet;
         next_offer_octet++;
-    } while ((offer & 0xff) == 0 || offer == my_ip || 
+    } while ((offer & 0xff) == 0 || offer == my_ip ||
              offer == routing_table[0] || offer == routing_table[1] ||
              offer == routing_table[2] || offer == routing_table[3]);
 
@@ -53,7 +48,7 @@ static uint32_t discover(uint64_t hwaddr, uint32_t *siaddr) {
      * servers on the same network.
      */
     *siaddr = my_ip;
-    
+
     char pretty_ip[STRLEN_IP];
     ip_to_string(offer, pretty_ip);
     dprintf("%s: Sending DHCPOFFER of IP %s\n", get_instance_name(), pretty_ip);
@@ -62,7 +57,8 @@ static uint32_t discover(uint64_t hwaddr, uint32_t *siaddr) {
 }
 
 /* Handle a DHCPREQ message */
-static uint32_t request(unsigned int client, uint32_t ip, uint32_t siaddr) {
+static uint32_t request(unsigned int client, uint32_t ip, uint32_t siaddr)
+{
 
     if (siaddr != my_ip) {
         /* This message was intended for a different DHCP server. In a real
@@ -71,7 +67,7 @@ static uint32_t request(unsigned int client, uint32_t ip, uint32_t siaddr) {
          * *must* send a reply, so we just NAK it.
          */
         dprintf("%s: Sending DHCPNAK due to server IP mismatch\n",
-            get_instance_name());
+                get_instance_name());
         return 0;
     }
 
@@ -87,19 +83,19 @@ static uint32_t request(unsigned int client, uint32_t ip, uint32_t siaddr) {
     if (routing_table[client] == ip) {
         /* They requested their existing IP. OK, whatever. */
         dprintf("%s: Sending DHCPACK to client %u for its existing IP\n",
-            get_instance_name(), client);
+                get_instance_name(), client);
         assigned = ip;
 
     } else if (ip != my_ip && ip != 0 && ip != routing_table[0] &&
-            ip != routing_table[1] && ip != routing_table[2] &&
-            ip != routing_table[3]) {
+               ip != routing_table[1] && ip != routing_table[2] &&
+               ip != routing_table[3]) {
         /* They requested an IP that was not ours, 0 or in the routing table
          * already. XXX: we should probably block the broadcast IP here too.
          */
         char pretty_ip[STRLEN_IP];
         ip_to_string(ip, pretty_ip);
         dprintf("%s: Sending DHCPACK to client %u of IP %s\n",
-            get_instance_name(), client, pretty_ip);
+                get_instance_name(), client, pretty_ip);
         routing_table[client] = ip;
         assigned = ip;
     }
@@ -108,34 +104,42 @@ static uint32_t request(unsigned int client, uint32_t ip, uint32_t siaddr) {
     return assigned;
 }
 
-uint32_t client1_discover(uint64_t hwaddr, uint32_t *siaddr) {
+uint32_t client1_discover(uint64_t hwaddr, uint32_t *siaddr)
+{
     return discover(hwaddr, siaddr);
 }
 
-uint32_t client2_discover(uint64_t hwaddr, uint32_t *siaddr) {
+uint32_t client2_discover(uint64_t hwaddr, uint32_t *siaddr)
+{
     return discover(hwaddr, siaddr);
 }
 
-uint32_t client3_discover(uint64_t hwaddr, uint32_t *siaddr) {
+uint32_t client3_discover(uint64_t hwaddr, uint32_t *siaddr)
+{
     return discover(hwaddr, siaddr);
 }
 
-uint32_t client4_discover(uint64_t hwaddr, uint32_t *siaddr) {
+uint32_t client4_discover(uint64_t hwaddr, uint32_t *siaddr)
+{
     return discover(hwaddr, siaddr);
 }
 
-uint32_t client1_request(uint32_t ip, uint32_t siaddr) {
+uint32_t client1_request(uint32_t ip, uint32_t siaddr)
+{
     return request(0, ip, siaddr);
 }
 
-uint32_t client2_request(uint32_t ip, uint32_t siaddr) {
+uint32_t client2_request(uint32_t ip, uint32_t siaddr)
+{
     return request(1, ip, siaddr);
 }
 
-uint32_t client3_request(uint32_t ip, uint32_t siaddr) {
+uint32_t client3_request(uint32_t ip, uint32_t siaddr)
+{
     return request(2, ip, siaddr);
 }
 
-uint32_t client4_request(uint32_t ip, uint32_t siaddr) {
+uint32_t client4_request(uint32_t ip, uint32_t siaddr)
+{
     return request(3, ip, siaddr);
 }

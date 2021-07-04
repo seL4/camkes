@@ -1,13 +1,7 @@
 /*
- * Copyright 2017, Data61
- * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
- * ABN 41 687 119 230.
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
  *
- * This software may be distributed and modified according to the terms of
- * the BSD 2-Clause license. Note that NO WARRANTY is provided.
- * See "LICENSE_BSD2.txt" for details.
- *
- * @TAG(DATA61_BSD)
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <assert.h>
@@ -17,16 +11,18 @@
 #include <stdio.h>
 #include <string.h>
 
-int p_echo(const int *x) {
+int p_echo(const int *x)
+{
     assert(x != NULL && "refin parameter not backed by memory");
     printf("%s: %s called with %d\n", get_instance_name(), __func__, *x);
     return *x;
 }
 
-void c_echo(const MyStruct *x, MyStruct *y) {
+void c_echo(const MyStruct *x, MyStruct *y)
+{
     assert(x != NULL && "refin parameter not backed by memory");
     assert(y != NULL && "output parameter not backed by memory");
     printf("%s: %s called with {%d..%d}\n", get_instance_name(), __func__,
-        x->data[0], x->data[sizeof(x->data) / sizeof(x->data[0]) - 1]);
+           x->data[0], x->data[sizeof(x->data) / sizeof(x->data[0]) - 1]);
     memcpy(y, x, sizeof(*x));
 }
