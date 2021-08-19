@@ -5,7 +5,7 @@
 #undef ERR_IF
 
 #include <ethdrivers/lwip.h>
-#include <lwip/timers.h>
+#include <lwip/timeouts.h>
 
 #define LWIP_TICK_MS 100
 

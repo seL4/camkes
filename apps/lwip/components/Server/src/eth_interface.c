@@ -28,7 +28,7 @@
 
 #include <lwip/init.h>
 #include <lwip/netif.h>
-#include <lwip/timers.h>
+#include <lwip/timeouts.h>
 #include <lwip/udp.h>
 
 #include <netif/etharp.h>
