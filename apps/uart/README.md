@@ -4,7 +4,7 @@
      SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
-# UART driver for KZM
+# UART driver for i.MX6 Sabrelite
 
 This is an example of accessing hardware device memory. The device memory
 address may vary.
