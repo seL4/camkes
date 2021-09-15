@@ -4,7 +4,7 @@
      SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
-# Enhanced Periodic Interrupt Timer driver for KZM/SabreLite
+# Enhanced Periodic Interrupt Timer driver for SabreLite
 
 This application demonstrates the use of CAmkES interrupt connector to receive hardware
 interrupts. Change the hardware memory address and interrupt number in file `epit.camkes`
