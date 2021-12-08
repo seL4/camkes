@@ -1,0 +1,23 @@
+# Copyright 2021, Proofcraft Pty Ltd
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
+# Actions to run on pull requests
+
+name: Camkes VM Examples
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        march: [nehalem, armv7a, armv8a]
+    steps:
+    - uses: seL4/ci-actions/camkes-vm@master
+      with:
+        march: ${{ matrix.march }}
