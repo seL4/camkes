@@ -31,7 +31,7 @@ int run()
     printf("%s: got it!\n", name);
 
     printf("%s: Let's do some actual work (not like that other lazy instance)...\n", name);
-    unsigned long long n = 23;
+    unsigned long long n = 20;
     unsigned long long  result = factorial(n);
     printf("%s: So, it turns out factorial %llu is %llu\n", name, n, result);
     printf("%s: Let's take a breather...\n", name);
@@ -41,8 +41,19 @@ int run()
 
     printf("%s: Unlocking...\n", name);
     lock_unlock();
+    printf("%s: Unlocked.\n", name);
+    // Yield to allow the other component to finish before printing our exit message
+    // This tries to avoid the consoles getting interleaved.
+    // We Yield multiple times because the connector is implemented using multiple seL4_Send and
+    // seL4_Recv syscalls which put the calling thread to the back of the scheduler queue.
+    seL4_Yield();
+    seL4_Yield();
+    lock_lock();
+    lock_unlock();
 
+    seL4_Yield();
     printf("%s: Exiting\n", name);
+
 
     return 0;
 }
