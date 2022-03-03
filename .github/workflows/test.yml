@@ -1,0 +1,46 @@
+# Copyright 2021, Proofcraft Pty Ltd
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
+# CAmkES regression tests
+
+name: CAmkES
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    name: Build + Simulate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+            - ODROID_XU
+            - ODROID_XU4
+            - PC99
+            - TX1
+            - TX2
+            - IMX8MM_EVK
+            - IMX8MQ_EVK
+        include:
+          - platform: sim
+            name: sabre
+          - platform: sim
+            name: ia32
+          - platform: sim
+            name: x86_64
+          - platform: sim
+            name: cakeml_1
+          - platform: sim
+            name: cakeml_2
+          - platform: sim
+            name: spike64_1
+          - platform: sim
+            name: spike64_2
+    steps:
+    - uses: seL4/ci-actions/camkes-test@master
+      with:
+        platform: ${{ matrix.platform }}
+        name: ${{ matrix.name }}

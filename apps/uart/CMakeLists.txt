@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(uart C)
 
-# This only works on kzm
+# This only works on sabre
 if(
     NOT
     "${KernelArch}"
@@ -18,9 +18,9 @@ if(
         NOT
         "${KernelARMPlatform}"
         STREQUAL
-        "kzm"
+        "sabre"
 )
-    message(FATAL_ERROR "uart application only supported on Arm kzm")
+    message(FATAL_ERROR "uart application only supported on Arm sabre")
 endif()
 
 DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
