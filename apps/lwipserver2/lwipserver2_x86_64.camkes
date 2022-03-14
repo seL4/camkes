@@ -1,0 +1,155 @@
+/*
+ * Copyright 2020, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+import <std_connector.camkes>;
+import <global-connectors.camkes>;
+import <TimeServer/TimeServer.camkes>;
+import <SerialServer/SerialServer.camkes>;
+
+#include <camkes-lwip-ethernet-async.h>
+#include <camkes-lwip-socket-sync.h>
+#include <camkes-lwip-base.h>
+#include <camkes-fdt-bind-driver.h>
+#include <camkes-single-threaded.h>
+#include <camkes-dynamic-untyped-allocators.h>
+#include <camkes-x86-iospace-dma.h>
+#include <camkes-BenchUtiliz.h>
+#include <camkes-SerialServer-camkes-putchar-client.h>
+
+#include <echo/tuning_params.h>
+
+component LWIPServerDF {
+    include "lwipserver.h";
+    single_threaded_component()
+    lwip_ethernet_async_client_interfaces(eth0)
+    lwip_base_interfaces(lwip_base)
+    SerialServer_putchar_printf_client(putchar)
+    BenchUtiliz_control_interfaces(idle)
+}
+
+/* Example hardware components that contain minimal necessary spec for different ethdrivers */
+component HWEthDriver82574DF {
+    hardware;
+    emits IRQ irq;
+    dataport Buf(0x20000) mmio;
+};
+
+component Ethdriver82574DF {
+    single_threaded_component()
+    dynamic_untyped_allocators_interfaces(init_dynamic)
+    x86_iospace_dma_interfaces(init_iospaces, "0x12:0x0:0x19:0")
+    lwip_ethernet_async_server_interfaces(eth0)
+    SerialServer_putchar_printf_client(putchar)
+    /*
+     * The promiscuous mode is set according to whatever configuration you want, 1 by default.
+     */
+     attribute int promiscuous_mode = 1;
+
+    consumes IRQ irq;
+    dataport Buf(0x20000) EthDriver;
+
+    /* MMIO and IRQ default values */
+    attribute int mmio_paddr = 0xf7f00000;
+    attribute int mmio_size = 0x20000;
+    attribute string irq_irq_type = "pci";
+    attribute int irq_irq_ioapic = 0;
+    attribute int irq_irq_ioapic_pin = 20;
+    attribute int irq_irq_vector = 20;
+
+    attribute int simple = 1;
+    attribute int cnode_size_bits = 14;
+    attribute int simple_untyped20_pool = 2;
+    attribute int heap_size = 0x40000;
+    attribute int dma_pool = 0x4000;
+    attribute int dma_pool_cached = 1;
+
+
+    composition {
+        component HWEthDriver82574DF hwethdriver;
+        connection seL4HardwareMMIO ethdrivermmio(from EthDriver, to hwethdriver.mmio);
+        connection seL4GlobalAsynchHardwareInterrupt hwethirq(from hwethdriver.irq, to irq);
+        dynamic_untyped_allocators_connections(init_dynamic)
+        x86_iospace_dma_connections(init_iospaces)
+    }
+
+    configuration {
+        hwethdriver.mmio_paddr <- mmio_paddr;
+        hwethdriver.mmio_size <- mmio_size;
+        hwethdriver.irq_irq_type <- irq_irq_type;
+        hwethdriver.irq_irq_ioapic <- irq_irq_ioapic;
+        hwethdriver.irq_irq_ioapic_pin <- irq_irq_ioapic_pin;
+        hwethdriver.irq_irq_vector <- irq_irq_vector;
+        dynamic_untyped_allocators_configuration(init_dynamic)
+        x86_iospace_dma_configuration(init_iospaces)
+   }
+}
+
+component Echo {
+    include "lwipserver.h";
+    single_threaded_component()
+
+    lwip_socket_sync_client_interfaces(echo)
+    //BenchUtiliz_control_interfaces(idle)
+    SerialServer_putchar_printf_client(putchar)
+}
+
+assembly {
+    composition {
+         /* LWIPServer component */
+         component LWIPServerDF lwipserver;
+
+         /* Ethdriver component */
+         component Ethdriver82574DF ethdriver;
+
+         /* Timer component */
+         component TimeServer time_server;
+         component BenchUtiliz bench;
+         component SerialServer serial_server;
+
+        /*
+         * Connections
+         */
+
+         lwip_ethernet_async_connections(eth0, lwipserver, ethdriver)
+         lwip_base_connections(lwipserver, lwip_base, time_server.the_timer)
+         connection seL4TimeServer serialserver_timer (from serial_server.timeout, to time_server.the_timer);
+         SerialServer_processed_putchar_printf_connection(putchar, lwipserver, serial_server)
+         SerialServer_processed_putchar_printf_connection(putchar, ethdriver, serial_server)
+
+         BenchUtiliz_trace_connections(trace, ethdriver, bench)
+         BenchUtiliz_trace_connections(trace, lwipserver, bench)
+         BenchUtiliz_control_connections(idle, lwipserver, bench)
+    }
+
+    configuration {
+         echo._priority = 100;
+         lwipserver._priority = 99;
+         ethdriver._priority = 98;
+
+         lwip_ethernet_async_configurations(eth0, lwipserver, ethdriver)
+
+         //BenchUtiliz_trace_configurations(trace, ethdriver, 103)
+         //BenchUtiliz_trace_configurations(trace, lwipserver, 102)
+
+         //lwipserver.enable_tracing = 1;
+         //ethdriver.enable_tracing = 1;
+
+         time_server.timers_per_client = 8;
+
+         /*
+          * LWIPServer config
+          */
+         /* IP and multicast address to assign to the networking device */
+         lwip_base_configuration(lwipserver, lwip_base, "", "0.0.0.0")
+         lwipserver.heap_size = 0x40000;
+    }
+}
