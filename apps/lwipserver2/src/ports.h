@@ -12,6 +12,8 @@
 
 #pragma once
 
+#define TCP_ECHO_PORT 1234
+
 #define UDP_ECHO_PORT 1235
 
 /* ipbench utilization client port */

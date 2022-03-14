@@ -30,7 +30,6 @@ component FDT_device {
 }
 
 component LWIPServer {
-	include "lwipserver.h";
 	single_threaded_component()
 	lwip_ethernet_async_client_interfaces(eth0)
 	lwip_base_interfaces(lwip_base)

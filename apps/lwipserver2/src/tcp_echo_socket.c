@@ -50,14 +50,6 @@ static int get_free_peer_id(void)
     int ret = peer_id;
     peer_id = (peer_id + 1) % MAX_TCP_CLIENTS;
     return ret;
-    /*
-    for (int i = 0; i < MAX_TCP_CLIENTS; i++) {
-        if (tcp_peer_sockets[i] == NULL) {
-            return i;
-        }
-    }
-    */
-    return -1;
 }
 
 static void pop_pbuf_from_chain(int client_id)

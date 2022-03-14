@@ -16,7 +16,6 @@ import <TimeServer/TimeServer.camkes>;
 import <SerialServer/SerialServer.camkes>;
 
 #include <camkes-lwip-ethernet-async.h>
-#include <camkes-lwip-socket-sync.h>
 #include <camkes-lwip-base.h>
 #include <camkes-fdt-bind-driver.h>
 #include <camkes-single-threaded.h>
@@ -98,7 +97,7 @@ component Echo {
     single_threaded_component()
 
     lwip_socket_sync_client_interfaces(echo)
-    //BenchUtiliz_control_interfaces(idle)
+    BenchUtiliz_control_interfaces(idle)
     SerialServer_putchar_printf_client(putchar)
 }
 
@@ -137,11 +136,11 @@ assembly {
 
          lwip_ethernet_async_configurations(eth0, lwipserver, ethdriver)
 
-         //BenchUtiliz_trace_configurations(trace, ethdriver, 103)
-         //BenchUtiliz_trace_configurations(trace, lwipserver, 102)
+         BenchUtiliz_trace_configurations(trace, ethdriver, 103)
+         BenchUtiliz_trace_configurations(trace, lwipserver, 102)
 
-         //lwipserver.enable_tracing = 1;
-         //ethdriver.enable_tracing = 1;
+         lwipserver.enable_tracing = 1;
+         ethdriver.enable_tracing = 1;
 
          time_server.timers_per_client = 8;
 
