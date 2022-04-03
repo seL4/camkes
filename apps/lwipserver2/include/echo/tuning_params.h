@@ -10,7 +10,7 @@
 #define TX_BUFS 510
 #define RX_BUFS 510
 
-/* Size used for ethernet buffers */
+/* Size used for ethernet buffers. This is the next 2^n for the 1500 byte ethernet MTU */
 #define BUF_SIZE 2048
 
 /* Maximum connected TCP clients */

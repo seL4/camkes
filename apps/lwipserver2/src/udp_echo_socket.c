@@ -21,7 +21,7 @@ static char udp_data_packet[0x1000] ALIGN(0x1000);
 static struct udp_pcb *udp_socket;
 
 static void lwip_udp_recv_callback(void *arg, struct udp_pcb *pcb, struct pbuf *p, const ip_addr_t *addr, u16_t port)
-{   
+{
     err_t error = udp_sendto(pcb, p, addr, port);
     ZF_LOGF_IF(error, "Failed to send UDP packet through socket");
     pbuf_free(p);

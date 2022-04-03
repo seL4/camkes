@@ -12,17 +12,16 @@ includeGlobalComponents()
 find_package(projects_libs REQUIRED)
 
 set(CAmkESCPP ON CACHE BOOL "" FORCE)
-if("${KernelArch}" STREQUAL "x86")
+if(KernelArchX86)
     set(cpp_define -DKernelArchX86)
-elseif("${KernelArch}" STREQUAL "arm")
+elseif(KernelArchARM)
     set(cpp_define -DKernelArchArm)
 endif()
 
 include(${LWIP_HELPERS})
 AddLWIPConfiguration(${CMAKE_CURRENT_LIST_DIR}/lwip_include)
 
-set(libs sel4utils sel4vka sel4allocman sel4vspace sel4simple 
-    sel4platsupport lwip)
+set(libs sel4utils sel4vka sel4allocman sel4vspace sel4simple sel4platsupport lwip)
 
 set(sources src/tcp_echo_socket.c src/udp_echo_socket.c src/utilization_socket.c)
 
@@ -35,7 +34,7 @@ DeclareCAmkESComponent(
     LIBS
     ${libs}
     LD_FLAGS
-    -Wl,--section-start=.note.gnu.build-id=0x400920
+    -Wl,--section-start=.note.gnu.build-id=0x400920 #Ensure reproducible build
 )
 
 CAmkESAddCPPInclude("${CMAKE_CURRENT_LIST_DIR}/include/")

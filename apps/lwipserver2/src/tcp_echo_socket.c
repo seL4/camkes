@@ -60,7 +60,7 @@ static void pop_pbuf_from_chain(int client_id)
 
 static err_t lwip_sent_callback(void *arg, struct tcp_pcb *pcb, u16_t len)
 {
-    int client_id = (int) (uintptr_t) arg;
+    int client_id = (int)(uintptr_t) arg;
     u16_t can_send = MIN(tcp_sndbuf(pcb), 0x1000);
 
     if (tcp_clients[client_id].pbufs) {
@@ -120,7 +120,7 @@ static int add_pbuf_to_chain(int client_id, struct pbuf *p, u16_t packet_pointer
 
 static err_t lwip_tcp_recv_callback(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
 {
-    int client_id = (int) (uintptr_t) arg;
+    int client_id = (int)(uintptr_t) arg;
     err_t error = ERR_OK;
     if (p == NULL) {
         printf("Connection closed on a TCP socket\n");
