@@ -67,7 +67,7 @@ set(cakeml_cmake "-DCAKEMLDIR=/cakeml -DCAKEML_BIN=/cake-x64-64/cake")
 add_test_variant(cakeml_hello x86_64_sim cakeml)
 add_test_variant(cakeml_tipc x86_64_sim cakeml)
 
-foreach(app IN ITEMS fdtgen epit swapcounter testhwdataportlrgpages testnto1mmio uart_cogent)
+foreach(app IN ITEMS fdtgen epit swapcounter testhwdataportlrgpages testnto1mmio)
     add_test_variant(${app} sabre_sim "")
     list(APPEND exclude_apps ${app})
 endforeach()
