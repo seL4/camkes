@@ -23,3 +23,5 @@ endif()
 set(LibEthdriverRXDescCount 256 CACHE STRING "" FORCE)
 set(LibEthdriverTXDescCount 512 CACHE STRING "" FORCE)
 set(CAmkESNoFPUByDefault ON CACHE BOOL "" FORCE)
+
+set(KernelExportPMCUser ON CACHE BOOL "" FORCE)
