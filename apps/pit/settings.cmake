@@ -6,4 +6,7 @@
 
 # This sample app requires IOAPIC interrupts to be selected
 # in order for the correct interrupt handler to be created.
-set(KernelIRQController IOAPIC CACHE STRING "" FORCE)
+set(KernelIRQController
+    IOAPIC
+    CACHE STRING "" FORCE
+)

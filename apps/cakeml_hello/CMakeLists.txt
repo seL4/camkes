@@ -16,15 +16,14 @@ project(cakeml_hello C)
 DeclareCAmkESComponent(Client SOURCES client.c)
 
 DeclareCakeMLMetaUtils(
-    ${CAKEML_LIBS_DIR}/meta_utils
-    meta_utils
-    meta_utils_target
-    meta_utils_target_files
+    ${CAKEML_LIBS_DIR}/meta_utils meta_utils meta_utils_target meta_utils_target_files
     meta_utils_path
 )
 
 DeclareCAmkESComponent(
-    Hello CAKEML_SOURCES componentScript.sml
+    Hello
+    CAKEML_SOURCES
+    componentScript.sml
     # Demonstrate that we can override the heap size
     CAKEML_HEAP_SIZE
     51

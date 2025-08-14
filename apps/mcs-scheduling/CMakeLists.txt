@@ -9,14 +9,23 @@ cmake_minimum_required(VERSION 3.16.0)
 project(mcs-scheduling C)
 
 if(KernelArchARM)
-    set(KernelArmExportPMUUser ON CACHE BOOL "" FORCE)
+    set(KernelArmExportPMUUser
+        ON
+        CACHE BOOL "" FORCE
+    )
 elseif(KernelArchX86)
-    set(KernelExportPMCUser ON CACHE BOOL "" FORCE)
+    set(KernelExportPMCUser
+        ON
+        CACHE BOOL "" FORCE
+    )
 else()
     message("Unsupported platform.")
 endif()
 
-set(KernelDangerousCodeInjection ON CACHE BOOL "" FORCE)
+set(KernelDangerousCodeInjection
+    ON
+    CACHE BOOL "" FORCE
+)
 
 if(SIMULATION)
     ApplyCommonSimulationSettings(${KernelSel4Arch})

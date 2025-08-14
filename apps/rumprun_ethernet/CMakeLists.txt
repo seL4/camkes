@@ -31,7 +31,9 @@ DeclareRumprunCAmkESComponent(
 )
 
 DeclareCAmkESRootserver(rumprun_ethernet.camkes CPP_INCLUDES ${CAMKES_RUMPRUN_PATH} include)
-add_simulate_test([=[
+add_simulate_test(
+    [=[
     wait_for "!dlroW ,olleH"
     wait_for "Server is listening on 6666"
-]=])
+]=]
+)

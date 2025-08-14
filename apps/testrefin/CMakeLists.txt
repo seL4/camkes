@@ -12,7 +12,9 @@ DeclareCAmkESComponent(Client SOURCES client.c INCLUDES .)
 DeclareCAmkESComponent(Server SOURCES server.c INCLUDES .)
 
 DeclareCAmkESRootserver(testrefin.camkes)
-add_simulate_test([=[
+add_simulate_test(
+    [=[
     wait_for "client: result was 42"
     wait_for "client: result was b = {0..99}"
-]=])
+]=]
+)

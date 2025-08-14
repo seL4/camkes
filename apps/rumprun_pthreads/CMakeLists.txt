@@ -17,11 +17,7 @@ DeclareExternalRumprunProject(
 )
 
 DeclareRumprunCAmkESComponent(
-    rumprun_pthreads
-    POSIX_BIN
-    ${CMAKE_CURRENT_BINARY_DIR}/bin/pthreads
-    BAKE_CONFIG
-    sel4_generic
+    rumprun_pthreads POSIX_BIN ${CMAKE_CURRENT_BINARY_DIR}/bin/pthreads BAKE_CONFIG sel4_generic
 )
 
 DeclareCAmkESRootserver(rumprun_pthreads.camkes CPP_INCLUDES ${CAMKES_RUMPRUN_PATH})

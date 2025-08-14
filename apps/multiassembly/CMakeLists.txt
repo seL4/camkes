@@ -9,7 +9,10 @@ cmake_minimum_required(VERSION 3.16.0)
 project(multiassembly C)
 
 # The multiassembly.camkes makes use of forward references, so force them to be on
-set(CAmkESAllowForwardReferences ON CACHE BOOL "" FORCE)
+set(CAmkESAllowForwardReferences
+    ON
+    CACHE BOOL "" FORCE
+)
 
 DeclareCAmkESComponent(Client SOURCES components/Client/src/main.c)
 DeclareCAmkESComponent(Server SOURCES components/Server/src/main.c)

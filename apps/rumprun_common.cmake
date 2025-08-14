@@ -21,28 +21,17 @@ function(DeclareExternalRumprunProject external_target_name source_dir files)
     set(stamp_dir ${CMAKE_CURRENT_BINARY_DIR}/${external_target_name}-stamp)
     ExternalProject_Add(
         ${external_target_name}
-        SOURCE_DIR
-        ${source_dir}
-        INSTALL_DIR
-        ${CMAKE_CURRENT_BINARY_DIR}
-        STAMP_DIR
-        ${stamp_dir}
-        DEPENDS
-        ${external_target_name}-toolchains
-        BUILD_ALWAYS
-        ON
-        EXCLUDE_FROM_ALL
-        CMAKE_ARGS
+        SOURCE_DIR ${source_dir}
+        INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}
+        STAMP_DIR ${stamp_dir}
+        DEPENDS ${external_target_name}-toolchains
+        BUILD_ALWAYS ON
+        EXCLUDE_FROM_ALL CMAKE_ARGS
         -DCMAKE_TOOLCHAIN_FILE=$<TARGET_PROPERTY:rumprun_toplevel_support,RUMPRUN_TOOLCHAIN_CMAKE>
-        -G
-        Ninja
-        -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_CURRENT_BINARY_DIR}
+        -G Ninja -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_CURRENT_BINARY_DIR}
     )
     DeclareExternalProjObjectFiles(
-        ${external_target_name}
-        ${CMAKE_CURRENT_BINARY_DIR}
-        FILES
-        ${files}
+        ${external_target_name} ${CMAKE_CURRENT_BINARY_DIR} FILES ${files}
     )
 
 endfunction()
