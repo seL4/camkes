@@ -26,7 +26,7 @@ int run(void)
 
     printf("\n");
 
-    const char *s1[] = {"hello", "world"};
+    char *s1[] = {"hello", "world"};
     size_t s1_sz = sizeof(s1) / sizeof(s1[0]);
     printf("%s: Calling p_bar(%u, {\"%s\", \"%s\"})...\n", name, s1_sz, s1[0],
            s1[1]);
@@ -74,7 +74,7 @@ int run(void)
 
     printf("\n");
 
-    const char *s4[] = { "bonjour", "le", "monde" };
+    char *s4[] = { "bonjour", "le", "monde" };
     size_t s4_sz = sizeof(s4) / sizeof(s4[0]);
     char **s5 = NULL;
     size_t s5_sz;
