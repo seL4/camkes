@@ -12,6 +12,9 @@
 
 #define SEND_DATA_LENGTH 20
 
+// not exported by default in the .h file
+void notification_signal_emit_underlying(void);
+
 void create_random_string(char *data, int length)
 {
     for (int i = 0; i < length; i++) {
