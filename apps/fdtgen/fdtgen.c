@@ -10,6 +10,7 @@
 #include <assert.h>
 #include <fdtgen.h>
 #include <libfdt.h>
+#include <camkes/io.h>
 #include "fdt_utils.h"
 
 static const char *nodes_to_keep[] = {"/soc/aips-bus@2100000/ethernet@2188000", "/cpus", "/soc/aips-bus@2100000/usdhc@2190000"};
