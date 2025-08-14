@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 #
 
-cmake_minimum_required(VERSION 3.7.2)
+cmake_minimum_required(VERSION 3.16.0)
 
 RequireFile(RUMPRUN_PATH rumprun PATHS "${CMAKE_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}/tools")
 RequireFile(CAMKES_HELPERS_PATH camkes_helpers.cmake PATHS "${RUMPRUN_PATH}/platform/sel4/camkes/")
