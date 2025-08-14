@@ -39,18 +39,16 @@ macro(add_test_variant app_name test_platform test_variant)
 endmacro()
 
 foreach(
-    app
-    IN
-    ITEMS
-    aeroplage
-    alignment
-    keyboard
-    pit
-    serialserver_polling
-    serialserver_interrupt
-    testhwdataportlrgpages
-    timeserver
-    vgatest
+    app IN
+    ITEMS aeroplage
+          alignment
+          keyboard
+          pit
+          serialserver_polling
+          serialserver_interrupt
+          testhwdataportlrgpages
+          timeserver
+          vgatest
 )
     add_test_variant(${app} ia32_sim "")
     list(APPEND exclude_apps ${app})
@@ -74,22 +72,22 @@ endforeach()
 
 list(
     APPEND
-        exclude_apps
-        cakeml_hello
-        cakeml_regex
-        cakeml_tipc
-        debug-simple
-        hellorust
-        uart
-        serialserver_loopback
-        rumprun_rust
-        rumprun_pthreads
-        rumprun_hello
-        rumprun_ethernet
-        picoserver
-        picotcp_tcp_echo
-        picotcp_single_component
-        mcs-scheduling
+    exclude_apps
+    cakeml_hello
+    cakeml_regex
+    cakeml_tipc
+    debug-simple
+    hellorust
+    uart
+    serialserver_loopback
+    rumprun_rust
+    rumprun_pthreads
+    rumprun_hello
+    rumprun_ethernet
+    picoserver
+    picotcp_tcp_echo
+    picotcp_single_component
+    mcs-scheduling
 )
 
 foreach(app IN LISTS apps)

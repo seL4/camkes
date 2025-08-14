@@ -17,17 +17,14 @@ includeGlobalComponents()
 include(${CAKEML_META_PATH})
 
 DeclareCakeMLMetaUtils(
-    ${CAKEML_LIBS_DIR}/meta_utils
-    meta_utils
-    meta_utils_target
-    meta_utils_target_files
+    ${CAKEML_LIBS_DIR}/meta_utils meta_utils meta_utils_target meta_utils_target_files
     meta_utils_path
 )
 
 DeclareCAmkESComponent(Client SOURCES components/client/client.c LIBS virtqueue vswitch)
 
-CakeMLPP(
-    components/cakeml-filter ${CAKEML_LIBS_DIR}/cakeml_libraries/libvirtqueue/virtqueueScript.sml
+CakeMLPP(components/cakeml-filter
+         ${CAKEML_LIBS_DIR}/cakeml_libraries/libvirtqueue/virtqueueScript.sml
 )
 
 DeclareCAmkESComponent(

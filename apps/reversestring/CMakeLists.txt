@@ -8,7 +8,10 @@ cmake_minimum_required(VERSION 3.16.0)
 
 project(reversestring C)
 
-set(CAmkESCPP ON CACHE BOOL "" FORCE)
+set(CAmkESCPP
+    ON
+    CACHE BOOL "" FORCE
+)
 
 DeclareCAmkESComponent(Client SOURCES src/client.c INCLUDES include)
 DeclareCAmkESComponent(Server SOURCES src/server.c INCLUDES include)

@@ -10,14 +10,20 @@ project(picoserver C)
 
 includeGlobalComponents()
 
-set(CAmkESCPP ON CACHE BOOL "" FORCE)
+set(CAmkESCPP
+    ON
+    CACHE BOOL "" FORCE
+)
 if("${KernelArch}" STREQUAL "x86")
     set(cpp_define -DKernelArchX86)
 elseif("${KernelArch}" STREQUAL "arm")
     set(cpp_define -DKernelArchArm)
 endif()
 
-set(PICOSERVER_IP_ADDR "" CACHE STRING "IP address for the Picoserver component")
+set(PICOSERVER_IP_ADDR
+    ""
+    CACHE STRING "IP address for the Picoserver component"
+)
 
 DeclareCAmkESComponent(
     Echo
@@ -41,8 +47,5 @@ DeclareCAmkESComponent(
 )
 
 DeclareCAmkESRootserver(
-    picoserver.camkes
-    CPP_FLAGS
-    ${cpp_define}
-    -DPICOSERVER_IP_ADDR=\"${PICOSERVER_IP_ADDR}\"
+    picoserver.camkes CPP_FLAGS ${cpp_define} -DPICOSERVER_IP_ADDR=\"${PICOSERVER_IP_ADDR}\"
 )

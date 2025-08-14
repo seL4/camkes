@@ -9,6 +9,5 @@ cmake_minimum_required(VERSION 3.16.0)
 # Declare interface library for our headers
 add_library(GetterIface INTERFACE)
 target_include_directories(
-    GetterIface
-    INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/../common_procedure_types"
+    GetterIface INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/../common_procedure_types"
 )

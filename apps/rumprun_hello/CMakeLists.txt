@@ -15,11 +15,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../rumprun_common.cmake)
 DeclareExternalRumprunProject(hello_external ${CMAKE_CURRENT_LIST_DIR}/components/hello bin/hello)
 
 DeclareRumprunCAmkESComponent(
-    rumprun
-    POSIX_BIN
-    ${CMAKE_CURRENT_BINARY_DIR}/bin/hello
-    BAKE_CONFIG
-    sel4_generic
+    rumprun POSIX_BIN ${CMAKE_CURRENT_BINARY_DIR}/bin/hello BAKE_CONFIG sel4_generic
 )
 
 DeclareCAmkESRootserver(rumprun_hello.camkes CPP_INCLUDES ${CAMKES_RUMPRUN_PATH})

@@ -8,18 +8,22 @@ cmake_minimum_required(VERSION 3.16.0)
 
 set(project_dir "${CMAKE_CURRENT_LIST_DIR}/../../")
 file(GLOB project_modules ${project_dir}/projects/*)
-list(
-    APPEND
-        CMAKE_MODULE_PATH
-        ${project_dir}/kernel
-        ${project_dir}/tools/seL4/cmake-tool/helpers/
-        ${project_dir}/tools/seL4/elfloader-tool/
-        ${project_modules}
+list(APPEND CMAKE_MODULE_PATH ${project_dir}/kernel ${project_dir}/tools/seL4/cmake-tool/helpers/
+     ${project_dir}/tools/seL4/elfloader-tool/ ${project_modules}
 )
 
-set(PICOTCP_PATH "${project_dir}/projects/picotcp" CACHE INTERNAL "")
-set(OPENSBI_PATH "${project_dir}/tools/opensbi" CACHE STRING "OpenSBI Folder location")
-set(RUMPRUN_PATH ${project_dir}/tools/rumprun CACHE INTERNAL "")
+set(PICOTCP_PATH
+    "${project_dir}/projects/picotcp"
+    CACHE INTERNAL ""
+)
+set(OPENSBI_PATH
+    "${project_dir}/tools/opensbi"
+    CACHE STRING "OpenSBI Folder location"
+)
+set(RUMPRUN_PATH
+    ${project_dir}/tools/rumprun
+    CACHE INTERNAL ""
+)
 
 set(SEL4_CONFIG_DEFAULT_ADVANCED ON)
 
@@ -33,13 +37,7 @@ foreach(ARG ${apps})
     get_filename_component(filename ${ARG} NAME)
     list(APPEND app_names "${filename}")
 endforeach()
-string(
-    REPLACE
-        ";"
-        "\n  "
-        app_names_error
-        "${app_names}"
-)
+string(REPLACE ";" "\n  " app_names_error "${app_names}")
 
 if("${CAMKES_APP}" STREQUAL "")
     message(
@@ -56,7 +54,10 @@ if(${app_exists} EQUAL -1)
 endif()
 
 if(ARM_HYP)
-    set(KernelArmHypervisorSupport ON CACHE BOOL "" FORCE)
+    set(KernelArmHypervisorSupport
+        ON
+        CACHE BOOL "" FORCE
+    )
 endif()
 
 correct_platform_strings()
@@ -68,7 +69,8 @@ set(valid_platforms ${KernelPlatform_all_strings} ${correct_platform_strings_pla
 set_property(CACHE PLATFORM PROPERTY STRINGS ${valid_platforms})
 if(NOT "${PLATFORM}" IN_LIST valid_platforms)
     message(FATAL_ERROR "Invalid PLATFORM selected: \"${PLATFORM}\"
-Valid platforms are: \"${valid_platforms}\"")
+Valid platforms are: \"${valid_platforms}\""
+    )
 endif()
 
 if(SIMULATION)
@@ -77,9 +79,12 @@ endif()
 
 ApplyCommonReleaseVerificationSettings(${RELEASE} FALSE)
 
-if (KernelSel4ArchAarch32)
+if(KernelSel4ArchAarch32)
     # Set correct aarch32 TLS register config
-    set(KernelArmTLSReg tpidruro CACHE STRING "" FORCE)
+    set(KernelArmTLSReg
+        tpidruro
+        CACHE STRING "" FORCE
+    )
 endif()
 
 # If an application specific settings file exists then import it here.

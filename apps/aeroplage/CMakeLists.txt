@@ -13,12 +13,7 @@ if(NOT "${KernelArch}" STREQUAL "x86")
 endif()
 
 DeclareCAmkESComponent(
-    KeyboardDriver
-    SOURCES
-    components/KeyboardDriver/driver.c
-    LIBS
-    ringbuffer
-    sel4keyboard
+    KeyboardDriver SOURCES components/KeyboardDriver/driver.c LIBS ringbuffer sel4keyboard
 )
 DeclareCAmkESComponent(MockLinux SOURCES components/MockLinux/mocklinux.c LIBS ringbuffer)
 DeclareCAmkESComponent(Switch SOURCES components/Switch/switch.c LIBS ringbuffer)

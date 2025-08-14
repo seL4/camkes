@@ -6,5 +6,8 @@
 
 # If x86 force the PIC so that legacy interrupt connector can work correctly
 if(KernelArchX86)
-    set(KernelIRQController PIC CACHE STRING "" FORCE)
+    set(KernelIRQController
+        PIC
+        CACHE STRING "" FORCE
+    )
 endif()

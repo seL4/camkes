@@ -10,10 +10,7 @@ includeGlobalComponents()
 
 project(global_async C)
 DeclareCAmkESComponent(
-    Client
-    SOURCES
-    components/Client/src/client.c
-    components/Client/src/client_events.c
+    Client SOURCES components/Client/src/client.c components/Client/src/client_events.c
 )
 
 DeclareCAmkESComponent(Sender SOURCES components/Sender/src/sender.c)

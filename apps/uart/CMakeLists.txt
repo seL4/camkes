@@ -9,17 +9,7 @@ cmake_minimum_required(VERSION 3.16.0)
 project(uart C)
 
 # This only works on sabre
-if(
-    NOT
-    "${KernelArch}"
-    STREQUAL
-    "arm"
-    OR
-        NOT
-        "${KernelARMPlatform}"
-        STREQUAL
-        "sabre"
-)
+if(NOT "${KernelArch}" STREQUAL "arm" OR NOT "${KernelARMPlatform}" STREQUAL "sabre")
     message(FATAL_ERROR "uart application only supported on Arm sabre")
 endif()
 

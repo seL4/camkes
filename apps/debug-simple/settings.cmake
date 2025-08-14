@@ -5,4 +5,7 @@
 #
 
 # The debug component relies on legacy PIC interrupts, so force that
-set(KernelIRQController PIC CACHE STRING "" FORCE)
+set(KernelIRQController
+    PIC
+    CACHE STRING "" FORCE
+)

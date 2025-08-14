@@ -13,8 +13,14 @@ find_package(global-components REQUIRED)
 find_package(sel4_projects_libs REQUIRED)
 
 # Set some options we know we need here. Applications can override them
-set(CapDLLoaderMaxObjects 20000 CACHE STRING "")
-set(KernelRootCNodeSizeBits 17 CACHE STRING "")
+set(CapDLLoaderMaxObjects
+    20000
+    CACHE STRING ""
+)
+set(KernelRootCNodeSizeBits
+    17
+    CACHE STRING ""
+)
 if(KernelArchARM)
     ApplyData61ElfLoaderSettings(${KernelPlatform} ${KernelSel4Arch})
 endif()

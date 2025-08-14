@@ -11,25 +11,13 @@ project(socket C)
 # Each component having their own include directory with the same copy of socket.h
 # in it should be fixed at some point
 DeclareCAmkESComponent(
-    Sender
-    SOURCES
-    components/Sender/src/sender.c
-    INCLUDES
-    components/Sender/include
+    Sender SOURCES components/Sender/src/sender.c INCLUDES components/Sender/include
 )
 DeclareCAmkESComponent(
-    Transport
-    SOURCES
-    components/Transport/src/transport.c
-    INCLUDES
-    components/Transport/include
+    Transport SOURCES components/Transport/src/transport.c INCLUDES components/Transport/include
 )
 DeclareCAmkESComponent(
-    Receiver
-    SOURCES
-    components/Receiver/src/receiver.c
-    INCLUDES
-    components/Receiver/include
+    Receiver SOURCES components/Receiver/src/receiver.c INCLUDES components/Receiver/include
 )
 
 DeclareCAmkESRootserver(socket.camkes)
