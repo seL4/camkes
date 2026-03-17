@@ -1,0 +1,39 @@
+/*
+ * Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+import <std_connector.camkes>;
+
+import "components/Emitter/Emitter.camkes";
+import "components/Collector/Collector.camkes";
+
+assembly {
+        composition {
+                component Emitter source;
+                component Collector sink;
+
+                connection seL4Notification simpleEvent1(from source.ev, to sink.ev);
+        }
+
+        /* Set the seL4 domain scheduler domains of the threads involved in the
+           composition above. In this case, these are the control threads of the
+           two components and the thread of the sink ev interface. */
+        configuration {
+                /* Use "_" to select the control thread of component "source",
+                   use attribute "domain" to set the domain of the thread. */
+                source._domain = 1;
+                /* The outgoing event interface source.ev does not have a thread
+                   associated with it, so no need to set a domain */
+
+                /* Domain of control thread of component "sink" */
+                sink._domain = 2;
+                /* Domain of the event "ev" interface thread in component "sink" */
+                sink.ev_domain = 2;
+
+               /* For both components there are also fault handler threads generated.
+                  These are for debugging only and are assigned domain 0 by
+                  the tool. They are currently not addressable for setting the domain. */
+        }
+}
