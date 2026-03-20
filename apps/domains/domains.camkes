@@ -36,4 +36,10 @@ assembly {
                   These are for debugging only and are assigned domain 0 by
                   the tool. They are currently not addressable for setting the domain. */
         }
+
+        schedule {
+           /* domain schedule: run domain 0 for 3 ticks, domain 1 for 4 ticks,
+              domain 2 for 1 tick, then wrap around. */
+           [(0, 3), (1, 4), (2, 1)]
+        }
 }

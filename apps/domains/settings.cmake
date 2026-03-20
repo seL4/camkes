@@ -5,4 +5,3 @@
 #
 
 set(KernelNumDomains 3 CACHE STRING "" FORCE)
-set(KernelDomainSchedule "${CMAKE_CURRENT_LIST_DIR}/domain_schedule.c" CACHE INTERNAL "")
