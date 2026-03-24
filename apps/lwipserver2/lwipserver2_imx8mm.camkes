@@ -1,0 +1,120 @@
+/*
+ * Copyright 2020, Data61, CSIRO (ABN 41 687 119 230)
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+import <std_connector.camkes>;
+import <global-connectors.camkes>;
+import <TimeServer/TimeServer.camkes>;
+import <SerialServer/SerialServer.camkes>;
+
+#include <camkes-lwip-ethernet-async.h>
+#include <camkes-lwip-base.h>
+#include <camkes-fdt-bind-driver.h>
+#include <camkes-single-threaded.h>
+#include <camkes-SerialServer-camkes-putchar-client.h>
+#include <camkes-BenchUtiliz.h>
+
+#include <echo/tuning_params.h>
+
+component FDT_device {
+    hardware;
+    emits FDT resource;
+}
+
+component LWIPServer {
+	single_threaded_component()
+	lwip_ethernet_async_client_interfaces(eth0)
+	lwip_base_interfaces(lwip_base)
+	SerialServer_putchar_printf_client(putchar)
+    BenchUtiliz_control_interfaces(idle)
+}
+
+component EthdriverARMPlatDF {
+    single_threaded_component()
+	lwip_ethernet_async_server_interfaces(eth0)
+    SerialServer_putchar_printf_client(putchar)
+
+    attribute int simple = true;
+    attribute int cnode_size_bits = 12;
+    attribute int simple_untyped20_pool = 2;
+    attribute int promiscuous_mode = 1;
+    attribute int heap_size = 0x10000;
+    attribute int dma_pool = 0x200000;
+
+	consumes FDT EthDriver;
+	consumes FDT ocotp;
+    consumes FDT iomux;
+    consumes FDT ccm;
+    consumes FDT analog;
+    consumes FDT gpio1;
+    fdt_bind_drivers_interfaces(["/ethernet@30be0000"]);
+
+    composition {
+		component FDT_device ether_qos;
+		connection seL4DTBHWThreadless ethdriver_conn(from ether_qos.resource, to EthDriver);
+        connection seL4DTBHWThreadless ocotp_conn(from ether_qos.resource, to ocotp);
+        connection seL4DTBHWThreadless iomux_conn(from ether_qos.resource, to iomux);
+        connection seL4DTBHWThreadless ccm_conn(from ether_qos.resource, to ccm);
+        connection seL4DTBHWThreadless analog_conn(from ether_qos.resource, to analog);
+        connection seL4DTBHWThreadless gpio1_conn(from ether_qos.resource, to gpio1);
+		fdt_bind_driver_connections();
+    }
+
+    configuration {
+        EthDriver.dtb = dtb({ "path" : "/ethernet@30be0000" });
+        EthDriver.generate_interrupts = 1;
+        ocotp.dtb = dtb({ "path" : "/ocotp-ctrl@30350000" });
+        iomux.dtb = dtb({ "path" : "/pinctrl@30330000" });
+        ccm.dtb = dtb({ "path" : "/clock-controller@30380000" });
+        analog.dtb = dtb({ "path" : "/anatop@30360000" });
+        gpio1.dtb = dtb({"path" : "/gpio@30200000"});
+    }
+};
+
+assembly {
+    composition {
+		component LWIPServer lwipserver;
+
+        component EthdriverARMPlatDF ethdriver;
+
+        component TimeServer time_server;
+        component SerialServer serial_server;
+        component BenchUtiliz bench;
+
+		lwip_ethernet_async_connections(eth0, lwipserver, ethdriver)
+
+		lwip_base_connections(lwipserver, lwip_base, time_server.the_timer)
+
+        connection seL4TimeServer serialserver_timer (from serial_server.timeout, to time_server.the_timer);
+		SerialServer_processed_putchar_printf_connection(putchar, lwipserver, serial_server)
+        SerialServer_processed_putchar_printf_connection(putchar, ethdriver, serial_server)
+
+        BenchUtiliz_trace_connections(trace, lwipserver, bench)
+        BenchUtiliz_trace_connections(trace, ethdriver, bench)
+        BenchUtiliz_control_connections(idle, lwipserver, bench)
+    }
+
+    configuration {
+        echo._priority = 100;
+        lwipserver._priority = 100;
+        ethdriver._priority = 100;
+
+        /*
+         * Non-platform specific configurations
+         */
+        time_server.timers_per_client = 8;
+
+		lwip_ethernet_async_configurations(eth0, lwipserver, ethdriver)
+		lwipserver.heap_size = 0x40000;
+
+        BenchUtiliz_trace_configurations(trace, ethdriver, 103)
+        BenchUtiliz_trace_configurations(trace, lwipserver, 102)
+
+        ethdriver.enable_tracing = 1;
+        lwipserver.enable_tracing = 1;
+
+        lwip_base_configuration(lwipserver, lwip_base, "", "0.0.0.0")
+    }
+}
