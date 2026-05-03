@@ -72,7 +72,7 @@ void handle_virtqueue_message(void *buffer)
 void handle_recv_callback(void)
 {
     void *available_buff = NULL;
-    size_t buf_size = 0;
+    unsigned buf_size = 0;
     vq_flags_t flag;
     virtqueue_ring_object_t handle;
     if (!virtqueue_get_available_buf(&recv_virtqueue, &handle)) {
@@ -97,7 +97,7 @@ void handle_recv_callback(void)
 void handle_send_callback(void)
 {
     void *send_buff = NULL;
-    size_t buf_size = 0;
+    unsigned buf_size = 0;
     uint32_t wr_len = 0;
     vq_flags_t flag;
     virtqueue_ring_object_t handle;
