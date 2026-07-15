@@ -38,8 +38,8 @@ assembly {
         }
 
         schedule {
-           /* non-MCS domain schedule: run domain 0 for 3 ticks, domain 1 for 4 ticks,
-              domain 2 for 2000 us (1 tick with TimerTickMS=2), then wrap around. */
-           [(0, 3), (1, 4 ticks), (2, 2000 us)]
+           /* MCS domain schedule: run domain 0 for 6000 us, domain 1 for 8000 us,
+              domain 2 for 2000 us, then wrap around. */
+           [(0, 6000 us), (1, 8000 us), (2, 2000 us)]
         }
 }
