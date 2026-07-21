@@ -1,0 +1,76 @@
+/*
+ * Copyright 2019, Data61
+ * Commonwealth Scientific and Industrial Research Organisation (CSIRO)
+ * ABN 41 687 119 230.
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DATA61_BSD)
+ */
+
+import <std_connector.camkes>;
+import <global-connectors.camkes>;
+import <Ethdriver/Ethdriver.camkes>;
+import <TimeServer/TimeServer.camkes>;
+
+component Server {
+    control;
+
+    has mutex mut;
+
+    uses Timer timer;
+    consumes Notification timer_complete;
+
+    uses Ethdriver ethdriver;
+
+    /* This field is exclusive to this application and not necessary elsewhere */
+    attribute string ip_addr;
+    attribute string multicast_addr;
+    attribute int num_clients;
+}
+
+
+assembly {
+    composition {
+
+        /* PicoServer component */
+        component Server server;
+        component EthdriverARMPlat ethdriver;
+        /* Timer component */
+        component TimeServer time_server;
+
+        /* Timer to Server */
+        connection seL4TimeServer picoserver_timer(from server.timer, to time_server.the_timer);
+        connection seL4GlobalAsynchCallback picoserver_timer_int(from time_server.timer_notification, to server.timer_complete);
+
+        /* Driver to Server */
+        connection seL4Ethdriver eth_driver_conn(from server.ethdriver, to ethdriver.client);
+
+    }
+
+    configuration {
+        /* Ethernet driver configuration */
+        ethdriver.simple = true;
+        ethdriver.cnode_size_bits = 12;
+        ethdriver.simple_untyped20_pool = 2;
+        ethdriver.heap_size = 0x10000;
+        ethdriver.dma_pool = 0x200000;
+
+        time_server.timers_per_client = 8;
+
+        /* IP address to assign to the networking device */
+        server.ip_addr = LWIPSERVER_IP_ADDR;
+        server.multicast_addr = "0.0.0.0";
+        /* This should match the number of clients connected to this component */
+        server.num_clients = 2;
+
+        server.ethdriver_shmem_size = 0x1000;
+        server.ethdriver_mac = [0x00, 0x19, 0xb8, 0x00, 0xf0, 0xA3];
+        server.heap_size = 0x40000;
+        /* Ethernet driver configuration */
+        ethdriver.promiscuous_mode = 0;
+        ethdriver.mac <- server.ethdriver_mac;
+    }
+}
