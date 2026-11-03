@@ -36,4 +36,4 @@ DeclareCAmkESComponent(
 )
 
 DeclareCAmkESRootserver(dhcp.camkes)
-add_simulate_test([=[wait_for "a: Acquired IP 192.168.1.5"]=])
+add_simulate_test([=[wait_for "s: All clients have an IP"]=])

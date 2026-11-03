@@ -37,4 +37,15 @@ assembly {
         connection seL4RPCCall c3(from c.dhcp, to s.client3);
         connection seL4RPCCall c4(from d.dhcp, to s.client4);
     }
+    configuration {
+        /* Set priorities so we get deterministic success output at the end. */
+        a._priority = 50;
+        b._priority = 50;
+        c._priority = 50;
+        d._priority = 50;
+        s.client1_priority = 60;
+        s.client2_priority = 60;
+        s.client3_priority = 60;
+        s.client4_priority = 60;
+    }
 }
