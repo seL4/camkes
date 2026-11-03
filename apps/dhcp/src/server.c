@@ -98,6 +98,13 @@ static uint32_t request(unsigned int client, uint32_t ip, uint32_t siaddr)
                 get_instance_name(), client, pretty_ip);
         routing_table[client] = ip;
         assigned = ip;
+
+        /* Report success here in the server, so the success output string is
+         * deterministic and not potentially interleaved. */
+        if (routing_table[0] != 0 && routing_table[1] != 0 &&
+            routing_table[2] != 0 && routing_table[3] != 0) {
+            dprintf("%s: All clients have an IP\n", get_instance_name());
+        }
     }
 
     lock_unlock();
