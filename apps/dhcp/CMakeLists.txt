@@ -15,25 +15,23 @@ config_option(DHCPDebug APP_DHCP_DEBUG "Enable debug print outs for this applica
 add_config_library(app_dhcp "${configure_string}")
 
 DeclareCAmkESComponent(
-    Client
-    SOURCES
-    src/client.c
-    src/util.c
-    INCLUDES
-    src
-    LIBS
-    app_dhcp_Config
-)
+  Client
+  SOURCES
+  src/client.c
+  src/util.c
+  INCLUDES
+  src
+  LIBS
+  app_dhcp_Config)
 DeclareCAmkESComponent(
-    Server
-    SOURCES
-    src/server.c
-    src/util.c
-    INCLUDES
-    src
-    LIBS
-    app_dhcp_Config
-)
+  Server
+  SOURCES
+  src/server.c
+  src/util.c
+  INCLUDES
+  src
+  LIBS
+  app_dhcp_Config)
 
 DeclareCAmkESRootserver(dhcp.camkes)
 add_simulate_test([=[wait_for "s: All clients have an IP"]=])
