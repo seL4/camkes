@@ -5,7 +5,14 @@
  */
 
 #include <camkes.h>
+#include <stdio.h>
 #include <string.h>
+
+/* Number of clients connected to this server */
+#define NUM_CLIENTS 2
+
+/* Number of clients that have made their last call (echo_parameter) */
+static int clients_done;
 
 void i__init(void)
 {
@@ -39,6 +46,13 @@ int i_echo_mix(double d)
 int i_echo_parameter(int pin, int *pout)
 {
     *pout = pin;
+
+    /* Report success from the server (higher priority) to avoid interleaved output. */
+    clients_done++;
+    if (clients_done == NUM_CLIENTS) {
+        printf("All clients done\n");
+    }
+
     return pin;
 }
 
