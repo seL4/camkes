@@ -32,7 +32,3 @@ assembly {
         server.i_passive = true;
     }
 }
-
-/* FIXME: CAmkES-RT fails to generate correct code if using seL4RPCCall
- * connector instead of seL4RPC
- */
