@@ -13,7 +13,7 @@ int run()
     char *shello = "hello world";
     char *s;
     int i = 42, j;
-    int p, p1, p2;
+    int p = 37, p1, p2;
     float f = 273421.4274, g;
     double d = 273421.4274, e;
 

@@ -6,7 +6,7 @@
 
 cmake_minimum_required(VERSION 3.16.0)
 
-project(mcs-donate C)
+project(mcs-nodonate C)
 
 DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
 DeclareCAmkESComponent(Server SOURCES components/Server/src/server.c)
